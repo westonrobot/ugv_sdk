@@ -17,14 +17,6 @@ namespace wescore
 {
 struct HunterState
 {
-    enum MotorID
-    {
-        FRONT_RIGHT = 0,
-        FRONT_LEFT = 1,
-        REAR_LEFT = 2,
-        REAR_RIGHT = 3
-    };
-
     struct MotorState
     {
         double current = 0; // in A
@@ -41,7 +33,7 @@ struct HunterState
     uint8_t set_zero_steering = 0;
 
     // motor state
-    MotorState motor_states[4];
+    MotorState motor_states[3];
 
     // motion state
     double linear_velocity = 0;

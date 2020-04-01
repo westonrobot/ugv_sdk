@@ -10,68 +10,7 @@
 #include <ratio>
 #include <thread>
 
-namespace
-{
-// source: https://github.com/rxdu/stopwatch
-struct StopWatch
-{
-    using Clock = std::chrono::high_resolution_clock;
-    using time_point = typename Clock::time_point;
-    using duration = typename Clock::duration;
-
-    StopWatch() { tic_point = Clock::now(); };
-
-    time_point tic_point;
-
-    void tic()
-    {
-        tic_point = Clock::now();
-    };
-
-    double toc()
-    {
-        return std::chrono::duration_cast<std::chrono::microseconds>(Clock::now() - tic_point).count() / 1000000.0;
-    };
-
-    // for different precisions
-    double stoc()
-    {
-        return std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - tic_point).count();
-    };
-
-    double mtoc()
-    {
-        return std::chrono::duration_cast<std::chrono::milliseconds>(Clock::now() - tic_point).count();
-    };
-
-    double utoc()
-    {
-        return std::chrono::duration_cast<std::chrono::microseconds>(Clock::now() - tic_point).count();
-    };
-
-    double ntoc()
-    {
-        return std::chrono::duration_cast<std::chrono::nanoseconds>(Clock::now() - tic_point).count();
-    };
-
-    // you have to call tic() before calling this function
-    void sleep_until_ms(int64_t period_ms)
-    {
-        int64_t duration = period_ms - std::chrono::duration_cast<std::chrono::milliseconds>(Clock::now() - tic_point).count();
-
-        if (duration > 0)
-            std::this_thread::sleep_for(std::chrono::milliseconds(duration));
-    };
-
-    void sleep_until_us(int64_t period_us)
-    {
-        int64_t duration = period_us - std::chrono::duration_cast<std::chrono::microseconds>(Clock::now() - tic_point).count();
-
-        if (duration > 0)
-            std::this_thread::sleep_for(std::chrono::microseconds(duration));
-    };
-};
-} // namespace
+#include "stopwatch/stopwatch.h"
 
 namespace wescore
 {

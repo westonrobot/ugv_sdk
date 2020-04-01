@@ -21,7 +21,6 @@
 
 #include "hunter_protocol/hunter_protocol.h"
 #include "hunter_protocol/hunter_can_parser.h"
-#include "hunter_protocol/hunter_uart_parser.h"
 
 #include "hunter_base/hunter_types.hpp"
 
@@ -38,8 +37,8 @@ public:
     HunterBase &operator=(const HunterBase &hunter) = delete;
 
 public:
-    // connect to roboot from CAN or serial
-    void Connect(std::string dev_name, int32_t baud_rate = 0);
+    // connect to roboot from CAN
+    void Connect(std::string dev_name);
 
     // disconnect from roboot, only valid for serial port
     void Disconnect();
@@ -71,16 +70,12 @@ private:
     std::thread cmd_thread_;
     std::mutex hunter_state_mutex_;
     std::mutex motion_cmd_mutex_;
-    std::mutex light_cmd_mutex_;
 
     HunterState hunter_state_;
     HunterMotionCmd current_motion_cmd_;
 
     int32_t cmd_thread_period_ms_ = 10;
     bool cmd_thread_started_ = false;
-
-    bool light_ctrl_enabled_ = false;
-    bool light_ctrl_requested_ = false;
 
     // internal functions
     void ConfigureCANBus(const std::string &can_if_name = "can1");

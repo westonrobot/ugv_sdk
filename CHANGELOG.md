@@ -1,5 +1,9 @@
 # Changelog for scout_sdk
 
+## 0.5 (2020-04-01)
+-------------------
+* Added initial support of Hunter
+
 ## 0.4 (2019-09-15)
 ------------------
 * Unified implementation of UART/CAN for firmware and SDK

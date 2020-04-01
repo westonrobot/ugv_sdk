@@ -21,22 +21,15 @@ int main(int argc, char **argv)
         device_name = {argv[1]};
         std::cout << "Specified CAN: " << device_name << std::endl;
     }
-    else if (argc == 3)
-    {
-        device_name = {argv[1]};
-        baud_rate = std::stol(argv[2]);
-        std::cout << "Specified serial: " << device_name << "@" << baud_rate << std::endl;
-    }
     else
     {
         std::cout << "Usage: app_scout_demo <interface>" << std::endl
-                  << "Example 1: ./app_scout_demo can0" << std::endl
-                  << "Example 2: ./app_scout_demo /dev/ttyUSB0 115200" << std::endl;
+                  << "Example 1: ./app_scout_demo can0" << std::endl;
         return -1;
     }
 
     HunterBase scout;
-    scout.Connect(device_name, baud_rate);
+    scout.Connect(device_name);
 
     int count = 0;
     while (true)
@@ -44,33 +37,33 @@ int main(int argc, char **argv)
         // motion control
         if (count < 5)
         {
-            std::cout << "Motor: 0.2, 0" << std::endl;
+            std::cout << "Motor: 0.2, 0.0" << std::endl;
             scout.SetMotionCommand(0.2, 0.0);
         }
         else if (count < 10)
         {
-        std::cout << "Motor: 0.8, 0" << std::endl;
-        scout.SetMotionCommand(0.8, 0.0);
+        std::cout << "Motor: 0.8, 0.3" << std::endl;
+        scout.SetMotionCommand(0.8, 0.3);
         }
         else if (count < 15)
         {
-            std::cout << "Motor: 1.5, 0" << std::endl;
-            scout.SetMotionCommand(1.5, 0.0);
+            std::cout << "Motor: 1.5, 0.5" << std::endl;
+            scout.SetMotionCommand(1.5, 0.5);
         }
         else if (count < 20)
         {
-            std::cout << "Motor: 1.0, 0.5" << std::endl;
-            scout.SetMotionCommand(1.0, 0.5);
+            std::cout << "Motor: 1.0, 0.3" << std::endl;
+            scout.SetMotionCommand(1.0, 0.3);
         }
         else if (count < 25)
         {
-            std::cout << "Motor: 0.0, 0" << std::endl;
+            std::cout << "Motor: 0.0, 0.0" << std::endl;
             scout.SetMotionCommand(0.0, 0.0);
         }
         else if (count < 30)
         {
-            std::cout << "Motor: -0.5, 0" << std::endl;
-            scout.SetMotionCommand(-0.5, 0.0);
+            std::cout << "Motor: -0.5, -0.3" << std::endl;
+            scout.SetMotionCommand(-0.5, -0.3);
         }
         else if (count < 35)
         {
@@ -79,7 +72,7 @@ int main(int argc, char **argv)
         }
         else if (count < 40)
         {
-            std::cout << "Motor: 0.0, 0, Light: breath" << std::endl;
+            std::cout << "Motor: 0.0, 0.0," << std::endl;
             scout.SetMotionCommand(0.0, 0.0);
         }
 
