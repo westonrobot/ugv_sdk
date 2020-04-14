@@ -9,7 +9,7 @@ target_include_directories(hunterbase PUBLIC
 	$<INSTALL_INTERFACE:include>	
     PRIVATE src)
 
- ## Add executables
-# if(BUILD_TESTS)
-#     add_subdirectory(tests)
-# endif()
+## Add executables
+if(BUILD_TESTS)
+    add_subdirectory(tests)
+endif()

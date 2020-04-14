@@ -1,1 +1,0 @@
-* Disable tests to keep minimal dependency by default
