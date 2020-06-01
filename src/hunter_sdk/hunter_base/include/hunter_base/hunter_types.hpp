@@ -37,7 +37,7 @@ struct HunterState
 
     // motion state
     double linear_velocity = 0;
-    double angular_velocity = 0;
+    double steering_angle = 0;
 };
 
 struct HunterMotionCmd

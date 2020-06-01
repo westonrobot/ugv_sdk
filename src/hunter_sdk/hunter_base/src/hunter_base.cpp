@@ -202,7 +202,7 @@ void HunterBase::UpdateHunterState(const HunterMessage &status_msg,
               static_cast<uint16_t>(msg.data.status.linear_velocity.high_byte)
                   << 8) /
           1000.0;
-      state.angular_velocity =
+      state.steering_angle =
           static_cast<int16_t>(
               static_cast<uint16_t>(msg.data.status.angular_velocity.low_byte) |
               static_cast<uint16_t>(msg.data.status.angular_velocity.high_byte)
