@@ -23,13 +23,13 @@ int main(int argc, char **argv)
     }
     else
     {
-        std::cout << "Usage: app_scout_demo <interface>" << std::endl
-                  << "Example 1: ./app_scout_demo can0" << std::endl;
+        std::cout << "Usage: app_hunter_demo <interface>" << std::endl
+                  << "Example 1: ./app_hunter_demo can0" << std::endl;
         return -1;
     }
 
-    HunterBase scout;
-    scout.Connect(device_name);
+    HunterBase hunter;
+    hunter.Connect(device_name);
 
     int count = 0;
     while (true)
@@ -38,45 +38,45 @@ int main(int argc, char **argv)
         if (count < 5)
         {
             std::cout << "Motor: 0.2, 0.0" << std::endl;
-            scout.SetMotionCommand(0.2, 0.0);
+            hunter.SetMotionCommand(0.2, 0.0);
         }
         else if (count < 10)
         {
         std::cout << "Motor: 0.8, 0.3" << std::endl;
-        scout.SetMotionCommand(0.8, 0.3);
+        hunter.SetMotionCommand(0.8, 0.3);
         }
         else if (count < 15)
         {
             std::cout << "Motor: 1.5, 0.5" << std::endl;
-            scout.SetMotionCommand(1.5, 0.5);
+            hunter.SetMotionCommand(1.5, 0.5);
         }
         else if (count < 20)
         {
             std::cout << "Motor: 1.0, 0.3" << std::endl;
-            scout.SetMotionCommand(1.0, 0.3);
+            hunter.SetMotionCommand(1.0, 0.3);
         }
         else if (count < 25)
         {
             std::cout << "Motor: 0.0, 0.0" << std::endl;
-            scout.SetMotionCommand(0.0, 0.0);
+            hunter.SetMotionCommand(0.0, 0.0);
         }
         else if (count < 30)
         {
             std::cout << "Motor: -0.5, -0.3" << std::endl;
-            scout.SetMotionCommand(-0.5, -0.3);
+            hunter.SetMotionCommand(-0.5, -0.3);
         }
         else if (count < 35)
         {
             std::cout << "Motor: -1.0, -0.5" << std::endl;
-            scout.SetMotionCommand(-1.0, -0.5);
+            hunter.SetMotionCommand(-1.0, -0.5);
         }
         else if (count < 40)
         {
             std::cout << "Motor: 0.0, 0.0," << std::endl;
-            scout.SetMotionCommand(0.0, 0.0);
+            hunter.SetMotionCommand(0.0, 0.0);
         }
 
-        auto state = scout.GetHunterState();
+        auto state = hunter.GetHunterState();
         std::cout << "-------------------------------" << std::endl;
         std::cout << "count: " << count << std::endl;
         std::cout << "control mode: " << static_cast<int>(state.control_mode) << " , base state: " << static_cast<int>(state.base_state) << std::endl;

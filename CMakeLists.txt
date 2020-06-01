@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.1.0)
 project(wrp_sdk)
 
+# Find catkin
+find_package(catkin REQUIRED)
+
 # generate symbols for IDE indexer
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/devel)
@@ -52,3 +55,45 @@ add_subdirectory(src)
 if(BUILD_TESTS)
 add_subdirectory(unit_tests)
 endif()
+
+## Export catkin targets
+set(EXPORTED_LIBS 
+    asyncio
+    stopwatch
+    scout_protocol
+    scoutbase
+    hunter_protocol
+    hunterbase
+)
+set(INCLUDE_DIRS 
+    src/common/async_io/asio
+    src/common/async_io/include
+    src/common/utilities/stopwatch/include
+    src/scout_sdk/scout_protocol/include
+    src/scout_sdk/scout_base/include
+    src/hunter_sdk/hunter_protocol/include
+    src/hunter_sdk/hunter_base/include
+)
+catkin_package(
+    LIBRARIES ${EXPORTED_LIBS}
+    INCLUDE_DIRS ${INCLUDE_DIRS}
+    # DEPENDS rt pthread
+)
+
+## Add catkin install targets
+# install(TARGETS ${EXPORTED_LIBS}
+#   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+#   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
+
+# install(DIRECTORY include/${PROJECT_NAME}/
+#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+
+# install(DIRECTORY asio/asio
+#   DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION})
+
+# install(FILES asio/asio.hpp
+#   DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION})
+
+# install(DIRECTORY scripts
+#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
