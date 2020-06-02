@@ -33,7 +33,8 @@ struct HunterState
     uint8_t set_zero_steering = 0;
 
     // motor state
-    MotorState motor_states[3];
+    static constexpr uint8_t motor_num = 3;
+    MotorState motor_states[motor_num];
 
     // motion state
     double linear_velocity = 0;

@@ -229,7 +229,7 @@ void HunterBase::UpdateHunterState(const HunterMessage &status_msg,
       // std::cout << "motor 1 driver feedback received" << std::endl;
       const MotorDriverStatusMessage &msg =
           status_msg.body.motor_driver_status_msg;
-      for (int i = 0; i < 4; ++i) {
+      for (int i = 0; i < HunterState::motor_num; ++i) {
         state.motor_states[status_msg.body.motor_driver_status_msg.motor_id]
             .current =
             (static_cast<uint16_t>(msg.data.status.current.low_byte) |

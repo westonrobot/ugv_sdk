@@ -45,7 +45,8 @@ struct ScoutState
     double battery_voltage = 0.0;
 
     // motor state
-    MotorState motor_states[4];
+    static constexpr uint8_t motor_num = 4;
+    MotorState motor_states[motor_num];
 
     // light state
     bool light_control_enabled = false;
