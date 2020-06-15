@@ -132,7 +132,7 @@ HunterState HunterBase::GetHunterState() {
 }
 
 void HunterBase::SetMotionCommand(
-    double linear_vel, double angular_vel,
+    double linear_vel, double steering_angle,
     HunterMotionCmd::FaultClearFlag fault_clr_flag) {
   // make sure cmd thread is started before attempting to send commands
   if (!cmd_thread_started_) StartCmdThread();
@@ -141,16 +141,16 @@ void HunterBase::SetMotionCommand(
     linear_vel = HunterMotionCmd::min_linear_velocity;
   if (linear_vel > HunterMotionCmd::max_linear_velocity)
     linear_vel = HunterMotionCmd::max_linear_velocity;
-  if (angular_vel < HunterMotionCmd::min_angular_velocity)
-    angular_vel = HunterMotionCmd::min_angular_velocity;
-  if (angular_vel > HunterMotionCmd::max_angular_velocity)
-    angular_vel = HunterMotionCmd::max_angular_velocity;
+  if (steering_angle < HunterMotionCmd::min_steering_angle)
+    steering_angle = HunterMotionCmd::min_steering_angle;
+  if (steering_angle > HunterMotionCmd::max_steering_angle)
+    steering_angle = HunterMotionCmd::max_steering_angle;
 
   std::lock_guard<std::mutex> guard(motion_cmd_mutex_);
   current_motion_cmd_.linear_velocity = static_cast<int8_t>(
       linear_vel / HunterMotionCmd::max_linear_velocity * 100.0);
   current_motion_cmd_.angular_velocity = static_cast<int8_t>(
-      angular_vel / HunterMotionCmd::max_angular_velocity * 100.0);
+      steering_angle / HunterMotionCmd::max_steering_angle * 100.0);
   current_motion_cmd_.fault_clear_flag = fault_clr_flag;
 }
 
@@ -229,7 +229,7 @@ void HunterBase::UpdateHunterState(const HunterMessage &status_msg,
       // std::cout << "motor 1 driver feedback received" << std::endl;
       const MotorDriverStatusMessage &msg =
           status_msg.body.motor_driver_status_msg;
-      for (int i = 0; i < 4; ++i) {
+      for (int i = 0; i < 3; ++i) {
         state.motor_states[status_msg.body.motor_driver_status_msg.motor_id]
             .current =
             (static_cast<uint16_t>(msg.data.status.current.low_byte) |

@@ -66,8 +66,8 @@ struct HunterMotionCmd
 
     static constexpr double max_linear_velocity = 1.5;      // 1.5 m/s
     static constexpr double min_linear_velocity = -1.5;     // -1.5 m/s
-    static constexpr double max_angular_velocity = 0.5235;  // 0.5235 rad/s
-    static constexpr double min_angular_velocity = -0.5235; // -0.5235 rad/s
+    static constexpr double max_steering_angle = 0.4622;    // 0.4622 rad ~= 26.5 degree
+    static constexpr double min_steering_angle = -0.4622;   // -0.4622 rad
 };
 } // namespace wescore
 

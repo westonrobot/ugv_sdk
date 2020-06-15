@@ -47,7 +47,7 @@ public:
     void SetCmdThreadPeriodMs(int32_t period_ms) { cmd_thread_period_ms_ = period_ms; };
 
     // motion control
-    void SetMotionCommand(double linear_vel, double angular_vel,
+    void SetMotionCommand(double linear_vel, double steering_angle,
                           HunterMotionCmd::FaultClearFlag fault_clr_flag = HunterMotionCmd::FaultClearFlag::NO_FAULT);
 
     // get robot state
