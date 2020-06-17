@@ -335,4 +335,4 @@ void ScoutBase::UpdateScoutState(const ScoutMessage &status_msg, ScoutState &sta
     }
     }
 }
-} // namespace wescore
+} // namespace westonrobot

@@ -13,60 +13,8 @@
 #include "stopwatch.h"
 
 namespace westonrobot {
-HunterBase::~HunterBase() {
-  if (serial_connected_) serial_if_->close();
 
-  if (cmd_thread_.joinable()) cmd_thread_.join();
-}
-
-void HunterBase::Connect(std::string dev_name) {
-  //   if (baud_rate == 0) {
-  ConfigureCANBus(dev_name);
-  //   } else {
-  //     ConfigureSerial(dev_name, baud_rate);
-
-  //     if (!serial_connected_)
-  //       std::cerr << "ERROR: Failed to connect to serial port" << std::endl;
-  //   }
-}
-
-void HunterBase::Disconnect() {
-  if (serial_connected_) {
-    if (serial_if_->is_open()) serial_if_->close();
-  }
-}
-
-void HunterBase::ConfigureCANBus(const std::string &can_if_name) {
-  can_if_ = std::make_shared<ASyncCAN>(can_if_name);
-
-  can_if_->set_receive_callback(
-      std::bind(&HunterBase::ParseCANFrame, this, std::placeholders::_1));
-
-  can_connected_ = true;
-}
-
-void HunterBase::ConfigureSerial(const std::string uart_name,
-                                 int32_t baud_rate) {
-  serial_if_ = std::make_shared<ASyncSerial>(uart_name, baud_rate);
-  serial_if_->open();
-
-  if (serial_if_->is_open()) serial_connected_ = true;
-
-  serial_if_->set_receive_callback(
-      std::bind(&HunterBase::ParseUARTBuffer, this, std::placeholders::_1,
-                std::placeholders::_2, std::placeholders::_3));
-}
-
-void HunterBase::StartCmdThread() {
-  current_motion_cmd_.linear_velocity = 0;
-  current_motion_cmd_.angular_velocity = 0;
-  current_motion_cmd_.fault_clear_flag =
-      HunterMotionCmd::FaultClearFlag::NO_FAULT;
-
-  cmd_thread_ = std::thread(
-      std::bind(&HunterBase::ControlLoop, this, cmd_thread_period_ms_));
-  cmd_thread_started_ = true;
-}
+void HunterBase::SendRobotCmd() {}
 
 void HunterBase::SendMotionCmd(uint8_t count) {
   // motion control message
@@ -107,22 +55,6 @@ void HunterBase::SendMotionCmd(uint8_t count) {
     // send to serial port
     // EncodeHunterMsgToUART(&m_msg, tx_buffer_, &tx_cmd_len_);
     // serial_if_->send_bytes(tx_buffer_, tx_cmd_len_);
-  }
-}
-
-void HunterBase::ControlLoop(int32_t period_ms) {
-  StopWatch ctrl_sw;
-  uint8_t cmd_count = 0;
-  uint8_t light_cmd_count = 0;
-  while (true) {
-    ctrl_sw.tic();
-
-    // motion control message
-    SendMotionCmd(cmd_count++);
-
-    ctrl_sw.sleep_until_ms(period_ms);
-    // std::cout << "control loop update frequency: " << 1.0 / ctrl_sw.toc() <<
-    // std::endl;
   }
 }
 
@@ -168,20 +100,6 @@ void HunterBase::ParseCANFrame(can_frame *rx_frame) {
   HunterMessage status_msg;
   DecodeHunterMsgFromCAN(rx_frame, &status_msg);
   NewStatusMsgReceivedCallback(status_msg);
-}
-
-void HunterBase::ParseUARTBuffer(uint8_t *buf, const size_t bufsize,
-                                 size_t bytes_received) {
-  // std::cout << "bytes received from serial: " << bytes_received << std::endl;
-  // serial_parser_.PrintStatistics();
-  // serial_parser_.ParseBuffer(buf, bytes_received);
-
-  // TODO
-  //   HunterMessage status_msg;
-  //   for (int i = 0; i < bytes_received; ++i) {
-  //     if (DecodeHunterMsgFromUART(buf[i], &status_msg))
-  //       NewStatusMsgReceivedCallback(status_msg);
-  //   }
 }
 
 void HunterBase::NewStatusMsgReceivedCallback(const HunterMessage &msg) {

@@ -17,7 +17,6 @@
 #include <cstdint>
 #include <thread>
 #include <mutex>
-#include <functional>
 
 #include "wrp_sdk/asyncio/async_can.hpp"
 #include "wrp_sdk/asyncio/async_serial.hpp"
@@ -64,10 +63,11 @@ class MobileBase {
   void StartCmdThread();
   void ControlLoop(int32_t period_ms);
 
+  // functions that must/may be implemented by child classes
   virtual void SendRobotCmd() = 0;
-  virtual void ParseCANFrame(can_frame *rx_frame) = 0;
+  virtual void ParseCANFrame(can_frame *rx_frame){};
   virtual void ParseUARTBuffer(uint8_t *buf, const size_t bufsize,
-                               size_t bytes_received) = 0;
+                               size_t bytes_received){};
 };
 }  // namespace westonrobot
 
