@@ -14,7 +14,10 @@
 
 namespace westonrobot {
 
-void HunterBase::SendRobotCmd() {}
+void HunterBase::SendRobotCmd() {
+  static uint8_t cmd_count = 0;
+  SendMotionCmd(cmd_count++);
+}
 
 void HunterBase::SendMotionCmd(uint8_t count) {
   // motion control message
@@ -42,19 +45,12 @@ void HunterBase::SendMotionCmd(uint8_t count) {
   if (can_connected_)
     m_msg.body.motion_cmd_msg.data.cmd.checksum = CalcHunterCANChecksum(
         CAN_MSG_MOTION_CMD_ID, m_msg.body.motion_cmd_msg.data.raw, 8);
-  // serial_connected_: checksum will be calculated later when packed into a
-  // complete serial frame
 
+  // send to can bus
   if (can_connected_) {
-    // send to can bus
     can_frame m_frame;
     EncodeHunterMsgToCAN(&m_msg, &m_frame);
     can_if_->send_frame(m_frame);
-  } else {
-    // TODO
-    // send to serial port
-    // EncodeHunterMsgToUART(&m_msg, tx_buffer_, &tx_cmd_len_);
-    // serial_if_->send_bytes(tx_buffer_, tx_cmd_len_);
   }
 }
 
