@@ -51,6 +51,7 @@ set(WRP_SDK_SRC
     src/async_can.cpp
     src/asyncio_utils.cpp
     # agilex mobile platforms
+    src/platforms/mobile_base.cpp
     src/platforms/hunter_base.cpp
     src/platforms/hunter_can_parser.c
     src/platforms/scout_base.cpp

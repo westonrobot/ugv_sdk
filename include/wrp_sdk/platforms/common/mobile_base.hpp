@@ -43,53 +43,31 @@ class MobileBase {
     cmd_thread_period_ms_ = period_ms;
   };
 
-  // motion control
-  void SetMotionCommand(double linear_vel, double steering_angle,
-                        HunterMotionCmd::FaultClearFlag fault_clr_flag =
-                            HunterMotionCmd::FaultClearFlag::NO_FAULT);
-
-  // get robot state
-  HunterState GetHunterState();
-
  protected:
-  // hardware communication interface
-  std::shared_ptr<ASyncCAN> can_if_;
-  std::shared_ptr<ASyncSerial> serial_if_;
-
-  // CAN priority higher than serial if both connected
+  // communication interface
   bool can_connected_ = false;
   bool serial_connected_ = false;
 
-  // serial port related variables
-  uint8_t tx_cmd_len_;
-  uint8_t tx_buffer_[HUNTER_CMD_BUF_LEN];
+  std::shared_ptr<ASyncCAN> can_if_;
+  std::shared_ptr<ASyncSerial> serial_if_;
 
-  // cmd/status update related variables
+  // command thread
   std::thread cmd_thread_;
-  std::mutex hunter_state_mutex_;
-  std::mutex motion_cmd_mutex_;
-
-  HunterState hunter_state_;
-  HunterMotionCmd current_motion_cmd_;
-
   int32_t cmd_thread_period_ms_ = 10;
   bool cmd_thread_started_ = false;
 
   // internal functions
-  void ConfigureCANBus(const std::string &can_if_name = "can1");
+  void ConfigureCAN(const std::string &can_if_name = "can0");
   void ConfigureSerial(const std::string uart_name = "/dev/ttyUSB0",
                        int32_t baud_rate = 115200);
 
   void StartCmdThread();
   void ControlLoop(int32_t period_ms);
 
-  void SendMotionCmd(uint8_t count);
-
-  void ParseCANFrame(can_frame *rx_frame);
-  void ParseUARTBuffer(uint8_t *buf, const size_t bufsize,
-                       size_t bytes_received);
-
-  void NewStatusMsgReceivedCallback(const HunterMessage &msg);
+  virtual void SendRobotCmd() = 0;
+  virtual void ParseCANFrame(can_frame *rx_frame) = 0;
+  virtual void ParseUARTBuffer(uint8_t *buf, const size_t bufsize,
+                               size_t bytes_received) = 0;
 };
 }  // namespace westonrobot
 
