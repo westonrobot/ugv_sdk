@@ -15,7 +15,7 @@
 
 #include "gtest/gtest.h"
 
-#include "scout_base/scout_base.hpp"
+#include "wrp_sdk/platforms/scout/scout_base.hpp"
 
 using namespace wescore;
 

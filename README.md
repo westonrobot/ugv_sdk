@@ -62,6 +62,12 @@ Install compile tools
 $ sudo apt install build-essential cmake
 ```
 
+Install dependent libraries
+
+```
+$ sudo apt install libasio-dev
+```
+
 If you want to build the TUI monitor tool, install libncurses
 
 ```
