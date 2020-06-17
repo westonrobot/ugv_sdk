@@ -16,8 +16,8 @@
 #include <mutex>
 #include <functional>
 
-#include "wrp_sdk/async_io/async_can.hpp"
-#include "wrp_sdk/async_io/async_serial.hpp"
+#include "wrp_sdk/asyncio/async_can.hpp"
+#include "wrp_sdk/asyncio/async_serial.hpp"
 
 #include "wrp_sdk/platforms/scout/scout_protocol.h"
 #include "wrp_sdk/platforms/scout/scout_can_parser.h"
@@ -25,7 +25,7 @@
 
 #include "wrp_sdk/platforms/scout/scout_types.hpp"
 
-namespace wescore
+namespace westonrobot
 {
 class ScoutBase
 {
@@ -105,6 +105,6 @@ private:
 public:
     static void UpdateScoutState(const ScoutMessage &status_msg, ScoutState &state);
 };
-} // namespace wescore
+} // namespace westonrobot
 
 #endif /* SCOUT_BASE_HPP */

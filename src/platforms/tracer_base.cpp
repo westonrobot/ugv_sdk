@@ -12,7 +12,7 @@
 
 #include "stopwatch/stopwatch.h"
 
-namespace wescore
+namespace westonrobot
 {
 TracerBase::~TracerBase()
 {
@@ -335,4 +335,4 @@ void TracerBase::UpdateTracerState(const TracerMessage &status_msg, TracerState 
     }
     }
 }
-} // namespace wescore
+} // namespace westonrobot

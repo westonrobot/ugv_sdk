@@ -19,7 +19,7 @@
 #include <cstring>
 #include <cassert>
 
-namespace wescore
+namespace westonrobot
 {
 
 /**
@@ -66,4 +66,4 @@ struct MsgBuffer
         return len - pos;
     }
 };
-} // namespace wescore
+} // namespace westonrobot

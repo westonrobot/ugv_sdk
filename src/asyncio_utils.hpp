@@ -19,7 +19,7 @@
 #include <algorithm>
 #include <iostream>
 
-namespace wescore
+namespace westonrobot
 {
 template <typename... Args>
 std::string format(const std::string &fmt, Args... args)
@@ -58,6 +58,6 @@ void url_parse_host(std::string host,
  * Parse ?ids=sid,cid
  */
 void url_parse_query(std::string query);
-} // namespace wescore
+} // namespace westonrobot
 
 #endif /* ASYNCIO_UTILS_HPP */

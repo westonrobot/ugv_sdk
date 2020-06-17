@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <iostream>
 
-namespace wescore
+namespace westonrobot
 {
 struct HunterState
 {
@@ -69,6 +69,6 @@ struct HunterMotionCmd
     static constexpr double max_steering_angle = 0.4622;    // 0.4622 rad ~= 26.5 degree
     static constexpr double min_steering_angle = -0.4622;   // -0.4622 rad
 };
-} // namespace wescore
+} // namespace westonrobot
 
 #endif /* HUNTER_TYPES_HPP */

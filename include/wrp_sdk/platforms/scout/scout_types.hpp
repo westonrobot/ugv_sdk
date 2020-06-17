@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <iostream>
 
-namespace wescore
+namespace westonrobot
 {
 struct ScoutState
 {
@@ -106,6 +106,6 @@ struct ScoutLightCmd
     LightMode rear_mode;
     uint8_t rear_custom_value;
 };
-} // namespace wescore
+} // namespace westonrobot
 
 #endif /* SCOUT_STATE_HPP */

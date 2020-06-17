@@ -9,7 +9,7 @@
 
 #include "asyncio_utils.hpp"
 
-namespace wescore
+namespace westonrobot
 {
 void url_parse_host(std::string host,
                     std::string &host_out, int &port_out,
@@ -79,4 +79,4 @@ void url_parse_query(std::string query)
     sys.assign(ids_it, comma_it);
     comp.assign(comma_it + 1, query.end());
 }
-} // namespace wescore
+} // namespace westonrobot

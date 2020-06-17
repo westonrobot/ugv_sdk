@@ -13,7 +13,7 @@
 #define _GNU_SOURCE
 #endif
 
-#include "wrp_sdk/async_io/async_can.hpp"
+#include "wrp_sdk/asyncio/async_can.hpp"
 
 #include <net/if.h>
 #include <poll.h>
@@ -26,7 +26,7 @@
 
 #include "asyncio_utils.hpp"
 
-using namespace wescore;
+using namespace westonrobot;
 
 using asio::buffer;
 using asio::io_service;

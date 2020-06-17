@@ -1,6 +1,6 @@
 #include "monitor/ncolors.hpp"
 
-using namespace wescore;
+using namespace westonrobot;
 
 int main(void)
 {

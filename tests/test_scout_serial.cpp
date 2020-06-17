@@ -2,13 +2,13 @@
 
 #include "scout_base/details/scout_serial_parser.hpp"
 
-using namespace wescore;
+using namespace westonrobot;
 
 #include "scout_base/scout_base.hpp"
 
 #define TEST_WITHOUT_SERIAL_HARDWARE
 
-using namespace wescore;
+using namespace westonrobot;
 
 int main(int argc, char **argv)
 {

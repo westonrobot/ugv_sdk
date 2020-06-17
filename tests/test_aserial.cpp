@@ -7,9 +7,9 @@
 
 #include <iostream>
 
-#include "wrp_sdk/async_io/async_serial.hpp"
+#include "wrp_sdk/asyncio/async_serial.hpp"
 
-using namespace wescore;
+using namespace westonrobot;
 
 void parse_buffer(uint8_t *buf, const size_t bufsize, size_t bytes_received)
 {

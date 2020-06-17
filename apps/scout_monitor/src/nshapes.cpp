@@ -9,7 +9,7 @@
 
 #include "monitor/nshapes.hpp"
 
-namespace wescore
+namespace westonrobot
 {
 void NShapes::DrawRectangle(int tl_y, int tl_x, int br_y, int br_x)
 {
@@ -38,4 +38,4 @@ void NShapes::WDrawRectangle(WINDOW *win, int tl_y, int tl_x, int br_y, int br_x
         mvwprintw(win, br_y, i, "-");
     }
 }
-} // namespace wescore
+} // namespace westonrobot

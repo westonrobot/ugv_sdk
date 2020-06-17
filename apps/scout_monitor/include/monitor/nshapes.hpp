@@ -12,13 +12,13 @@
 
 #include <ncurses.h>
 
-namespace wescore
+namespace westonrobot
 {
 struct NShapes
 {
     static void DrawRectangle(int tl_y, int tl_x, int br_y, int br_x);
     static void WDrawRectangle(WINDOW *win, int tl_y, int tl_x, int br_y, int br_x);
 };
-} // namespace wescore
+} // namespace westonrobot
 
 #endif /* NSHAPES_HPP */

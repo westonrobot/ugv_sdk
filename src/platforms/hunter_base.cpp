@@ -12,7 +12,7 @@
 
 #include "stopwatch.h"
 
-namespace wescore {
+namespace westonrobot {
 HunterBase::~HunterBase() {
   if (serial_connected_) serial_if_->close();
 
@@ -253,4 +253,4 @@ void HunterBase::UpdateHunterState(const HunterMessage &status_msg,
       break;
   }
 }
-}  // namespace wescore
+}  // namespace westonrobot

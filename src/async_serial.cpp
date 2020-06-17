@@ -26,14 +26,14 @@
 #include <cassert>
 #include <iostream>
 
-#include "wrp_sdk/async_io/async_serial.hpp"
+#include "wrp_sdk/asyncio/async_serial.hpp"
 #include "asyncio_utils.hpp"
 
 #if defined(__linux__)
 #include <linux/serial.h>
 #endif
 
-using namespace wescore;
+using namespace westonrobot;
 
 using asio::buffer;
 using asio::io_service;

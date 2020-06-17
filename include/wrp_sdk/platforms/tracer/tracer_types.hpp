@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <iostream>
 
-namespace wescore
+namespace westonrobot
 {
 struct TracerState
 {
@@ -106,6 +106,6 @@ struct TracerLightCmd
     LightMode rear_mode;
     uint8_t rear_custom_value;
 };
-} // namespace wescore
+} // namespace westonrobot
 
 #endif /* TRACER_TYPES_HPP */

@@ -40,10 +40,10 @@
 
 #include "asio.hpp"
 
-#include "wrp_sdk/async_io/device_error.hpp"
-#include "wrp_sdk/async_io/msg_buffer.hpp"
+#include "wrp_sdk/asyncio/device_error.hpp"
+#include "wrp_sdk/asyncio/msg_buffer.hpp"
 
-namespace wescore
+namespace westonrobot
 {
 using steady_clock = std::chrono::steady_clock;
 using lock_guard = std::lock_guard<std::recursive_mutex>;
@@ -140,6 +140,6 @@ private:
     void iostat_tx_add(std::size_t bytes);
     void iostat_rx_add(std::size_t bytes);
 };
-} // namespace wescore
+} // namespace westonrobot
 
 #endif /* ASYNC_SERIAL_HPP */

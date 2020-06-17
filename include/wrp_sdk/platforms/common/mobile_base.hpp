@@ -1,14 +1,17 @@
 /*
- * hunter_base.hpp
+ * mobile_base.hpp
  *
- * Created on: Apr 01, 2020 09:43
+ * Created on: Jun 17, 2020 11:23
  * Description:
  *
- * Copyright (c) 2019 Ruixiang Du (rdu)
+ * Generic mobile base: this class handles the communication
+ * logic that is similar across different mobile platforms
+ *
+ * Copyright (c) 2020 Ruixiang Du (rdu)
  */
 
-#ifndef HUNTER_BASE_HPP
-#define HUNTER_BASE_HPP
+#ifndef MOBILE_BASE_HPP
+#define MOBILE_BASE_HPP
 
 #include <string>
 #include <cstdint>
@@ -19,24 +22,18 @@
 #include "wrp_sdk/asyncio/async_can.hpp"
 #include "wrp_sdk/asyncio/async_serial.hpp"
 
-#include "wrp_sdk/platforms/hunter/hunter_protocol.h"
-#include "wrp_sdk/platforms/hunter/hunter_can_parser.h"
-
-#include "wrp_sdk/platforms/hunter/hunter_types.hpp"
-
 namespace westonrobot {
-class HunterBase {
+class MobileBase {
  public:
-  HunterBase() = default;
-  ~HunterBase();
+  MobileBase() = default;
+  virtual ~MobileBase();
 
-  // do not allow copy
-  HunterBase(const HunterBase &hunter) = delete;
-  HunterBase &operator=(const HunterBase &hunter) = delete;
+  // do not allow copy or assignment
+  MobileBase(const MobileBase &hunter) = delete;
+  MobileBase &operator=(const MobileBase &hunter) = delete;
 
- public:
-  // connect to roboot from CAN
-  void Connect(std::string dev_name);
+  // connect to roboot from CAN or serial
+  void Connect(std::string dev_name, int32_t baud_rate = 0);
 
   // disconnect from roboot, only valid for serial port
   void Disconnect();
@@ -54,7 +51,7 @@ class HunterBase {
   // get robot state
   HunterState GetHunterState();
 
- private:
+ protected:
   // hardware communication interface
   std::shared_ptr<ASyncCAN> can_if_;
   std::shared_ptr<ASyncSerial> serial_if_;
@@ -93,11 +90,7 @@ class HunterBase {
                        size_t bytes_received);
 
   void NewStatusMsgReceivedCallback(const HunterMessage &msg);
-
- public:
-  static void UpdateHunterState(const HunterMessage &status_msg,
-                                HunterState &state);
 };
 }  // namespace westonrobot
 
-#endif /* HUNTER_BASE_HPP */
+#endif /* MOBILE_BASE_HPP */

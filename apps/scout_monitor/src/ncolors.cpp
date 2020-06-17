@@ -58,7 +58,7 @@ short CursorColor(int fg)
 }
 } // namespace
 
-namespace wescore
+namespace westonrobot
 {
 void NColors::InitColors()
 {
@@ -111,4 +111,4 @@ void NColors::WUnsetColor(WINDOW *win, int fg, int bg)
     if (IsBold(fg))
         wattroff(win, A_BOLD);
 }
-} // namespace wescore
+} // namespace westonrobot

@@ -24,7 +24,7 @@
 
 #include "tracer_base/tracer_types.hpp"
 
-namespace wescore
+namespace westonrobot
 {
 class TracerBase
 {
@@ -104,6 +104,6 @@ private:
 public:
     static void UpdateTracerState(const TracerMessage &status_msg, TracerState &state);
 };
-} // namespace wescore
+} // namespace westonrobot
 
 #endif /* TRACER_BASE_HPP */

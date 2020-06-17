@@ -9,7 +9,7 @@
 
 #include "scout_base/scout_base.hpp"
 
-using namespace wescore;
+using namespace westonrobot;
 
 int main(int argc, char **argv)
 {

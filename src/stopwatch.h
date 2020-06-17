@@ -35,7 +35,7 @@ For more information, please refer to <http://unlicense.org>
 
 #include <thread>
 
-namespace wescore {
+namespace westonrobot {
 // only supported on x86 processors
 #if (defined __x86_64__) || (defined __i386)
 // An implementation of the 'TrivialClock' concept using the rdtscp instruction.
@@ -157,6 +157,6 @@ struct StopWatch {
   };
 };
 
-}  // namespace wescore
+}  // namespace westonrobot
 
 #endif  // STOPWATCH_H

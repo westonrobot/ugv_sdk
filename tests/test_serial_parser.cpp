@@ -2,7 +2,7 @@
 
 #include "scout_base/details/scout_serial_parser.hpp"
 
-using namespace wescore;
+using namespace westonrobot;
 
 void print_msg(uint8_t data[8])
 {

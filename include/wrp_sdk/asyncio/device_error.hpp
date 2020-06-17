@@ -19,7 +19,7 @@
 #include <cstring>
 #include <stdexcept>
 
-namespace wescore
+namespace westonrobot
 {
 class DeviceError : public std::runtime_error
 {

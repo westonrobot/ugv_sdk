@@ -17,7 +17,7 @@
 
 #include <ncurses.h>
 
-namespace wescore
+namespace westonrobot
 {
 struct NColors
 {
@@ -62,6 +62,6 @@ struct NColors
     static void WSetColor(WINDOW *win, int fg, int bg = BLACK);
     static void WUnsetColor(WINDOW *win, int fg, int bg = BLACK);
 };
-} // namespace wescore
+} // namespace westonrobot
 
 #endif /* NCOLORS_HPP */

@@ -12,7 +12,7 @@
 
 #include "stopwatch.h"
 
-namespace wescore
+namespace westonrobot
 {
 ScoutBase::~ScoutBase()
 {

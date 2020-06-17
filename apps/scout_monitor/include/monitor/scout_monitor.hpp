@@ -14,7 +14,7 @@
 
 #include <ncurses.h>
 
-namespace wescore
+namespace westonrobot
 {
 class ScoutMonitor
 {
@@ -73,6 +73,6 @@ private:
     void UpdateScoutSystemInfo();
     void UpdateScoutCmdWindow();
 };
-} // namespace wescore
+} // namespace westonrobot
 
 #endif /* SCOUT_MONITOR_HPP */

@@ -5,6 +5,7 @@ Copyright (c) 2020 [WestonRobot](https://www.westonrobot.com/)
 ## Introduction
 
 Supported platforms
+
 * **Scout**: skid-steer mobile base
 * **Hunter**: ackermann mobile base
 

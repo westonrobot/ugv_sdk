@@ -12,7 +12,7 @@
 
 #define TEST_WITHOUT_SERIAL_HARDWARE
 
-using namespace wescore;
+using namespace westonrobot;
 
 int main(int argc, char **argv) {
   std::string device_name;

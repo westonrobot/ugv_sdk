@@ -111,7 +111,7 @@ struct StopWatch
 };
 } // namespace
 
-namespace wescore
+namespace westonrobot
 {
 ScoutMonitor::ScoutMonitor()
 {
@@ -655,4 +655,4 @@ void ScoutMonitor::ShowMotorInfo(int y, int x, double cur, int rpm, int temp, bo
     std::string temp_str = "TMP:" + ConvertFloatToString(temp, 0);
     mvwprintw(body_info_win_, y + 3, col_title, temp_str.c_str());
 }
-} // namespace wescore
+} // namespace westonrobot

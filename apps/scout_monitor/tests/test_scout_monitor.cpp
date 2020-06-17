@@ -7,7 +7,7 @@
 
 #include "monitor/scout_monitor.hpp"
 
-using namespace wescore;
+using namespace westonrobot;
 
 ScoutMonitor monitor;
 
