@@ -10,13 +10,8 @@ set(RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/devel)
 
 ## Set compiler to use c++ 11 features
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
-## Put all binary files into /bin and libraries into /lib
-# set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
-# set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
-# set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 ## Chosse build type
 # set(CMAKE_BUILD_TYPE Release)
@@ -31,6 +26,20 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
     "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
+
+## Use GNUInstallDirs to install libraries into correct
+# locations on all platforms.
+include(GNUInstallDirs)
+message(STATUS "Project will be installed to ${CMAKE_INSTALL_PREFIX}")
+
+## Put all binary files into /bin and libraries into /lib
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
+set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 
 ## Optionally built modules: ON/OFF
 set(BUILD_TESTS OFF)
@@ -91,10 +100,6 @@ catkin_package(
 #  CATKIN_DEPENDS hunter_msgs roscpp 
 #  DEPENDS system_lib
 )
-
-## Use GNUInstallDirs to install libraries into correct
-# locations on all platforms.
-include(GNUInstallDirs)
 
 ## Add catkin install targets
 install(TARGETS ${PROJECT_NAME}
