@@ -51,19 +51,6 @@ if(BUILD_MONITOR AND NOT CURSES_FOUND)
 endif()
 
 # Add libraries
-# set(WRP_SDK_SRC
-#     src/async_serial.cpp
-#     src/async_can.cpp
-#     src/asyncio_utils.cpp
-#     # agilex mobile platforms
-#     src/platforms/mobile_base.cpp
-#     src/platforms/hunter_base.cpp
-#     src/platforms/hunter_can_parser.c
-#     src/platforms/scout_base.cpp
-#     src/platforms/scout_can_parser.c
-#     src/platforms/scout_uart_parser.c
-# )
-# add_library(${PROJECT_NAME} STATIC ${WRP_SDK_SRC})
 add_library(${PROJECT_NAME} 
     src/async_serial.cpp
     src/async_can.cpp
