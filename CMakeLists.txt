@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 3.1.0)
 project(wrp_sdk)
 
-# Find catkin
-find_package(catkin REQUIRED)
-
 # generate symbols for IDE indexer
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/devel)
@@ -16,6 +13,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 ## Chosse build type
 # set(CMAKE_BUILD_TYPE Release)
 # set(CMAKE_BUILD_TYPE Debug)
+
+## Optionally built modules: ON/OFF
+set(BUILD_TESTS OFF)
+set(BUILD_MONITOR ON)
+
+#############################################################################
 
 set(default_build_type "Release")
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -36,10 +39,6 @@ message(STATUS "Project will be installed to ${CMAKE_INSTALL_PREFIX}")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
-
-## Optionally built modules: ON/OFF
-set(BUILD_TESTS OFF)
-set(BUILD_MONITOR ON)
 
 # Disable monitor if ncurses library is not found
 set(CURSES_NEED_NCURSES TRUE)
@@ -90,23 +89,15 @@ set(INSTALL_CMAKEDIR ${DEF_INSTALL_CMAKEDIR} CACHE PATH "Installation directory 
 # Report to user
 foreach(p LIB BIN INCLUDE CMAKE)
     file(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX}/${INSTALL_${p}DIR} _path)
-    message(STATUS "Installing ${p} components to ${_path}")
+    message(STATUS " -> To install ${p} components to ${_path}")
     unset(_path)
 endforeach()
 
-## Export catkin targets
-catkin_package(
- INCLUDE_DIRS include
- LIBRARIES ${PROJECT_NAME}
-#  CATKIN_DEPENDS hunter_msgs roscpp 
-#  DEPENDS system_lib
-)
-
-## Add catkin install targets
-install(TARGETS ${PROJECT_NAME}
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
+## Add install targets
+# install(TARGETS ${PROJECT_NAME}
+#   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+#   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
 
 # install(DIRECTORY include/${PROJECT_NAME}/
 #   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
