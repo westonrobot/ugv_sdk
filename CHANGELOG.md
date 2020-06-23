@@ -1,4 +1,9 @@
-# Changelog for scout_sdk
+# Changelog for wrp_sdk
+
+## 1.0 (2020-06-17)
+-------------------
+* Merged multiple small libraries into one "wrpsdk"
+* Changed to "plain" project structure
 
 ## 0.5 (2020-04-01)
 -------------------

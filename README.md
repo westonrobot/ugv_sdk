@@ -5,6 +5,7 @@ Copyright (c) 2020 [WestonRobot](https://www.westonrobot.com/)
 ## Introduction
 
 Supported platforms
+
 * **Scout**: skid-steer mobile base
 * **Hunter**: ackermann mobile base
 
@@ -60,6 +61,12 @@ Install compile tools
 
 ```
 $ sudo apt install build-essential cmake
+```
+
+Install dependent libraries
+
+```
+$ sudo apt install libasio-dev
 ```
 
 If you want to build the TUI monitor tool, install libncurses
