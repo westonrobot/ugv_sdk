@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.1.0)
 project(wrp_sdk)
 
+# Find catkin
+find_package(catkin REQUIRED)
+
 # generate symbols for IDE indexer
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/devel)
@@ -92,6 +95,12 @@ foreach(p LIB BIN INCLUDE CMAKE)
     message(STATUS " -> To install ${p} components to ${_path}")
     unset(_path)
 endforeach()
+
+catkin_package(
+    LIBRARIES ${PROJECT_NAME}
+    INCLUDE_DIRS include
+    # DEPENDS rt pthread
+)
 
 ## Add install targets
 # install(TARGETS ${PROJECT_NAME}
