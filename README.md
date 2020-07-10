@@ -57,6 +57,17 @@ You need to re-login to get the change to take effect.
 
 ## Build SDK
 
+### I. Use the package with ROS
+
+```
+$ cd <your-catkin-ws>/src
+$ git clone https://github.com/westonrobot/wrp_sdk.git
+$ cd ..
+$ catkin_make
+```
+
+### II. Use the package without ROS
+
 Install compile tools
 
 ```
@@ -110,6 +121,8 @@ or
 ```
 $./app_scout_monitor /dev/ttyUSB0 115200
 ```
+
+Note: the monitor app is not built by default if you use this SDK with ROS.
 
 ## Known Limitations
 

@@ -75,7 +75,11 @@ target_link_libraries(${PROJECT_NAME} pthread)
 target_include_directories(${PROJECT_NAME} PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 	$<INSTALL_INTERFACE:include>
-	PRIVATE src)
+    PRIVATE src)
+    
+if(NOT catkin_FOUND)
+    add_subdirectory(apps)
+endif()
 
 # Add executables
 if(BUILD_TESTS)
