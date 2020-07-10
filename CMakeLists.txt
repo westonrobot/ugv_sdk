@@ -2,7 +2,12 @@ cmake_minimum_required(VERSION 3.1.0)
 project(wrp_sdk)
 
 # Find catkin
-find_package(catkin REQUIRED)
+find_package(catkin QUIET)
+if(catkin_FOUND)
+    message(STATUS "Build package with catkin")
+else()
+    message(STATUS "Build package with cmake")
+endif()
 
 # generate symbols for IDE indexer
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -96,13 +101,14 @@ foreach(p LIB BIN INCLUDE CMAKE)
     unset(_path)
 endforeach()
 
+if(catkin_FOUND)
 catkin_package(
     LIBRARIES ${PROJECT_NAME}
     INCLUDE_DIRS include
     # DEPENDS rt pthread
 )
 
-## Add install targets
+## Add catkin install targets
 # install(TARGETS ${PROJECT_NAME}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
@@ -119,3 +125,4 @@ catkin_package(
 
 # install(DIRECTORY scripts
 #   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+endif()
