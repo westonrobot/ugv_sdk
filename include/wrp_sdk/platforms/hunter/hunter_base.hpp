@@ -36,10 +36,6 @@ class HunterBase : public MobileBase {
                             HunterMotionCmd::FaultClearFlag::NO_FAULT);
 
  private:
-  // serial port related variables
-  uint8_t tx_cmd_len_;
-  uint8_t tx_buffer_[HUNTER_CMD_BUF_LEN];
-
   // cmd/status update related variables
   std::mutex hunter_state_mutex_;
   std::mutex motion_cmd_mutex_;
