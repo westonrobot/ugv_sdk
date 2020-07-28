@@ -48,10 +48,6 @@ class HunterBase : public MobileBase {
   HunterMotionCmd current_motion_cmd_;
 
   // internal functions
-  void ConfigureCANBus(const std::string &can_if_name = "can1");
-  void ConfigureSerial(const std::string uart_name = "/dev/ttyUSB0",
-                       int32_t baud_rate = 115200);
-
   void SendRobotCmd() override;
   void ParseCANFrame(can_frame *rx_frame) override;
   void ParseUARTBuffer(uint8_t *buf, const size_t bufsize,
