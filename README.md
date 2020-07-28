@@ -89,7 +89,7 @@ $ sudo apt install libncurses5-dev
 Configure and build
 
 ```
-$ cd scout_sdk 
+$ cd wrp_sdk 
 $ mkdir build
 $ cd build
 $ cmake ..
