@@ -1,5 +1,7 @@
 # Weston Robot Platform SDK
 
+![C++](https://github.com/actions/hello-world/workflows/.github/workflows/standalone-ci.yml/badge.svg)
+
 Copyright (c) 2020 [WestonRobot](https://www.westonrobot.com/)
 
 ## Introduction
