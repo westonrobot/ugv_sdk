@@ -1,0 +1,20 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-18.04
+
+    steps:
+    - name: install dependencies
+      run: apt install build-essential cmake libasio-dev
+    - name: build
+      run: mkdir build && cd build && cmake .. && cmake --build . 
+    - name: pack
+      run: cpack
