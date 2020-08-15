@@ -1,5 +1,6 @@
 # Weston Robot Platform SDK
 
+![Gitlab Pipeline](https://gitlab.com/westonrobot/core/wrp_sdk/badges/master/pipeline.svg)
 ![GitHub Workflow Status](https://github.com/westonrobot/wrp_sdk/workflows/Cpp/badge.svg)
 
 Copyright (c) 2020 [WestonRobot](https://www.westonrobot.com/)
