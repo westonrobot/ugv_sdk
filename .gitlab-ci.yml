@@ -5,7 +5,7 @@ build:
   # instead of calling g++ directly you can also use some build toolkit like make
   # install the necessary build tools when needed
   before_script:
-    - sudo apt update && apt -y install libasio-dev
+    - apt update && apt -y install libasio-dev
   script:
     - mkdir build && cd build
     - cmake ..
