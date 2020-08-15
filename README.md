@@ -1,6 +1,7 @@
 # Weston Robot Platform SDK
 
 ![GitHub Workflow Status](https://github.com/westonrobot/wrp_sdk/workflows/Cpp/badge.svg)
+![GitHub Workflow Status](https://github.com/westonrobot/wrp_sdk/workflows/ROS/badge.svg)
 
 Copyright (c) 2020 [WestonRobot](https://www.westonrobot.com/)
 
