@@ -57,6 +57,13 @@ You need to re-login to get the change to take effect.
 
 ## Build SDK
 
+### Install dependent libraries
+
+```
+$ sudo apt install build-essential cmake
+$ sudo apt install libasio-dev
+```
+
 ### I. Use the package with ROS
 
 ```
@@ -68,19 +75,7 @@ $ catkin_make
 
 ### II. Use the package without ROS
 
-Install compile tools
-
-```
-$ sudo apt install build-essential cmake
-```
-
-Install dependent libraries
-
-```
-$ sudo apt install libasio-dev
-```
-
-If you want to build the TUI monitor tool, install libncurses
+If you want to build the TUI monitor tool, additionally install libncurses
 
 ```
 $ sudo apt install libncurses5-dev
