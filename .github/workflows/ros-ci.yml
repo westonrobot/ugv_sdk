@@ -1,0 +1,29 @@
+# This is a basic workflow to help you get started with Actions
+
+name: ROS
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build-melodic:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-18.04
+    container: 
+      image: rduweston/ubuntu-ci:melodic-bionic
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+    - name: Setup catkin workspace
+      run: mkdir -p /catkin_ws/src && cd /catkin_ws/src && catkin_init_workspace
+    - name: Copy code to catkin workspace
+      run: cp -r $GITHUB_WORKSPACE/wrp_sdk /catkin_ws/src
+    - name: Run catkin_make
+      run: cd /catkin_ws && catkin_make
