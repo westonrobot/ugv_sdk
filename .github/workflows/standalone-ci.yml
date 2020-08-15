@@ -1,4 +1,4 @@
-name: standalone-ci
+name: Cpp
 
 on:
   push:
