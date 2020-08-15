@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - name: install dependencies
-      run: apt install build-essential cmake libasio-dev
+      run: sudo apt-get install -y build-essential cmake libasio-dev
     - name: build
       run: mkdir build && cd build && cmake .. && cmake --build . 
     - name: pack
