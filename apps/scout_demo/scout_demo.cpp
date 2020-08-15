@@ -7,7 +7,7 @@
  * Copyright (c) 2019 Ruixiang Du (rdu)
  */
 
-#include "scout_base/scout_base.hpp"
+#include "wrp_sdk/platforms/scout/scout_base.hpp"
 
 using namespace westonrobot;
 

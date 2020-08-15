@@ -10,7 +10,7 @@
 #ifndef SCOUT_MONITOR_HPP
 #define SCOUT_MONITOR_HPP
 
-#include "scout_base/scout_base.hpp"
+#include "wrp_sdk/platforms/scout/scout_base.hpp"
 
 #include <ncurses.h>
 
