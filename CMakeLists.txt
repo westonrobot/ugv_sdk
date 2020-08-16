@@ -9,7 +9,7 @@ endif()
 project(wrp_sdk VERSION 0.1.5)
 
 ## Project Options
-set(BUILD_TESTS OFF)
+option(BUILD_TESTS ON)
 
 ## Check if pkg is built with ROS catkin
 if(CATKIN_DEVEL_PREFIX)
@@ -60,6 +60,8 @@ if(BUILD_WITHOUT_ROS)
 endif()
 
 # Build libraries
+find_package(Threads REQUIRED)
+
 add_library(${PROJECT_NAME} 
     src/async_serial.cpp
     src/async_can.cpp
@@ -73,7 +75,7 @@ add_library(${PROJECT_NAME}
     src/platforms/scout_uart_parser.c
 )
 target_compile_definitions(${PROJECT_NAME} PUBLIC "-DASIO_ENABLE_OLD_SERVICES -DASIO_HAS_POSIX_STREAM_DESCRIPTOR")
-target_link_libraries(${PROJECT_NAME} pthread)
+target_link_libraries(${PROJECT_NAME} Threads::Threads)
 target_include_directories(${PROJECT_NAME} PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 	$<INSTALL_INTERFACE:include>
@@ -97,10 +99,12 @@ endif()
 
 # Build tests
 if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME AND BUILD_TESTS)
+    message(STATUS "Tests will be built")
     enable_testing()
     include(GoogleTest)
     add_subdirectory(tests)
-    add_subdirectory(unit_tests)
+else()
+    message(STATUS "Tests will not be built")
 endif()
 
 ## Installation configuration
