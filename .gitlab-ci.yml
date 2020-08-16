@@ -2,8 +2,6 @@ image: rduweston/ubuntu-ci:18.04
 
 build:
   stage: build
-  # instead of calling g++ directly you can also use some build toolkit like make
-  # install the necessary build tools when needed
   before_script:
     - apt update && apt -y install libasio-dev
   script:
@@ -22,4 +20,4 @@ build:
 test:
   stage: test
   script:
-    - ./build/bin/gtest_all
+    - ./bin/gtest_all

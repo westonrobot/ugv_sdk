@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>wrp_sdk</name>
-  <version>0.3.3</version>
+  <version>0.1.5</version>
   <description>Weston Robot Platform SDK</description>
 
   <author email="ruixiang.du@westonrobot.com">Ruixiang Du</author>
@@ -9,9 +9,9 @@
 
   <license>BSD</license>
 
-  <url type="website">TODO</url>
-  <url type="bugtracker">TODO</url>
-  <url type="repository">TODO</url>
+  <url type="website">https://www.westonrobot.com/</url>
+  <url type="bugtracker">https://github.com/westonrobot/wrp_sdk/issues</url>
+  <url type="repository">https://github.com/westonrobot/wrp_sdk</url>
 
   <buildtool_depend>catkin</buildtool_depend> 
   <export></export>
