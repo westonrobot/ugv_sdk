@@ -8,9 +8,10 @@ build:
     - mkdir build && cd build
     - cmake -DBUILD_TESTS=ON ..
     - cmake --build . && cpack
-#   artifacts:
-#     paths:
-#       - mybinary
+  artifacts:
+    paths:
+      - build/bin
+      - build/lib
       # depending on your build setup it's most likely a good idea to cache outputs to reduce the build time
       # cache:
       #   paths:
