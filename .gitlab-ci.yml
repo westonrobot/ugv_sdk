@@ -20,4 +20,6 @@ build:
 test:
   stage: test
   script:
-    - pwd && ls && ./bin/gtest_all
+    - ./build/bin/gtest_all
+  dependencies:
+    - build
