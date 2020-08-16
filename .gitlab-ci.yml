@@ -20,4 +20,4 @@ build:
 test:
   stage: test
   script:
-    - ./bin/gtest_all
+    - pwd && ls && ./bin/gtest_all
