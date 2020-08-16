@@ -8,7 +8,7 @@ build:
     - apt update && apt -y install libasio-dev
   script:
     - mkdir build && cd build
-    - cmake ..
+    - cmake -DBUILD_TESTS=ON ..
     - cmake --build . && cpack
 #   artifacts:
 #     paths:
@@ -19,7 +19,7 @@ build:
       #     - "*.o"
 
 # run tests using the binary built before
-# test:
-#   stage: test
-#   script:
-#     - ./runmytests.sh
+test:
+  stage: test
+  script:
+    - ./build/bin/gtest_all
