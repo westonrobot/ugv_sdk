@@ -57,8 +57,8 @@ class ScoutBase : public MobileBase {
   ScoutMotionCmd current_motion_cmd_;
   ScoutLightCmd current_light_cmd_;
 
-  int32_t cmd_thread_period_ms_ = 10;
-  bool cmd_thread_started_ = false;
+  
+ 
 
   bool light_ctrl_enabled_ = false;
   bool light_ctrl_requested_ = false;
