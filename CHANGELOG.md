@@ -2,12 +2,14 @@
 
 ## 0.1.5 (2020-06-17)
 -------------------
-* Merged multiple small libraries into one "wrpsdk"
+* Merged multiple small libraries into one "wrp_sdk"
 * Changed to "plain" project structure
+* Contributors: Ruixiang Du
 
 ## 0.1.4 (2020-04-01)
 -------------------
 * Added initial support of Hunter
+* Contributors: Ruixiang Du
 
 ## 0.1.3 (2019-09-15)
 ------------------

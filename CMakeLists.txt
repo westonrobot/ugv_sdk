@@ -10,6 +10,8 @@ project(wrp_sdk VERSION 0.1.5)
 
 ## Project Options
 option(BUILD_TESTS ON)
+# set(CMAKE_BUILD_TYPE Release)
+# set(CMAKE_BUILD_TYPE Debug)
 
 ## Check if pkg is built with ROS catkin
 if(CATKIN_DEVEL_PREFIX)
@@ -35,9 +37,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 ## Chosse build type
-# set(CMAKE_BUILD_TYPE Release)
-# set(CMAKE_BUILD_TYPE Debug)
-
 set(default_build_type "Release")
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
@@ -63,9 +62,9 @@ endif()
 find_package(Threads REQUIRED)
 
 add_library(${PROJECT_NAME} 
-    src/async_serial.cpp
-    src/async_can.cpp
-    src/asyncio_utils.cpp
+    src/asyncio/async_serial.cpp
+    src/asyncio/async_can.cpp
+    src/asyncio/asyncio_utils.cpp
     # agilex mobile platforms
     src/platforms/mobile_base.cpp
     src/platforms/hunter_base.cpp
