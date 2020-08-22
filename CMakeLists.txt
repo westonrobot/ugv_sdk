@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.10.2)
+project(wrp_sdk VERSION 0.1.5)
 
 find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
@@ -6,10 +7,9 @@ if(CCACHE_PROGRAM)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
 endif()
 
-project(wrp_sdk VERSION 0.1.5)
-
 ## Project Options
 option(BUILD_TESTS ON)
+option(STATIC_CHECK OFF)
 # set(CMAKE_BUILD_TYPE Release)
 # set(CMAKE_BUILD_TYPE Debug)
 
@@ -24,6 +24,14 @@ endif()
 
 ## Generate symbols for IDE indexer
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+if(STATIC_CHECK)
+    find_program(CPPCHECK cppcheck)
+    if(CPPCHECK)
+        message(STATUS "Found cppcheck")
+        set(CMAKE_CXX_CPPCHECK cppcheck;--std=c++11;--enable=all)
+    endif() 
+endif()
 
 ## Additional cmake module path
 set(USER_CMAKE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
