@@ -1,0 +1,25 @@
+image: rduweston/ubuntu-ci:18.04
+
+build:
+  stage: build
+  before_script:
+    - apt update && apt -y install libasio-dev
+  script:
+    - mkdir build && cd build
+    - cmake -DBUILD_TESTS=ON ..
+    - cmake --build . && cpack
+  artifacts:
+    paths:
+      - build/bin
+      # depending on your build setup it's most likely a good idea to cache outputs to reduce the build time
+      # cache:
+      #   paths:
+      #     - "*.o"
+
+# run tests using the binary built before
+test:
+  stage: test
+  script:
+    - ./build/bin/gtest_all
+  dependencies:
+    - build

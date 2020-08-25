@@ -36,10 +36,6 @@ class HunterBase : public MobileBase {
                             HunterMotionCmd::FaultClearFlag::NO_FAULT);
 
  private:
-  // serial port related variables
-  uint8_t tx_cmd_len_;
-  uint8_t tx_buffer_[HUNTER_CMD_BUF_LEN];
-
   // cmd/status update related variables
   std::mutex hunter_state_mutex_;
   std::mutex motion_cmd_mutex_;
@@ -48,10 +44,6 @@ class HunterBase : public MobileBase {
   HunterMotionCmd current_motion_cmd_;
 
   // internal functions
-  void ConfigureCANBus(const std::string &can_if_name = "can1");
-  void ConfigureSerial(const std::string uart_name = "/dev/ttyUSB0",
-                       int32_t baud_rate = 115200);
-
   void SendRobotCmd() override;
   void ParseCANFrame(can_frame *rx_frame) override;
   void ParseUARTBuffer(uint8_t *buf, const size_t bufsize,

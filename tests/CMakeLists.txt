@@ -1,22 +1,17 @@
-# Add executables
-add_executable(test_aserial test_aserial.cpp)
-target_link_libraries(test_aserial wrp_sdk)
+# Google tests
+message(STATUS "Build unit tests with Google Test.")
+add_subdirectory(googletest)
 
-add_executable(test_aserial_comm test_aserial_comm.cpp)
-target_link_libraries(test_aserial_comm wrp_sdk)
+# reference: https://cliutils.gitlab.io/modern-cmake/chapters/testing/googletest.html
+mark_as_advanced(
+    BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS
+    gmock_build_tests gtest_build_samples gtest_build_tests
+    gtest_disable_pthreads gtest_force_shared_crt gtest_hide_internal_symbols
+)
 
-add_executable(test_asio_can test_asio_can.cpp)
-target_link_libraries(test_asio_can wrp_sdk)
-
-add_executable(test_acan test_acan.cpp)
-target_link_libraries(test_acan wrp_sdk)
-
-# hunter
-add_executable(test_hunter_base test_hunter_base.cpp)
-target_link_libraries(test_hunter_base wrp_sdk)
-
-# scout
-add_executable(test_scout_base test_scout_base.cpp)
-target_link_libraries(test_scout_base wrp_sdk)
-
-# tracer
+# add unit tests
+set(GRAPH_TESTS
+    unit_tests/scout_can_protocol_test.cpp
+)
+add_executable(gtest_all ${GRAPH_TESTS})
+target_link_libraries(gtest_all gtest gmock gtest_main wrp_sdk)
