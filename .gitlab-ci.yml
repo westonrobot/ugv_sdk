@@ -28,3 +28,15 @@ cpp-test:
     - ./bin/gtest_all
   # dependencies:
   #   - cpp-build
+
+## Build and test as catkin package
+catkin-build:
+  stage: build
+  image: rduweston/melodic-bionic
+  before_script:
+    - apt update && apt -y install libasio-dev
+  script:
+    - cd $CI_PROJECT_PATH && pwd
+    - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
+    - cd /catkin_ws/src && cp -r $CI_PROJECT_PATH .
+    - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make"
