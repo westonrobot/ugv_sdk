@@ -48,7 +48,6 @@ class ScoutBase : public MobileBase {
   uint8_t tx_buffer_[SCOUT_CMD_BUF_LEN];
 
   // cmd/status update related variables
-  std::thread cmd_thread_;
   std::mutex scout_state_mutex_;
   std::mutex motion_cmd_mutex_;
   std::mutex light_cmd_mutex_;
@@ -56,9 +55,6 @@ class ScoutBase : public MobileBase {
   ScoutState scout_state_;
   ScoutMotionCmd current_motion_cmd_;
   ScoutLightCmd current_light_cmd_;
-
-  
- 
 
   bool light_ctrl_enabled_ = false;
   bool light_ctrl_requested_ = false;

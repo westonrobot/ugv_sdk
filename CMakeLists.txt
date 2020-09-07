@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.10.2)
+project(wrp_sdk VERSION 0.1.5)
 
 find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
@@ -6,10 +7,11 @@ if(CCACHE_PROGRAM)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
 endif()
 
-project(wrp_sdk VERSION 0.1.5)
-
 ## Project Options
 option(BUILD_TESTS ON)
+option(STATIC_CHECK OFF)
+# set(CMAKE_BUILD_TYPE Release)
+# set(CMAKE_BUILD_TYPE Debug)
 
 ## Check if pkg is built with ROS catkin
 if(CATKIN_DEVEL_PREFIX)
@@ -23,6 +25,14 @@ endif()
 ## Generate symbols for IDE indexer
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+if(STATIC_CHECK)
+    find_program(CPPCHECK cppcheck)
+    if(CPPCHECK)
+        message(STATUS "Found cppcheck")
+        set(CMAKE_CXX_CPPCHECK cppcheck;--std=c++11;--enable=all)
+    endif() 
+endif()
+
 ## Additional cmake module path
 set(USER_CMAKE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 list(APPEND CMAKE_MODULE_PATH "${USER_CMAKE_PATH}/modules")
@@ -35,9 +45,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 ## Chosse build type
-# set(CMAKE_BUILD_TYPE Release)
-# set(CMAKE_BUILD_TYPE Debug)
-
 set(default_build_type "Release")
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
@@ -63,9 +70,9 @@ endif()
 find_package(Threads REQUIRED)
 
 add_library(${PROJECT_NAME} 
-    src/async_serial.cpp
-    src/async_can.cpp
-    src/asyncio_utils.cpp
+    src/asyncio/async_serial.cpp
+    src/asyncio/async_can.cpp
+    src/asyncio/asyncio_utils.cpp
     # agilex mobile platforms
     src/platforms/mobile_base.cpp
     src/platforms/hunter_base.cpp
