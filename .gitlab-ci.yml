@@ -25,6 +25,6 @@ cpp-test:
     - mkdir build && cd build
     - cmake -DBUILD_TESTS=ON ..
     - cmake --build .
-    - ./build/bin/gtest_all
+    - ./bin/gtest_all
   # dependencies:
   #   - cpp-build
