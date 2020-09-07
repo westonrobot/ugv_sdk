@@ -36,7 +36,6 @@ catkin-build:
   before_script:
     - apt update && apt -y install libasio-dev
   script:
-    - cd $CI_PROJECT_PATH && pwd
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
-    - cd /catkin_ws/src && cp -r $CI_PROJECT_PATH .
+    - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
     - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make"
