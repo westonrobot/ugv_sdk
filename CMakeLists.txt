@@ -17,6 +17,7 @@ option(STATIC_CHECK OFF)
 if(CATKIN_DEVEL_PREFIX)
     message(STATUS "Build package with catkin")
     set(BUILD_WITHOUT_ROS OFF)
+    find_package(catkin REQUIRED)
 else()
     message(STATUS "Build package with cmake")
     set(BUILD_WITHOUT_ROS ON)    
@@ -190,7 +191,8 @@ else() # BUILD_WITHOUT_ROS
     catkin_package(
         LIBRARIES ${PROJECT_NAME}
         INCLUDE_DIRS include
-        # DEPENDS rt pthread
+        #  CATKIN_DEPENDS rospy scout_msgs std_msgs
+        #  DEPENDS system_lib
     )
 
     ## Add catkin install targets

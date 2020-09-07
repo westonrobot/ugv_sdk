@@ -30,7 +30,7 @@ cpp-test:
   #   - cpp-build
 
 ## Build and test as catkin package
-catkin-build:
+melodic-catkin-build:
   stage: build
   image: rduweston/ubuntu-ci:melodic-bionic
   before_script:
@@ -39,3 +39,14 @@ catkin-build:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
     - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make"
+
+## Build and test as catkin package
+melodic-catkin-isolated-build:
+  stage: build
+  image: rduweston/ubuntu-ci:melodic-bionic
+  before_script:
+    - apt update && apt -y install libasio-dev
+  script:
+    - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
+    - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
+    - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make_isolated --install"
