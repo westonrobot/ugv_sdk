@@ -1,6 +1,6 @@
 ## Build and test as standard C++ package
 cpp-build:
-  stage: cpp-build
+  stage: build
   image: rduweston/ubuntu-ci:18.04
   before_script:
     - apt update && apt -y install libasio-dev
@@ -17,7 +17,7 @@ cpp-build:
   #     - "*.o"
 
 cpp-test:
-  stage: cpp-test
+  stage: test
   image: rduweston/ubuntu-ci:18.04
   before_script:
     - apt update && apt -y install libasio-dev
