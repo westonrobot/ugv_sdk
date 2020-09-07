@@ -32,7 +32,7 @@ cpp-test:
 ## Build and test as catkin package
 catkin-build:
   stage: build
-  image: rduweston/melodic-bionic
+  image: rduweston/ubuntu-ci:melodic-bionic
   before_script:
     - apt update && apt -y install libasio-dev
   script:
