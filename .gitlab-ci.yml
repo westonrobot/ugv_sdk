@@ -1,5 +1,5 @@
 ## Build and test as standard C++ package
-cpp-build:
+bionic-cpp-build:
   stage: build
   image: rduweston/ubuntu-ci:18.04
   before_script:
@@ -16,7 +16,7 @@ cpp-build:
   #   paths:
   #     - "*.o"
 
-cpp-test:
+bionic-cpp-test:
   stage: test
   image: rduweston/ubuntu-ci:18.04
   before_script:
@@ -28,6 +28,27 @@ cpp-test:
     - ./bin/gtest_all
   # dependencies:
   #   - cpp-build
+
+focal-cpp-build:
+  stage: build
+  image: rduweston/ubuntu-ci:20.04
+  before_script:
+    - apt update && apt -y install libasio-dev
+  script:
+    - mkdir build && cd build
+    - cmake ..
+    - cmake --build . && cpack
+
+focal-cpp-test:
+  stage: test
+  image: rduweston/ubuntu-ci:20.04
+  before_script:
+    - apt update && apt -y install libasio-dev
+  script:
+    - mkdir build && cd build
+    - cmake -DBUILD_TESTS=ON ..
+    - cmake --build .
+    - ./bin/gtest_all
 
 ## Build and test as catkin package
 melodic-catkin-build:
