@@ -34,6 +34,7 @@ void MobileBase::Connect(std::string dev_name, int32_t baud_rate) {
 }
 
 void MobileBase::Disconnect() {
+  if (can_connected_) can_if_->StopService();
   if (serial_connected_ && serial_if_->IsOpened()) {
     serial_if_->StopService();
   }
@@ -43,18 +44,18 @@ void MobileBase::ConfigureCAN(const std::string &can_if_name) {
   can_if_ = std::make_shared<AsyncCAN>(can_if_name);
   can_if_->SetReceiveCallback(
       std::bind(&MobileBase::ParseCANFrame, this, std::placeholders::_1));
-  serial_if_->StartListening();
+  can_if_->StartListening();
   can_connected_ = true;
 }
 
 void MobileBase::ConfigureSerial(const std::string uart_name,
                                  int32_t baud_rate) {
   serial_if_ = std::make_shared<AsyncSerial>(uart_name, baud_rate);
-  if (serial_if_->IsOpened()) serial_connected_ = true;
   serial_if_->SetReceiveCallback(
       std::bind(&MobileBase::ParseUARTBuffer, this, std::placeholders::_1,
                 std::placeholders::_2, std::placeholders::_3));
   serial_if_->StartListening();
+  if (serial_if_->IsOpened()) serial_connected_ = true;
 }
 
 void MobileBase::StartCmdThread() {
@@ -66,6 +67,7 @@ void MobileBase::StartCmdThread() {
 void MobileBase::ControlLoop(int32_t period_ms) {
   StopWatch ctrl_sw;
   bool print_loop_freq = false;
+  static uint32_t iter_cnt = 0;
   while (true) {
     ctrl_sw.tic();
     SendRobotCmd();
