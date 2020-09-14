@@ -107,7 +107,7 @@ void AsyncCAN::SendFrame(const can_frame &frame) {
       asio::buffer(&frame, sizeof(frame)),
       [](asio::error_code error, size_t bytes_transferred) {
         if (error) {
-          std::cerr << "Failed to send CAN frame";
+          std::cerr << "Failed to send CAN frame" << std::endl;
         }
         // std::cout << "frame sent" << std::endl;
       });

@@ -56,7 +56,7 @@ class MobileBase {
   bool enable_timeout_ = true;
   uint32_t timeout_ms_ = 100;
   uint32_t watchdog_counter_ = 0;
-  virtual void CheckCmdTimeout();
+  void FeedCmdTimeoutWatchdog() { watchdog_counter_ = 0; };
 
   // command thread
   std::thread cmd_thread_;

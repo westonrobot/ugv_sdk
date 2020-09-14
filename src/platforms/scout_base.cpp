@@ -17,6 +17,7 @@ void ScoutBase::SendRobotCmd() {
   static uint8_t cmd_count = 0;
   static uint8_t light_cmd_count = 0;
   SendMotionCmd(cmd_count++);
+  FeedCmdTimeoutWatchdog();
   if (light_ctrl_requested_) SendLightCmd(light_cmd_count++);
 }
 

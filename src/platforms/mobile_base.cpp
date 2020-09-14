@@ -67,9 +67,12 @@ void MobileBase::StartCmdThread() {
 void MobileBase::ControlLoop(int32_t period_ms) {
   StopWatch ctrl_sw;
   bool print_loop_freq = false;
+  if (timeout_ms_ < period_ms) timeout_ms_ = period_ms;
+  uint32_t timeout_iter_num = static_cast<uint32_t>(timeout_ms_ / period_ms);
   while (true) {
     ctrl_sw.tic();
-    SendRobotCmd();
+    if (watchdog_counter_ < timeout_iter_num) SendRobotCmd();
+    ++watchdog_counter_;
     ctrl_sw.sleep_until_ms(period_ms);
     if (print_loop_freq)
       std::cout << "control loop frequency: " << 1.0 / ctrl_sw.toc()

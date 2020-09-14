@@ -17,6 +17,7 @@ namespace westonrobot {
 void HunterBase::SendRobotCmd() {
   static uint8_t cmd_count = 0;
   SendMotionCmd(cmd_count++);
+  FeedCmdTimeoutWatchdog();
 }
 
 void HunterBase::SendMotionCmd(uint8_t count) {
