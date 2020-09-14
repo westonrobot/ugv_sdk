@@ -71,7 +71,7 @@ endif()
 find_package(Threads REQUIRED)
 
 # import asio library
-add_subdirectory(include/asio)
+add_subdirectory(asio)
 
 add_library(${PROJECT_NAME} 
     src/asyncio/async_serial.cpp
@@ -145,10 +145,10 @@ if(BUILD_WITHOUT_ROS) # BUILD_WITHOUT_ROS
         RUNTIME DESTINATION bin
         INCLUDES DESTINATION include)
 
-    install(DIRECTORY include/wrp_sdk include/asio/include/asio
+    install(DIRECTORY include/wrp_sdk asio/include/asio
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
-    install(FILES include/asio/include/asio.hpp
+    install(FILES asio/include/asio.hpp
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
     # export target configuration 
@@ -189,7 +189,7 @@ else() # BUILD_WITHOUT_ROS
 
     catkin_package(
         LIBRARIES ${PROJECT_NAME}
-        INCLUDE_DIRS include
+        INCLUDE_DIRS include asio/include
         #  CATKIN_DEPENDS rospy scout_msgs std_msgs
         #  DEPENDS system_lib
     )
@@ -200,11 +200,11 @@ else() # BUILD_WITHOUT_ROS
       LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
       ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
 
-    install(DIRECTORY include/${PROJECT_NAME} include/asio/include/asio
-      DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+    install(DIRECTORY include/${PROJECT_NAME} asio/include/asio
+      DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION})
 
-    install(FILES include/asio/include/asio.hpp
-      DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+    install(FILES asio/include/asio.hpp
+      DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION})
 
     install(DIRECTORY scripts
       DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
