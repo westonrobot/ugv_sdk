@@ -23,7 +23,7 @@ class AsyncSerial : public AsyncListener,
                     public std::enable_shared_from_this<AsyncSerial> {
  public:
   using ReceiveCallback =
-      std::function<void(uint8_t *data, size_t len, const size_t bufsize)>;
+      std::function<void(uint8_t *data, const size_t bufsize, size_t len)>;
 
  public:
   AsyncSerial(std::string port_name, uint32_t baud_rate = 115200);
@@ -56,7 +56,7 @@ class AsyncSerial : public AsyncListener,
   bool tx_in_progress_ = false;
 
   bool SetupPort();
-  void DefaultReceiveCallback(uint8_t *data, size_t len, const size_t bufsize);
+  void DefaultReceiveCallback(uint8_t *data, const size_t bufsize, size_t len);
   void ReadFromPort();
   void WriteToPort(bool check_if_busy);
 };

@@ -80,8 +80,8 @@ void AsyncSerial::StopService() {
   port_opened_ = false;
 }
 
-void AsyncSerial::DefaultReceiveCallback(uint8_t *data, size_t len,
-                                         const size_t bufsize) {}
+void AsyncSerial::DefaultReceiveCallback(uint8_t *data, const size_t bufsize,
+                                         size_t len) {}
 
 void AsyncSerial::ReadFromPort() {
   auto sthis = shared_from_this();
@@ -93,9 +93,13 @@ void AsyncSerial::ReadFromPort() {
           return;
         }
 
-        if (sthis->rcv_cb_ != nullptr)
-          sthis->rcv_cb_(sthis->rx_buf_.data(), bytes_transferred,
-                         sthis->rx_buf_.size());
+        if (sthis->rcv_cb_ != nullptr) {
+          sthis->rcv_cb_(sthis->rx_buf_.data(), sthis->rx_buf_.size(),
+                         bytes_transferred);
+        } else {
+          sthis->DefaultReceiveCallback(
+              sthis->rx_buf_.data(), sthis->rx_buf_.size(), bytes_transferred);
+        }
         sthis->ReadFromPort();
       });
 }
