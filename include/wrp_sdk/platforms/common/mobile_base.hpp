@@ -31,6 +31,8 @@ class MobileBase {
   MobileBase(const MobileBase &hunter) = delete;
   MobileBase &operator=(const MobileBase &hunter) = delete;
 
+  void SetCmdTimeout(bool enable, uint32_t timeout_ms = 100);
+
   // connect to roboot from CAN or serial
   void Connect(std::string dev_name, int32_t baud_rate = 0);
 
@@ -49,6 +51,12 @@ class MobileBase {
 
   std::shared_ptr<AsyncCAN> can_if_;
   std::shared_ptr<AsyncSerial> serial_if_;
+
+  // timeout to be implemented in each vehicle
+  bool enable_timeout_ = true;
+  uint32_t timeout_ms_ = 100;
+  uint32_t watchdog_counter_ = 0;
+  virtual void CheckCmdTimeout();
 
   // command thread
   std::thread cmd_thread_;

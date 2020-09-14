@@ -67,7 +67,6 @@ void MobileBase::StartCmdThread() {
 void MobileBase::ControlLoop(int32_t period_ms) {
   StopWatch ctrl_sw;
   bool print_loop_freq = false;
-  static uint32_t iter_cnt = 0;
   while (true) {
     ctrl_sw.tic();
     SendRobotCmd();
