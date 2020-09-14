@@ -2,8 +2,8 @@
 bionic-cpp-build:
   stage: build
   image: rduweston/ubuntu-ci:18.04
-  before_script:
-    - apt update && apt -y install libasio-dev
+  # before_script:
+  #   - apt update && apt -y install libasio-dev
   script:
     - mkdir build && cd build
     - cmake ..
@@ -19,8 +19,8 @@ bionic-cpp-build:
 bionic-cpp-test:
   stage: test
   image: rduweston/ubuntu-ci:18.04
-  before_script:
-    - apt update && apt -y install libasio-dev
+  # before_script:
+  #   - apt update && apt -y install libasio-dev
   script:
     - mkdir build && cd build
     - cmake -DBUILD_TESTS=ON ..
@@ -32,8 +32,8 @@ bionic-cpp-test:
 focal-cpp-build:
   stage: build
   image: rduweston/ubuntu-ci:20.04
-  before_script:
-    - apt update && apt -y install libasio-dev
+  # before_script:
+  #   - apt update && apt -y install libasio-dev
   script:
     - mkdir build && cd build
     - cmake ..
@@ -42,8 +42,8 @@ focal-cpp-build:
 focal-cpp-test:
   stage: test
   image: rduweston/ubuntu-ci:20.04
-  before_script:
-    - apt update && apt -y install libasio-dev
+  # before_script:
+  #   - apt update && apt -y install libasio-dev
   script:
     - mkdir build && cd build
     - cmake -DBUILD_TESTS=ON ..
@@ -54,8 +54,8 @@ focal-cpp-test:
 melodic-catkin-build:
   stage: build
   image: rduweston/ubuntu-ci:melodic-bionic
-  before_script:
-    - apt update && apt -y install libasio-dev
+  # before_script:
+  #   - apt update && apt -y install libasio-dev
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
@@ -64,8 +64,8 @@ melodic-catkin-build:
 melodic-catkin-isolated-build:
   stage: build
   image: rduweston/ubuntu-ci:melodic-bionic
-  before_script:
-    - apt update && apt -y install libasio-dev
+  # before_script:
+  #   - apt update && apt -y install libasio-dev
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
@@ -74,8 +74,8 @@ melodic-catkin-isolated-build:
 noetic-catkin-build:
   stage: build
   image: rduweston/ubuntu-ci:noetic-focal
-  before_script:
-    - apt update && apt -y install libasio-dev
+  # before_script:
+  #   - apt update && apt -y install libasio-dev
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
@@ -84,8 +84,8 @@ noetic-catkin-build:
 noetic-catkin-isolated-build:
   stage: build
   image: rduweston/ubuntu-ci:noetic-focal
-  before_script:
-    - apt update && apt -y install libasio-dev
+  # before_script:
+  #   - apt update && apt -y install libasio-dev
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk

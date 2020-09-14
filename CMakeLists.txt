@@ -70,7 +70,13 @@ endif()
 # Build libraries
 find_package(Threads REQUIRED)
 
-add_subdirectory(include/asio)
+# import asio library
+add_library(asio INTERFACE)
+target_compile_definitions(asio INTERFACE "-DASIO_STANDALONE")
+target_include_directories(asio INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/wrp_sdk/asio>
+	$<INSTALL_INTERFACE:include>)
 
 add_library(${PROJECT_NAME} 
     src/asyncio/async_serial.cpp
@@ -144,7 +150,7 @@ if(BUILD_WITHOUT_ROS) # BUILD_WITHOUT_ROS
         RUNTIME DESTINATION bin
         INCLUDES DESTINATION include)
 
-    install(DIRECTORY include/wrp_sdk include/asio/include
+    install(DIRECTORY include/wrp_sdk
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
     # export target configuration 
@@ -177,20 +183,15 @@ if(BUILD_WITHOUT_ROS) # BUILD_WITHOUT_ROS
     set(CPACK_GENERATOR "DEB")
     set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
     set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Ruixiang Du (ruixiang.du@westonrobot.com)") 
-    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libasio-dev")
-    set(CPACK_SOURCE_IGNORE_FILES
-        /.git
-        /dist
-        /.*build.*
-        /\\\\.DS_Store
-    )
+    # set(CPACK_DEBIAN_PACKAGE_DEPENDS "libasio-dev")
+    set(CPACK_SOURCE_IGNORE_FILES .git dist .*build.* /\\\\.DS_Store)
     include(CPack)
 
 else() # BUILD_WITHOUT_ROS
 
     catkin_package(
-        LIBRARIES ${PROJECT_NAME} asio
-        INCLUDE_DIRS include include/asio/include
+        LIBRARIES ${PROJECT_NAME}
+        INCLUDE_DIRS include
         #  CATKIN_DEPENDS rospy scout_msgs std_msgs
         #  DEPENDS system_lib
     )

@@ -13,8 +13,7 @@
 
 #include "gtest/gtest.h"
 
-// #define ALLOW_OVERWRITE
-#include "asyncio/ring_buffer.hpp"
+#include "wrp_sdk/asyncio/ring_buffer.hpp"
 
 using namespace westonrobot;
 
