@@ -71,12 +71,7 @@ endif()
 find_package(Threads REQUIRED)
 
 # import asio library
-add_library(asio INTERFACE)
-target_compile_definitions(asio INTERFACE "-DASIO_STANDALONE")
-target_include_directories(asio INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/wrp_sdk/asio>
-	$<INSTALL_INTERFACE:include>)
+add_subdirectory(include/asio)
 
 add_library(${PROJECT_NAME} 
     src/asyncio/async_serial.cpp
@@ -150,7 +145,10 @@ if(BUILD_WITHOUT_ROS) # BUILD_WITHOUT_ROS
         RUNTIME DESTINATION bin
         INCLUDES DESTINATION include)
 
-    install(DIRECTORY include/wrp_sdk
+    install(DIRECTORY include/wrp_sdk include/asio/include/asio
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+    install(FILES include/asio/include/asio.hpp
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
     # export target configuration 
@@ -202,7 +200,10 @@ else() # BUILD_WITHOUT_ROS
       LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
       ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
 
-    install(DIRECTORY include/${PROJECT_NAME}/
+    install(DIRECTORY include/${PROJECT_NAME} include/asio/include/asio
+      DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+
+    install(FILES include/asio/include/asio.hpp
       DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 
     install(DIRECTORY scripts
