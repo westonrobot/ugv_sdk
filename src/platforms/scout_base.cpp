@@ -54,11 +54,11 @@ void ScoutBase::SendMotionCmd(uint8_t count) {
     // send to can bus
     can_frame m_frame;
     EncodeScoutMsgToCAN(&m_msg, &m_frame);
-    can_if_->send_frame(m_frame);
+    can_if_->SendFrame(m_frame);
   } else {
     // send to serial port
     EncodeScoutMsgToUART(&m_msg, tx_buffer_, &tx_cmd_len_);
-    serial_if_->send_bytes(tx_buffer_, tx_cmd_len_);
+    serial_if_->SendBytes(tx_buffer_, tx_cmd_len_);
   }
 }
 
@@ -112,11 +112,11 @@ void ScoutBase::SendLightCmd(uint8_t count) {
     can_frame l_frame;
     EncodeScoutMsgToCAN(&l_msg, &l_frame);
 
-    can_if_->send_frame(l_frame);
+    can_if_->SendFrame(l_frame);
   } else {
     // send to serial port
     EncodeScoutMsgToUART(&l_msg, tx_buffer_, &tx_cmd_len_);
-    serial_if_->send_bytes(tx_buffer_, tx_cmd_len_);
+    serial_if_->SendBytes(tx_buffer_, tx_cmd_len_);
   }
 
   // std::cout << "cmd: " << static_cast<int>(l_msg.data.cmd.front_light_mode)

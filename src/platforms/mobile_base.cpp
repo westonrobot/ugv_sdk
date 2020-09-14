@@ -34,26 +34,27 @@ void MobileBase::Connect(std::string dev_name, int32_t baud_rate) {
 }
 
 void MobileBase::Disconnect() {
-  if (serial_connected_ && serial_if_->is_open()) {
-    serial_if_->close();
+  if (serial_connected_ && serial_if_->IsOpened()) {
+    serial_if_->StopService();
   }
 }
 
 void MobileBase::ConfigureCAN(const std::string &can_if_name) {
-  can_if_ = std::make_shared<ASyncCAN>(can_if_name);
-  can_if_->set_receive_callback(
+  can_if_ = std::make_shared<AsyncCAN>(can_if_name);
+  can_if_->SetReceiveCallback(
       std::bind(&MobileBase::ParseCANFrame, this, std::placeholders::_1));
+  serial_if_->StartListening();
   can_connected_ = true;
 }
 
 void MobileBase::ConfigureSerial(const std::string uart_name,
                                  int32_t baud_rate) {
-  serial_if_ = std::make_shared<ASyncSerial>(uart_name, baud_rate);
-  serial_if_->open();
-  if (serial_if_->is_open()) serial_connected_ = true;
-  serial_if_->set_receive_callback(
+  serial_if_ = std::make_shared<AsyncSerial>(uart_name, baud_rate);
+  if (serial_if_->IsOpened()) serial_connected_ = true;
+  serial_if_->SetReceiveCallback(
       std::bind(&MobileBase::ParseUARTBuffer, this, std::placeholders::_1,
                 std::placeholders::_2, std::placeholders::_3));
+  serial_if_->StartListening();
 }
 
 void MobileBase::StartCmdThread() {

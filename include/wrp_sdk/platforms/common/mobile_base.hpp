@@ -47,8 +47,8 @@ class MobileBase {
   bool can_connected_ = false;
   bool serial_connected_ = false;
 
-  std::shared_ptr<ASyncCAN> can_if_;
-  std::shared_ptr<ASyncSerial> serial_if_;
+  std::shared_ptr<AsyncCAN> can_if_;
+  std::shared_ptr<AsyncSerial> serial_if_;
 
   // command thread
   std::thread cmd_thread_;

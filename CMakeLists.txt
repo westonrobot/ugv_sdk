@@ -70,10 +70,12 @@ endif()
 # Build libraries
 find_package(Threads REQUIRED)
 
+# import asio library
+add_subdirectory(asio)
+
 add_library(${PROJECT_NAME} 
     src/asyncio/async_serial.cpp
     src/asyncio/async_can.cpp
-    src/asyncio/asyncio_utils.cpp
     # agilex mobile platforms
     src/platforms/mobile_base.cpp
     src/platforms/hunter_base.cpp
@@ -82,8 +84,7 @@ add_library(${PROJECT_NAME}
     src/platforms/scout_can_parser.c
     src/platforms/scout_uart_parser.c
 )
-target_compile_definitions(${PROJECT_NAME} PUBLIC "-DASIO_ENABLE_OLD_SERVICES -DASIO_HAS_POSIX_STREAM_DESCRIPTOR")
-target_link_libraries(${PROJECT_NAME} Threads::Threads)
+target_link_libraries(${PROJECT_NAME} asio Threads::Threads)
 target_include_directories(${PROJECT_NAME} PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 	$<INSTALL_INTERFACE:include>
@@ -137,14 +138,17 @@ if(BUILD_WITHOUT_ROS) # BUILD_WITHOUT_ROS
     endforeach()
 
     # targets to install
-    install(TARGETS ${PROJECT_NAME}
+    install(TARGETS ${PROJECT_NAME} asio
         EXPORT wrp_sdkTargets
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
         RUNTIME DESTINATION bin
         INCLUDES DESTINATION include)
 
-    install(DIRECTORY include/wrp_sdk
+    install(DIRECTORY include/wrp_sdk asio/include/asio
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+    install(FILES asio/include/asio.hpp
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
     # export target configuration 
@@ -177,20 +181,15 @@ if(BUILD_WITHOUT_ROS) # BUILD_WITHOUT_ROS
     set(CPACK_GENERATOR "DEB")
     set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
     set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Ruixiang Du (ruixiang.du@westonrobot.com)") 
-    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libasio-dev")
-    set(CPACK_SOURCE_IGNORE_FILES
-        /.git
-        /dist
-        /.*build.*
-        /\\\\.DS_Store
-    )
+    # set(CPACK_DEBIAN_PACKAGE_DEPENDS "libasio-dev")
+    set(CPACK_SOURCE_IGNORE_FILES .git dist .*build.* /\\\\.DS_Store)
     include(CPack)
 
 else() # BUILD_WITHOUT_ROS
 
     catkin_package(
         LIBRARIES ${PROJECT_NAME}
-        INCLUDE_DIRS include
+        INCLUDE_DIRS include asio/include
         #  CATKIN_DEPENDS rospy scout_msgs std_msgs
         #  DEPENDS system_lib
     )
@@ -201,8 +200,11 @@ else() # BUILD_WITHOUT_ROS
       LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
       ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
 
-    install(DIRECTORY include/${PROJECT_NAME}/
-      DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+    install(DIRECTORY include/${PROJECT_NAME} asio/include/asio
+      DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION})
+
+    install(FILES asio/include/asio.hpp
+      DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION})
 
     install(DIRECTORY scripts
       DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})

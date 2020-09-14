@@ -38,7 +38,7 @@ void parse_buffer(uint8_t *buf, const size_t bufsize, size_t bytes_received)
 
 int main(int argc, char *argv[])
 {
-    std::shared_ptr<ASyncCAN> canbus = std::make_shared<ASyncCAN>("can1");
+    std::shared_ptr<AsyncCAN> canbus = std::make_shared<AsyncCAN>("can1");
 
     // canbus->set_receive_callback(parse_buffer);
 
