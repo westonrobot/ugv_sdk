@@ -24,8 +24,8 @@ void parse_buffer(uint8_t *buf, const size_t bufsize, size_t bytes_received)
 
 int main(int argc, char *argv[])
 {
-    // ASyncSerial::Ptr serial = ASyncSerial::open_url("/dev/ttyUSB0:115200");
-    std::shared_ptr<ASyncSerial> serial = std::make_shared<ASyncSerial>("/dev/ttyO5", 115200);
+    // AsyncSerial::Ptr serial = AsyncSerial::open_url("/dev/ttyUSB0:115200");
+    std::shared_ptr<AsyncSerial> serial = std::make_shared<AsyncSerial>("/dev/ttyO5", 115200);
 
     serial->set_receive_callback(parse_buffer);
 

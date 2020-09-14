@@ -50,7 +50,7 @@ void HunterBase::SendMotionCmd(uint8_t count) {
   if (can_connected_) {
     can_frame m_frame;
     EncodeHunterMsgToCAN(&m_msg, &m_frame);
-    can_if_->send_frame(m_frame);
+    can_if_->SendFrame(m_frame);
   }
 }
 

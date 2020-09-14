@@ -46,7 +46,7 @@ void TracerBase::Disconnect()
 
 void TracerBase::ConfigureCANBus(const std::string &can_if_name)
 {
-    can_if_ = std::make_shared<ASyncCAN>(can_if_name);
+    can_if_ = std::make_shared<AsyncCAN>(can_if_name);
 
     can_if_->set_receive_callback(std::bind(&TracerBase::ParseCANFrame, this, std::placeholders::_1));
 
@@ -55,7 +55,7 @@ void TracerBase::ConfigureCANBus(const std::string &can_if_name)
 
 void TracerBase::ConfigureSerial(const std::string uart_name, int32_t baud_rate)
 {
-    serial_if_ = std::make_shared<ASyncSerial>(uart_name, baud_rate);
+    serial_if_ = std::make_shared<AsyncSerial>(uart_name, baud_rate);
     serial_if_->open();
 
     if (serial_if_->is_open())

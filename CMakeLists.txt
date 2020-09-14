@@ -70,10 +70,11 @@ endif()
 # Build libraries
 find_package(Threads REQUIRED)
 
+add_subdirectory(include/asio)
+
 add_library(${PROJECT_NAME} 
     src/asyncio/async_serial.cpp
     src/asyncio/async_can.cpp
-    src/asyncio/asyncio_utils.cpp
     # agilex mobile platforms
     src/platforms/mobile_base.cpp
     src/platforms/hunter_base.cpp
@@ -82,8 +83,7 @@ add_library(${PROJECT_NAME}
     src/platforms/scout_can_parser.c
     src/platforms/scout_uart_parser.c
 )
-target_compile_definitions(${PROJECT_NAME} PUBLIC "-DASIO_ENABLE_OLD_SERVICES -DASIO_HAS_POSIX_STREAM_DESCRIPTOR")
-target_link_libraries(${PROJECT_NAME} Threads::Threads)
+target_link_libraries(${PROJECT_NAME} asio Threads::Threads)
 target_include_directories(${PROJECT_NAME} PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 	$<INSTALL_INTERFACE:include>
@@ -137,14 +137,14 @@ if(BUILD_WITHOUT_ROS) # BUILD_WITHOUT_ROS
     endforeach()
 
     # targets to install
-    install(TARGETS ${PROJECT_NAME}
+    install(TARGETS ${PROJECT_NAME} asio
         EXPORT wrp_sdkTargets
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
         RUNTIME DESTINATION bin
         INCLUDES DESTINATION include)
 
-    install(DIRECTORY include/wrp_sdk
+    install(DIRECTORY include/wrp_sdk include/asio/include
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
     # export target configuration 
@@ -189,8 +189,8 @@ if(BUILD_WITHOUT_ROS) # BUILD_WITHOUT_ROS
 else() # BUILD_WITHOUT_ROS
 
     catkin_package(
-        LIBRARIES ${PROJECT_NAME}
-        INCLUDE_DIRS include
+        LIBRARIES ${PROJECT_NAME} asio
+        INCLUDE_DIRS include include/asio/include
         #  CATKIN_DEPENDS rospy scout_msgs std_msgs
         #  DEPENDS system_lib
     )

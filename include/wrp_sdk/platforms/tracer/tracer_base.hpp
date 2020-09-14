@@ -59,8 +59,8 @@ public:
 
 private:
     // hardware communication interface
-    std::shared_ptr<ASyncCAN> can_if_;
-    std::shared_ptr<ASyncSerial> serial_if_;
+    std::shared_ptr<AsyncCAN> can_if_;
+    std::shared_ptr<AsyncSerial> serial_if_;
 
     // CAN priority higher than serial if both connected
     bool can_connected_ = false;

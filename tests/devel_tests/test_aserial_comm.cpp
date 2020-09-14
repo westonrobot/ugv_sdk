@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    std::shared_ptr<ASyncSerial> serial = std::make_shared<ASyncSerial>(device_name, baud);
+    std::shared_ptr<AsyncSerial> serial = std::make_shared<AsyncSerial>(device_name, baud);
 
     serial->set_receive_callback(parse_buffer);
 
