@@ -98,7 +98,7 @@ int main(int argc, char **argv) {
     //     scout.SetLightCommand({ScoutLightCmd::LightMode::BREATH, 0,
     //     ScoutLightCmd::LightMode::BREATH, 0});
     // }
-    if (count < 250) {
+    if (count < 100) {
       std::cout << "Motor: 0.2, 0" << std::endl;
       scout.SetMotionCommand(0.2, 0.0);
     }
