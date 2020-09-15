@@ -17,8 +17,8 @@ void ScoutBase::SendRobotCmd() {
   static uint8_t cmd_count = 0;
   static uint8_t light_cmd_count = 0;
   SendMotionCmd(cmd_count++);
-  FeedCmdTimeoutWatchdog();
   if (light_ctrl_requested_) SendLightCmd(light_cmd_count++);
+  FeedCmdTimeoutWatchdog();
 }
 
 void ScoutBase::SendMotionCmd(uint8_t count) {
@@ -56,10 +56,12 @@ void ScoutBase::SendMotionCmd(uint8_t count) {
     can_frame m_frame;
     EncodeScoutMsgToCAN(&m_msg, &m_frame);
     can_if_->SendFrame(m_frame);
+    std::cout << "CAN cmd sent" << std::endl;
   } else {
     // send to serial port
     EncodeScoutMsgToUART(&m_msg, tx_buffer_, &tx_cmd_len_);
     serial_if_->SendBytes(tx_buffer_, tx_cmd_len_);
+    std::cout << "serial cmd sent" << std::endl;
   }
 }
 
