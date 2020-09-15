@@ -74,14 +74,16 @@ void MobileBase::ControlLoop(int32_t period_ms) {
     timeout_iter_num = static_cast<uint32_t>(timeout_ms_ / period_ms);
     std::cout << "Timeout iteration number: " << timeout_iter_num << std::endl;
   }
+  
   while (true) {
     ctrl_sw.tic();
     if (enable_timeout_) {
-      ++watchdog_counter_;
-      if (watchdog_counter_ < timeout_iter_num)
+      if (watchdog_counter_ < timeout_iter_num) {
         SendRobotCmd();
-      else
+        ++watchdog_counter_;
+      } else {
         std::cout << "Warning: cmd timeout, not sent to robot" << std::endl;
+      }
     } else {
       SendRobotCmd();
     }

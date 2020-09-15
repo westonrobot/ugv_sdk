@@ -54,7 +54,7 @@ class MobileBase {
 
   // timeout to be implemented in each vehicle
   bool enable_timeout_ = true;
-  uint32_t timeout_ms_ = 100;
+  uint32_t timeout_ms_ = 500;
   uint32_t watchdog_counter_ = 0;
   void FeedCmdTimeoutWatchdog() { watchdog_counter_ = 0; };
 
