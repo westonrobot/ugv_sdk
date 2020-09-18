@@ -34,6 +34,7 @@ void MobileBase::Connect(std::string dev_name, int32_t baud_rate) {
 }
 
 void MobileBase::Disconnect() {
+  if (can_connected_) can_if_->StopService();
   if (serial_connected_ && serial_if_->IsOpened()) {
     serial_if_->StopService();
   }
@@ -43,7 +44,7 @@ void MobileBase::ConfigureCAN(const std::string &can_if_name) {
   can_if_ = std::make_shared<AsyncCAN>(can_if_name);
   can_if_->SetReceiveCallback(
       std::bind(&MobileBase::ParseCANFrame, this, std::placeholders::_1));
-  serial_if_->StartListening();
+  can_if_->StartListening();
   can_connected_ = true;
 }
 
@@ -66,9 +67,26 @@ void MobileBase::StartCmdThread() {
 void MobileBase::ControlLoop(int32_t period_ms) {
   StopWatch ctrl_sw;
   bool print_loop_freq = false;
+  uint32_t timeout_iter_num;
+
+  if (enable_timeout_) {
+    if (timeout_ms_ < period_ms) timeout_ms_ = period_ms;
+    timeout_iter_num = static_cast<uint32_t>(timeout_ms_ / period_ms);
+    std::cout << "Timeout iteration number: " << timeout_iter_num << std::endl;
+  }
+
   while (true) {
     ctrl_sw.tic();
-    SendRobotCmd();
+    if (enable_timeout_) {
+      if (watchdog_counter_ < timeout_iter_num) {
+        SendRobotCmd();
+        ++watchdog_counter_;
+      } else {
+        std::cout << "Warning: cmd timeout, old cmd not sent to robot" << std::endl;
+      }
+    } else {
+      SendRobotCmd();
+    }
     ctrl_sw.sleep_until_ms(period_ms);
     if (print_loop_freq)
       std::cout << "control loop frequency: " << 1.0 / ctrl_sw.toc()

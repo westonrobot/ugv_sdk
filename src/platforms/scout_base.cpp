@@ -55,10 +55,12 @@ void ScoutBase::SendMotionCmd(uint8_t count) {
     can_frame m_frame;
     EncodeScoutMsgToCAN(&m_msg, &m_frame);
     can_if_->SendFrame(m_frame);
+    // std::cout << "CAN cmd sent" << std::endl;
   } else {
     // send to serial port
     EncodeScoutMsgToUART(&m_msg, tx_buffer_, &tx_cmd_len_);
     serial_if_->SendBytes(tx_buffer_, tx_cmd_len_);
+    // std::cout << "serial cmd sent" << std::endl;
   }
 }
 
@@ -158,6 +160,8 @@ void ScoutBase::SetMotionCommand(
   current_motion_cmd_.angular_velocity = static_cast<int8_t>(
       angular_vel / ScoutMotionCmd::max_angular_velocity * 100.0);
   current_motion_cmd_.fault_clear_flag = fault_clr_flag;
+
+  FeedCmdTimeoutWatchdog();
 }
 
 void ScoutBase::SetLightCommand(ScoutLightCmd cmd) {
