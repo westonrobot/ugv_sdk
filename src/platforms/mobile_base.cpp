@@ -50,11 +50,11 @@ void MobileBase::ConfigureCAN(const std::string &can_if_name) {
 void MobileBase::ConfigureSerial(const std::string uart_name,
                                  int32_t baud_rate) {
   serial_if_ = std::make_shared<AsyncSerial>(uart_name, baud_rate);
-  if (serial_if_->IsOpened()) serial_connected_ = true;
   serial_if_->SetReceiveCallback(
       std::bind(&MobileBase::ParseUARTBuffer, this, std::placeholders::_1,
                 std::placeholders::_2, std::placeholders::_3));
   serial_if_->StartListening();
+  if (serial_if_->IsOpened()) serial_connected_ = true;
 }
 
 void MobileBase::StartCmdThread() {
