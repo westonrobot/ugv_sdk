@@ -9,4 +9,4 @@ find_dependency(Threads REQUIRED)
 # Any extra setup
 
 # Add the targets file
-include("${CMAKE_CURRENT_LIST_DIR}/wra_utilsTargets.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/wrp_sdkTargets.cmake")
