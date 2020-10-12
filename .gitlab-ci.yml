@@ -1,4 +1,27 @@
 ## Build and test as standard C++ package
+xenial-cpp-build:
+  stage: build
+  image: rduweston/ubuntu-ci:16.04
+  # before_script:
+  #   - apt update && apt -y install libasio-dev
+  script:
+    - mkdir build && cd build
+    - cmake -DCMAKE_BUILD_TYPE=Release ..
+    - cmake --build . && cpack
+
+xenial-cpp-test:
+  stage: test
+  image: rduweston/ubuntu-ci:16.04
+  # before_script:
+  #   - apt update && apt -y install libasio-dev
+  script:
+    - mkdir build && cd build
+    - cmake -DBUILD_TESTS=ON ..
+    - cmake --build .
+    - ./bin/gtest_all
+  # dependencies:
+  #   - cpp-build
+
 bionic-cpp-build:
   stage: build
   image: rduweston/ubuntu-ci:18.04
@@ -51,6 +74,30 @@ focal-cpp-test:
     - ./bin/gtest_all
 
 ## Build and test as catkin package
+kinetic-catkin-build:
+  stage: build
+  image: rduweston/ubuntu-ci:kinetic-xenial
+  # before_script:
+  #   - apt update && apt -y install libasio-dev
+  script:
+    - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
+    - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
+    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/scout_base.git
+    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/hunter_base.git
+    - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make"
+
+kinetic-catkin-isolated-build:
+  stage: build
+  image: rduweston/ubuntu-ci:kinetic-xenial
+  # before_script:
+  #   - apt update && apt -y install libasio-dev
+  script:
+    - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
+    - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
+    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/scout_base.git
+    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/hunter_base.git
+    - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make_isolated --install"
+
 melodic-catkin-build:
   stage: build
   image: rduweston/ubuntu-ci:melodic-bionic
