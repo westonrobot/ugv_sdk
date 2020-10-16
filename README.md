@@ -78,6 +78,41 @@ $ catkin_make
 
 ### II. Use the package without ROS
 
+You will need to upgrade CMake to a newer version in this case. Follow instructions on this page: https://apt.kitware.com/ 
+
+Here is a brief summary
+
+```
+$ sudo apt-get update
+$ sudo apt-get install apt-transport-https ca-certificates gnupg software-properties-common wget
+$ wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null
+```
+
+Ubuntu 20.04 
+
+```
+$ sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ focal main'
+```
+
+Ubuntu 18.04 
+
+```
+$ sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
+```
+
+Ubuntu 16.04 
+
+```
+$ sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ xenial main'
+```
+
+```
+$ sudo apt-get update
+$ sudo apt-get install kitware-archive-keyring
+$ sudo rm /etc/apt/trusted.gpg.d/kitware.gpg
+$ sudo apt-get install cmake
+```
+
 If you want to build the TUI monitor tool, additionally install libncurses
 
 ```
