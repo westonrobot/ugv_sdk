@@ -62,25 +62,7 @@ You need to re-login to get the change to take effect.
 
 ### Install dependent libraries
 
-```
-$ sudo apt install build-essential cmake
-$ sudo apt install libasio-dev
-```
-
-### I. Use the package with ROS
-
-```
-$ cd <your-catkin-ws>/src
-$ git clone https://github.com/westonrobot/wrp_sdk.git
-$ cd ..
-$ catkin_make
-```
-
-### II. Use the package without ROS
-
-You will need to upgrade CMake to a newer version in this case. Follow instructions on this page: https://apt.kitware.com/ 
-
-Here is a brief summary
+You will need to upgrade CMake to v3.13.0 or later. You can follow the [offical instructions](https://apt.kitware.com/). Here is a brief summary:
 
 ```
 $ sudo apt-get update
@@ -112,6 +94,17 @@ $ sudo apt-get install kitware-archive-keyring
 $ sudo rm /etc/apt/trusted.gpg.d/kitware.gpg
 $ sudo apt-get install cmake
 ```
+
+### I. Use the package with ROS
+
+```
+$ cd <your-catkin-ws>/src
+$ git clone https://github.com/westonrobot/wrp_sdk.git
+$ cd ..
+$ catkin_make
+```
+
+### II. Use the package without ROS
 
 If you want to build the TUI monitor tool, additionally install libncurses
 
