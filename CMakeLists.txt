@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10.2)
+cmake_minimum_required(VERSION 3.5.1)
 project(wrp_sdk VERSION 0.1.5)
 
 find_program(CCACHE_PROGRAM ccache)
