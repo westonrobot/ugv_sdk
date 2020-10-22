@@ -20,11 +20,9 @@ Supported environments
 * **OS**: Ubuntu 16.04/18.04/20.04
 * **ROS**: Kinetic/Melodic/Noetic
 
-It should also work in other similar Linux environments but only the listed setups are regularly tested.
+It should also work in other similar Linux environments but only the above listed environments are regularly tested.
 
 Generally, you only need to instantiate an object of the robot base class (such as ScoutBase), then use the object to programmatically control the robot. Internally, the base class manages two background threads, one to process CAN/UART messages of the robot state and accordingly update state variables in the robot state data structure, and the other to maintain a 50Hz loop and send the latest command to the robot base. User can iteratively perform tasks in the main thread and check the robot state or set control commands. 
-
-Refer to "src/apps" for examples.
 
 ## Build SDK
 
