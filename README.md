@@ -1,13 +1,16 @@
-# Weston Robot Platform SDK
+# UGV SDK
 
 ![GitHub Workflow Status](https://github.com/westonrobot/wrp_sdk/workflows/Cpp/badge.svg)
 ![GitHub Workflow Status](https://github.com/westonrobot/wrp_sdk/workflows/ROS/badge.svg)
 
-Copyright (c) 2020 [WestonRobot](https://www.westonrobot.com/)
+This repository is a joint effort by the development teams at Weston Robot (Singapore) and AgileX Robotics (China).
+
+- Copyright (c) 2020 [Weston Robot](https://www.westonrobot.com/) 
+- Copyright (c) 2020 [AgileX Robotics](http://www.agilex.ai/?lang=zh-cn)
 
 ## Introduction
 
-This software package provides a C++ interface to communicate with the mobile platforms from Weston Robot, for sending commands to the robot and receiving the latest robot state. 
+This software package provides a C++ interface to communicate with the mobile platforms from Weston Robot and AgileX Robotics, for sending commands to the robot and receiving the latest robot state. 
 
 Supported robot platforms
 
@@ -22,7 +25,7 @@ Supported environments
 
 It should also work in other similar Linux environments but only the above listed environments are regularly tested.
 
-Generally, you only need to instantiate an object of the robot base class (such as ScoutBase), then use the object to programmatically control the robot. Internally, the base class manages two background threads, one to process CAN/UART messages of the robot state and accordingly update state variables in the robot state data structure, and the other to maintain a 50Hz loop and send the latest command to the robot base. User can iteratively perform tasks in the main thread and check the robot state or set control commands. 
+Generally, you only need to instantiate an object of the robot base class (such as ScoutBase), then use the object to programmatically control the robot. Internally, the base class manages two background threads, one to process CAN/UART messages of the robot state and accordingly update state variables in the robot state data structure, and the other to maintain a 50Hz loop and send the latest command to the robot base. User can iteratively perform tasks in the main thread and check the robot state or set control commands. Advanced users may also use this setup as a reference and maintain the control and monitoring loops in a different way.
 
 ## Build SDK
 
