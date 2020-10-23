@@ -13,7 +13,10 @@ xenial-cpp-build:
 
 bionic-cpp-build:
   stage: build
-  image: rduweston/ubuntu-ci:18.04-min
+  image: ubuntu:18.04
+  before_script:
+    - apt-get update
+    - apt-get install -y build-essential git cmake
   script:
     - git submodule update --init --recursive
     - mkdir build && cd build
@@ -22,7 +25,10 @@ bionic-cpp-build:
 
 focal-cpp-build:
   stage: build
-  image: rduweston/ubuntu-ci:20.04-min
+  image: ubuntu:20.04
+  before_script:
+    - apt-get update
+    - apt-get install -y build-essential git cmake
   script:
     - git submodule update --init --recursive
     - mkdir build && cd build
