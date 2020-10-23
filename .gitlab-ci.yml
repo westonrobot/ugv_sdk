@@ -2,6 +2,8 @@
 xenial-cpp-build:
   stage: build
   image: rduweston/ubuntu-ci:16.04
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
@@ -12,6 +14,8 @@ xenial-cpp-build:
 xenial-cpp-test:
   stage: test
   image: rduweston/ubuntu-ci:16.04
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
@@ -25,6 +29,8 @@ xenial-cpp-test:
 bionic-cpp-build:
   stage: build
   image: rduweston/ubuntu-ci:18.04
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
@@ -42,6 +48,8 @@ bionic-cpp-build:
 bionic-cpp-test:
   stage: test
   image: rduweston/ubuntu-ci:18.04
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
@@ -55,6 +63,8 @@ bionic-cpp-test:
 focal-cpp-build:
   stage: build
   image: rduweston/ubuntu-ci:20.04
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
@@ -65,6 +75,8 @@ focal-cpp-build:
 focal-cpp-test:
   stage: test
   image: rduweston/ubuntu-ci:20.04
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
@@ -77,71 +89,83 @@ focal-cpp-test:
 kinetic-catkin-build:
   stage: build
   image: rduweston/ubuntu-ci:kinetic-xenial
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
-    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/scout_base.git
-    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/hunter_base.git
+    # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/scout_base.git
+    # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/hunter_base.git
     - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make"
 
 kinetic-catkin-isolated-build:
   stage: build
   image: rduweston/ubuntu-ci:kinetic-xenial
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
-    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/scout_base.git
-    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/hunter_base.git
+    # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/scout_base.git
+    # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/hunter_base.git
     - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make_isolated --install"
 
 melodic-catkin-build:
   stage: build
   image: rduweston/ubuntu-ci:melodic-bionic
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
-    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/scout_base.git
-    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/hunter_base.git
+    # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/scout_base.git
+    # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/hunter_base.git
     - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make"
 
 melodic-catkin-isolated-build:
   stage: build
   image: rduweston/ubuntu-ci:melodic-bionic
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
-    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/scout_base.git
-    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/hunter_base.git
+    # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/scout_base.git
+    # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/hunter_base.git
     - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make_isolated --install"
 
 noetic-catkin-build:
   stage: build
   image: rduweston/ubuntu-ci:noetic-focal
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
-    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/scout_base.git
-    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/hunter_base.git
+    # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/scout_base.git
+    # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/hunter_base.git
     - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make"
 
 noetic-catkin-isolated-build:
   stage: build
   image: rduweston/ubuntu-ci:noetic-focal
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
-    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/scout_base.git
-    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/hunter_base.git
+    # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/scout_base.git
+    # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/hunter_base.git
     - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make_isolated --install"
