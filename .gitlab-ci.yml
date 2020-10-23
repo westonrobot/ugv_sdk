@@ -1,7 +1,10 @@
 ## Build and test as standard C++ package
 xenial-cpp-build:
   stage: build
-  image: rduweston/ubuntu-ci:16.04-min
+  image: ubuntu:16.04
+  before_script:
+    - apt-get update
+    - apt-get install -y build-essential git cmake
   script:
     - git submodule update --init --recursive
     - mkdir build && cd build
