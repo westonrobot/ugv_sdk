@@ -26,8 +26,6 @@ jobs:
     - name: Create catkin workspace
       run: mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - name: Copy code to catkin workspace
-      run: cd /catkin_ws/src && cp -r $GITHUB_WORKSPACE .
-    - name: Update git submodule
-      run: cd /catkin_ws/src/ugv_sdk && git submodule update --init --recursive
+      run: cd /catkin_ws/src && git clone --recursive https://github.com/westonrobot/ugv_sdk
     - name: Run catkin_make
       run: cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make"
