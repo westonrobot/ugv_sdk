@@ -68,7 +68,7 @@ $ sudo apt-get install cmake
 
 ```
 $ cd <your-catkin-ws>/src
-$ git clone https://github.com/westonrobot/wrp_sdk.git
+$ git clone --recursive https://github.com/westonrobot/ugv_sdk.git
 $ cd ..
 $ catkin_make
 ```
@@ -84,7 +84,8 @@ $ sudo apt install libncurses5-dev
 Configure and build
 
 ```
-$ cd wrp_sdk 
+$ git clone --recursive https://github.com/westonrobot/ugv_sdk.git
+$ cd ugv_sdk 
 $ mkdir build
 $ cd build
 $ cmake ..

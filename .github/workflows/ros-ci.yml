@@ -21,11 +21,13 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-    - name: Install dependencies
-      run: sudo apt-get update && sudo apt-get install -y libasio-dev
+    # - name: Install dependencies
+    #   run: sudo apt-get update && sudo apt-get install -y libasio-dev
     - name: Create catkin workspace
       run: mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - name: Copy code to catkin workspace
       run: cd /catkin_ws/src && cp -r $GITHUB_WORKSPACE .
+    - name: Update git submodule
+      run: cd /catkin_ws/src/$GITHUB_WORKSPACE && git submodule update --init --recursive
     - name: Run catkin_make
       run: cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make"
