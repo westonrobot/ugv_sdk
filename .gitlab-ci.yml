@@ -1,10 +1,7 @@
 ## Build and test as standard C++ package
 xenial-cpp-build:
   stage: build
-  image: ubuntu:16.04
-  before_script:
-    - apt-get update
-    - apt-get install -y build-essential git cmake
+  image: rduweston/ubuntu-ci:16.04
   script:
     - git submodule update --init --recursive
     - mkdir build && cd build
@@ -13,10 +10,7 @@ xenial-cpp-build:
 
 bionic-cpp-build:
   stage: build
-  image: ubuntu:18.04
-  before_script:
-    - apt-get update
-    - apt-get install -y build-essential git cmake
+  image: rduweston/ubuntu-ci:18.04
   script:
     - git submodule update --init --recursive
     - mkdir build && cd build
@@ -26,9 +20,6 @@ bionic-cpp-build:
 focal-cpp-build:
   stage: build
   image: rduweston/ubuntu-ci:20.04
-  before_script:
-    - apt-get update
-    - apt-get install -y build-essential git cmake
   script:
     - git submodule update --init --recursive
     - mkdir build && cd build
@@ -38,7 +29,7 @@ focal-cpp-build:
 ## Build and test as catkin package
 kinetic-catkin-build:
   stage: build
-  image: rduweston/ubuntu-ci:kinetic-xenial
+  image: rduweston/ubuntu-ci:kinetic
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
@@ -49,7 +40,7 @@ kinetic-catkin-build:
 
 kinetic-catkin-isolated-build:
   stage: build
-  image: rduweston/ubuntu-ci:kinetic-xenial
+  image: rduweston/ubuntu-ci:kinetic
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
@@ -60,7 +51,7 @@ kinetic-catkin-isolated-build:
 
 melodic-catkin-build:
   stage: build
-  image: rduweston/ubuntu-ci:melodic-bionic
+  image: rduweston/ubuntu-ci:melodic
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
@@ -71,7 +62,7 @@ melodic-catkin-build:
 
 melodic-catkin-isolated-build:
   stage: build
-  image: rduweston/ubuntu-ci:melodic-bionic
+  image: rduweston/ubuntu-ci:melodic
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
@@ -82,7 +73,7 @@ melodic-catkin-isolated-build:
 
 noetic-catkin-build:
   stage: build
-  image: rduweston/ubuntu-ci:noetic-focal
+  image: rduweston/ubuntu-ci:noetic
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
@@ -93,7 +84,7 @@ noetic-catkin-build:
 
 noetic-catkin-isolated-build:
   stage: build
-  image: rduweston/ubuntu-ci:noetic-focal
+  image: rduweston/ubuntu-ci:noetic
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
