@@ -5,6 +5,7 @@ xenial-cpp-build:
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
+    - git submodule update --init --recursive
     - mkdir build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Release ..
     - cmake --build . && cpack
@@ -29,6 +30,7 @@ bionic-cpp-build:
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
+    - git submodule update --init --recursive
     - mkdir build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Release ..
     - cmake --build . && cpack
@@ -60,6 +62,7 @@ focal-cpp-build:
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
+    - git submodule update --init --recursive
     - mkdir build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Release ..
     - cmake --build . && cpack
@@ -85,6 +88,7 @@ kinetic-catkin-build:
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
+    - cd /catkin_ws/src/wrp_sdk && git submodule update --init --recursive
     # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/scout_base.git
     # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/hunter_base.git
     - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make"
@@ -97,6 +101,7 @@ kinetic-catkin-isolated-build:
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
+    - cd /catkin_ws/src/wrp_sdk && git submodule update --init --recursive
     # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/scout_base.git
     # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/hunter_base.git
     - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make_isolated --install"
@@ -109,6 +114,7 @@ melodic-catkin-build:
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
+    - cd /catkin_ws/src/wrp_sdk && git submodule update --init --recursive
     # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/scout_base.git
     # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/hunter_base.git
     - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make"
@@ -121,6 +127,7 @@ melodic-catkin-isolated-build:
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
+    - cd /catkin_ws/src/wrp_sdk && git submodule update --init --recursive
     # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/scout_base.git
     # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/hunter_base.git
     - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make_isolated --install"
@@ -133,6 +140,7 @@ noetic-catkin-build:
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
+    - cd /catkin_ws/src/wrp_sdk && git submodule update --init --recursive
     # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/scout_base.git
     # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/hunter_base.git
     - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make"
@@ -145,6 +153,7 @@ noetic-catkin-isolated-build:
   script:
     - mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/wrp_sdk
+    - cd /catkin_ws/src/wrp_sdk && git submodule update --init --recursive
     # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/scout_base.git
     # - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/ros/hunter_base.git
     - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make_isolated --install"
