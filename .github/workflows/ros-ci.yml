@@ -28,6 +28,6 @@ jobs:
     - name: Copy code to catkin workspace
       run: cd /catkin_ws/src && cp -r $GITHUB_WORKSPACE .
     - name: Update git submodule
-      run: cd /catkin_ws/src/$GITHUB_WORKSPACE && git submodule update --init --recursive
+      run: cd /catkin_ws/src/ugv_sdk && git submodule update --init --recursive
     - name: Run catkin_make
       run: cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make"

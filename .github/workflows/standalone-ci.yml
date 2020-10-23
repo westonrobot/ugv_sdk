@@ -18,7 +18,4 @@ jobs:
     - name: Update git submodule
       run: git submodule update --init --recursive
     - name: Build and pack
-      run: mkdir build && cd build && cmake -DBUILD_TESTS=ON .. && cmake --build . && cpack
-    - name: Run tests
-      run: ./build/bin/gtest_all
-    
+      run: mkdir build && cd build && cmake -DBUILD_TESTS=ON .. && cmake --build . && cpack    
