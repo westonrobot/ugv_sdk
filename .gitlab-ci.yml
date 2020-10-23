@@ -1,7 +1,7 @@
 ## Build and test as standard C++ package
 xenial-cpp-build:
   stage: build
-  image: rduweston/ubuntu-ci:16.04
+  image: rduweston/ubuntu-ci:16.04-min
   script:
     - git submodule update --init --recursive
     - mkdir build && cd build
@@ -10,7 +10,7 @@ xenial-cpp-build:
 
 bionic-cpp-build:
   stage: build
-  image: rduweston/ubuntu-ci:18.04
+  image: rduweston/ubuntu-ci:18.04-min
   script:
     - git submodule update --init --recursive
     - mkdir build && cd build
@@ -19,7 +19,7 @@ bionic-cpp-build:
 
 focal-cpp-build:
   stage: build
-  image: rduweston/ubuntu-ci:20.04
+  image: rduweston/ubuntu-ci:20.04-min
   script:
     - git submodule update --init --recursive
     - mkdir build && cd build
