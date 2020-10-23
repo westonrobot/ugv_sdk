@@ -2,8 +2,6 @@
 xenial-cpp-build:
   stage: build
   image: rduweston/ubuntu-ci:16.04
-  variables:
-    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
@@ -14,11 +12,10 @@ xenial-cpp-build:
 xenial-cpp-test:
   stage: test
   image: rduweston/ubuntu-ci:16.04
-  variables:
-    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
+    - git submodule update --init --recursive
     - mkdir build && cd build
     - cmake -DBUILD_TESTS=ON ..
     - cmake --build .
@@ -29,8 +26,6 @@ xenial-cpp-test:
 bionic-cpp-build:
   stage: build
   image: rduweston/ubuntu-ci:18.04
-  variables:
-    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
@@ -48,11 +43,10 @@ bionic-cpp-build:
 bionic-cpp-test:
   stage: test
   image: rduweston/ubuntu-ci:18.04
-  variables:
-    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
+    - git submodule update --init --recursive
     - mkdir build && cd build
     - cmake -DBUILD_TESTS=ON ..
     - cmake --build .
@@ -63,8 +57,6 @@ bionic-cpp-test:
 focal-cpp-build:
   stage: build
   image: rduweston/ubuntu-ci:20.04
-  variables:
-    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
@@ -75,11 +67,10 @@ focal-cpp-build:
 focal-cpp-test:
   stage: test
   image: rduweston/ubuntu-ci:20.04
-  variables:
-    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
+    - git submodule update --init --recursive
     - mkdir build && cd build
     - cmake -DBUILD_TESTS=ON ..
     - cmake --build .
@@ -89,8 +80,6 @@ focal-cpp-test:
 kinetic-catkin-build:
   stage: build
   image: rduweston/ubuntu-ci:kinetic-xenial
-  variables:
-    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
@@ -103,8 +92,6 @@ kinetic-catkin-build:
 kinetic-catkin-isolated-build:
   stage: build
   image: rduweston/ubuntu-ci:kinetic-xenial
-  variables:
-    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
@@ -117,8 +104,6 @@ kinetic-catkin-isolated-build:
 melodic-catkin-build:
   stage: build
   image: rduweston/ubuntu-ci:melodic-bionic
-  variables:
-    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
@@ -131,8 +116,6 @@ melodic-catkin-build:
 melodic-catkin-isolated-build:
   stage: build
   image: rduweston/ubuntu-ci:melodic-bionic
-  variables:
-    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
@@ -145,8 +128,6 @@ melodic-catkin-isolated-build:
 noetic-catkin-build:
   stage: build
   image: rduweston/ubuntu-ci:noetic-focal
-  variables:
-    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
@@ -159,8 +140,6 @@ noetic-catkin-build:
 noetic-catkin-isolated-build:
   stage: build
   image: rduweston/ubuntu-ci:noetic-focal
-  variables:
-    GIT_SUBMODULE_STRATEGY: recursive
   # before_script:
   #   - apt update && apt -y install libasio-dev
   script:
