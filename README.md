@@ -92,6 +92,16 @@ $ cmake ..
 $ make
 ```
 
+### Update repository
+
+If you have already cloned the repository, use the following commands to get latest updates
+
+```
+$ cd ugv_sdk
+$ git pull origin master
+$ git submodule update --init --recursive
+```
+
 ## Hardware Interface
 
 ### Setup CAN-To-USB adapter 
