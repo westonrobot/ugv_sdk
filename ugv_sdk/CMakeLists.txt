@@ -67,6 +67,14 @@ if(BUILD_WITHOUT_ROS)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 endif()
 
+if(NOT BUILD_WITHOUT_ROS)
+    find_package(catkin REQUIRED COMPONENTS wrp_io)
+    include_directories(
+        include
+        ${catkin_INCLUDE_DIRS}
+    )
+endif()
+
 # Build libraries
 find_package(Threads REQUIRED)
 
@@ -81,7 +89,11 @@ add_library(${PROJECT_NAME}
     src/scout_can_parser.c
     src/scout_uart_parser.c
 )
-target_link_libraries(${PROJECT_NAME} wrp_io Threads::Threads)
+if(BUILD_WITHOUT_ROS)
+    target_link_libraries(${PROJECT_NAME} wrp_io Threads::Threads)
+else()
+    target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} Threads::Threads)
+endif() 
 target_include_directories(${PROJECT_NAME} PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 	$<INSTALL_INTERFACE:include>
@@ -184,7 +196,7 @@ else() # BUILD_WITHOUT_ROS
     catkin_package(
         LIBRARIES ${PROJECT_NAME}
         INCLUDE_DIRS include 
-        #  CATKIN_DEPENDS rospy scout_msgs std_msgs
+         CATKIN_DEPENDS wrp_io
         #  DEPENDS system_lib
     )
 
