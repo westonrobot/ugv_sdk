@@ -23,14 +23,26 @@ extern "C" {
 #define TRACER_MOTOR1_ID                 ((uint8_t)0x00)
 #define TRACER_MOTOR2_ID                 ((uint8_t)0x01)
 
+// UART Definitions
+#define UART_FRAME_SYSTEM_STATUS_ID         ((uint8_t)0x01)
+#define UART_FRAME_MOTION_STATUS_ID         ((uint8_t)0x02)
+#define UART_FRAME_MOTOR1_DRIVER_STATUS_ID  ((uint8_t)0x03)
+#define UART_FRAME_MOTOR2_DRIVER_STATUS_ID  ((uint8_t)0x04)
+#define UART_FRAME_LIGHT_STATUS_ID          ((uint8_t)0x07)
+
+#define UART_FRAME_MOTION_CONTROL_ID        ((uint8_t)0x01)
+#define UART_FRAME_LIGHT_CONTROL_ID         ((uint8_t)0x02)
+
 // CAN Definitions
-#define CAN_MSG_MOTION_CMD_ID            ((uint32_t)0x130)
-#define CAN_MSG_MOTION_STATUS_ID         ((uint32_t)0x131)
-#define CAN_MSG_LIGHT_CONTROL_CMD_ID     ((uint32_t)0x140)
-#define CAN_MSG_LIGHT_CONTROL_STATUS_ID  ((uint32_t)0x141)
-#define CAN_MSG_SYSTEM_STATUS_STATUS_ID  ((uint32_t)0x151)
-#define CAN_MSG_MOTOR1_DRIVER_STATUS_ID  ((uint32_t)0x201)
-#define CAN_MSG_MOTOR2_DRIVER_STATUS_ID  ((uint32_t)0x202)
+#define CAN_MSG_MOTION_CMD_ID            ((uint32_t)0x111)
+#define CAN_MSG_MOTION_STATUS_ID         ((uint32_t)0x221)
+#define CAN_MSG_LIGHT_CONTROL_CMD_ID     ((uint32_t)0x121)
+#define CAN_MSG_LIGHT_CONTROL_STATUS_ID  ((uint32_t)0x231)
+#define CAN_MSG_SYSTEM_STATUS_STATUS_ID  ((uint32_t)0x211)
+#define CAN_MSG_MOTOR1_DRIVER_STATUS_ID  ((uint32_t)0x251)
+#define CAN_MSG_MOTOR2_DRIVER_STATUS_ID  ((uint32_t)0x252)
+#define CAN_MSG_COMTROL_MODE_ID          ((uint32_t)0x421)
+#define CAN_MSG_ODOMETER_ID             ((uint32_t)0x311)
 
 /*--------------------- Control/State Constants ------------------------*/
 
@@ -90,7 +102,32 @@ extern "C" {
 
 // Note: id could be different for UART and CAN protocol
 
-// Motion Control
+// Motion Control(can)
+typedef struct {
+    union
+    {
+        struct
+        {
+          struct
+          {
+            int8_t H_byte;
+            int8_t L_byte;
+          }linear_velocity;
+          struct
+          {
+            int8_t H_byte;
+            int8_t L_byte;
+          }angular_velocity;
+          uint8_t reserved0;
+          uint8_t reserved1;
+          uint8_t reserved2;
+          uint8_t reserved3;
+        } cmd;
+        uint8_t raw[8];
+    } data;
+} MotionCmdMessage;
+
+// Motion Control(uart)
 typedef struct {
     union
     {
@@ -107,7 +144,49 @@ typedef struct {
         } cmd;
         uint8_t raw[8];
     } data;
-} MotionCmdMessage;
+} UartMotionControlMessage;
+
+typedef struct {
+    union
+    {
+      struct
+      {
+        uint8_t control_mode;
+        uint8_t reserved0;
+        uint8_t reserved1;
+        uint8_t reserved2;
+        uint8_t reserved3;
+        uint8_t reserved4;
+        uint8_t reserved5;
+        uint8_t reserved6;
+      } cmd;
+        uint8_t raw[8];
+    } data;
+} ModSelectMessage;
+
+typedef struct {
+    union
+    {
+        struct
+        {
+            struct
+            {
+                uint8_t high_byte;
+                uint8_t low_byte;
+            } linear_velocity;
+            struct
+            {
+                uint8_t high_byte;
+                uint8_t low_byte;
+            } angular_velocity;
+            uint8_t reserved0;
+            uint8_t reserved1;
+            uint8_t reserved2;
+            uint8_t reserved3;
+        } status;
+        uint8_t raw[8];
+    } data;
+} MotionStatusMessage;
 
 typedef struct {
     union
@@ -131,10 +210,32 @@ typedef struct {
         } status;
         uint8_t raw[8];
     } data;
-} MotionStatusMessage;
+} UartMotionStatusMessage;
 
 // System Status Feedback
 typedef struct {    
+    union
+    {
+        struct
+        {
+            uint8_t base_state;
+            uint8_t control_mode;
+            struct
+            {
+                uint8_t high_byte;
+                uint8_t low_byte;
+            } battery_voltage;
+            uint8_t fault_code;
+            uint8_t reserved0;
+            uint8_t reserved1;
+            uint8_t count;
+            //uint8_t checksum;
+        } status;
+        uint8_t raw[8];
+    } data;
+} SystemStatusMessage;
+
+typedef struct {
     union
     {
         struct
@@ -156,7 +257,7 @@ typedef struct {
         } status;
         uint8_t raw[8];
     } data;
-} SystemStatusMessage;
+} UartSystemStatusMessage;
 
 // Light Control
 typedef struct {
@@ -167,11 +268,12 @@ typedef struct {
             uint8_t light_ctrl_enable;
             uint8_t front_light_mode;
             uint8_t front_light_custom;
-            uint8_t rear_light_mode;
-            uint8_t rear_light_custom;
             uint8_t reserved0;
+            uint8_t reserved1;
+            uint8_t reserved2;
+            uint8_t reserved3;
             uint8_t count;
-            uint8_t checksum;
+
         } cmd;
         uint8_t raw[8];
     } data;
@@ -190,10 +292,46 @@ typedef struct {
             uint8_t reserved0;
             uint8_t count;
             uint8_t checksum;
+        } cmd;
+        uint8_t raw[8];
+    } data;
+} UartLightControlMessage;
+
+typedef struct {
+    union
+    {
+        struct
+        {
+            uint8_t light_ctrl_enable;
+            uint8_t front_light_mode;
+            uint8_t front_light_custom;
+            uint8_t reserved0;
+            uint8_t reserved1;
+            uint8_t reserved2;
+            uint8_t reserved3;
+            uint8_t count;          
         } status;
         uint8_t raw[8];
     } data;
 } LightStatusMessage;
+
+typedef struct {
+    union
+    {
+        struct
+        {
+            uint8_t light_ctrl_enable;
+            uint8_t front_light_mode;
+            uint8_t front_light_custom;
+            uint8_t rear_light_mode;
+            uint8_t rear_light_custom;
+            uint8_t reserved0;
+            uint8_t count;
+            uint8_t checksum;
+        } status;
+        uint8_t raw[8];
+    } data;
+} UartLightStatusMessage;
 
 // Motor Driver Feedback
 typedef struct
@@ -221,6 +359,97 @@ typedef struct
     } data;
 } MotorDriverStatusMessage;
 
+typedef struct
+{
+    uint8_t motor_id;
+    union {
+        struct
+        {
+            struct
+            {
+                uint8_t high_byte;
+                uint8_t low_byte;
+            } current;
+            struct
+            {
+                uint8_t high_byte;
+                uint8_t low_byte;
+            } rpm;
+            int8_t temperature;
+            uint8_t reserved0;
+            uint8_t count;
+            uint8_t checksum;
+        } status;
+        uint8_t raw[8];
+    } data;
+} UartMotorDriverStatusMessage;
+
+typedef struct
+{
+    uint8_t motor_id;
+    union {
+        struct
+        {
+            struct
+            {
+                uint8_t high_byte;
+                uint8_t low_byte;
+            } rpm;
+            int8_t reserved0;
+            int8_t reserved1;
+            int8_t reserved2;
+            int8_t reserved3;
+            int8_t reserved4;
+            int8_t reserved5;
+        } status;
+        uint8_t raw[8];
+    } data;
+} MotorHeightSpeedStatusMessage;
+
+typedef struct
+{
+    uint8_t motor_id;
+    union {
+        struct
+        {           
+           int8_t reserved0;
+           int8_t reserved1;
+           int8_t reserved2;
+           int8_t reserved3;
+           int8_t reserved4;
+           int8_t driver_state;
+           int8_t reserved5;
+           int8_t reserved6;
+        } status;
+        uint8_t raw[8];
+    } data;
+} MotorLowSpeedStatusMessage;
+
+typedef struct
+{
+    uint8_t motor_id;
+    union {
+        struct
+        {
+          struct
+          {
+            uint8_t highest;
+            uint8_t sec_highest;
+            uint8_t sec_lowest;
+            uint8_t lowest;
+          }leftodometer;
+          struct
+          {
+            uint8_t highest;
+            uint8_t sec_highest;
+            uint8_t sec_lowest;
+            uint8_t lowest;
+          }rightodometer;
+        } status;
+        uint8_t raw[8];
+    } data;
+} OdometerMessage;
+
 // For convenience to access status/control message
 typedef enum
 {
@@ -230,12 +459,30 @@ typedef enum
     TracerLightStatusMsg = 0x02,
     TracerSystemStatusMsg = 0x03,
     TracerMotorDriverStatusMsg = 0x04,
+    TracerOdometerMsg = 0x05,
+    TracerHeighSpeedMsg = 0x06,
+    TracerLowSpeedMsg = 0x07,
+
     // control messages
     TracerMotionCmdMsg = 0x21,
-    TracerLightControlMsg = 0x22
+    TracerLightControlMsg = 0x22,
+    TracerModeControlMsg = 0x23
 } TracerMsgType;
 
-typedef struct 
+typedef enum
+{
+    UartTracerMsgNone = 0x00,
+    // status messages
+    UartTracerMotionStatusMsg = 0x01,
+    UartTracerLightStatusMsg = 0x02,
+    UartTracerSystemStatusMsg = 0x03,
+    UartTracerMotorDriverStatusMsg = 0x04,
+    // control messages
+    UartTracerMotionControlMsg = 0x21,
+    UartTracerLightControlMsg = 0x22
+} UartTracerMsgType;
+
+typedef struct
 {
     TracerMsgType type;
     union {
@@ -244,11 +491,32 @@ typedef struct
         LightStatusMessage light_status_msg;
         SystemStatusMessage system_status_msg;
         MotorDriverStatusMessage motor_driver_status_msg;
+        OdometerMessage odom_msg;
+        MotorHeightSpeedStatusMessage motor_heigh_speed_msg;
+        MotorLowSpeedStatusMessage motor_low_speed_msg;
+
         // control messages
         MotionCmdMessage motion_cmd_msg;
         LightControlMessage light_control_msg;
+        ModSelectMessage mode_cmd_msg;
+
     } body;
 } TracerMessage;
+
+typedef struct
+{
+    UartTracerMsgType type;
+    union {
+        // status messages
+        UartMotionStatusMessage motion_status_msg;
+        UartLightStatusMessage light_status_msg;
+        UartSystemStatusMessage system_status_msg;
+        UartMotorDriverStatusMessage motor_driver_status_msg;
+        // control messages
+        UartMotionControlMessage motion_control_msg;
+        UartLightControlMessage light_control_msg;
+    } body;
+} UartTracerMessage;
 
 #pragma pack(pop)
 
