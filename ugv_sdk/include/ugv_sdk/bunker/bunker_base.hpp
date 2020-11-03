@@ -20,7 +20,6 @@
 
 #include "ugv_sdk/bunker/bunker_protocol.h"
 #include "ugv_sdk/bunker/bunker_can_parser.h"
-#include "ugv_sdk/bunker/bunker_uart_parser.h"
 #include "ugv_sdk/bunker/bunker_types.hpp"
 
 namespace westonrobot {
