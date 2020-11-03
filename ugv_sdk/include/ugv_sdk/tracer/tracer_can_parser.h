@@ -17,7 +17,7 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "tracer_protocol/tracer_protocol.h"
+#include "ugv_sdk/tracer/tracer_protocol.h"
 
 #ifdef __linux__
 #include <linux/can.h>

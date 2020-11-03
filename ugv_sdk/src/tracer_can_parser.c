@@ -7,11 +7,12 @@
  * Copyright (c) 2020 Ruixiang Du (rdu)
  */ 
 
-#include "tracer_protocol/tracer_can_parser.h"
+#include "ugv_sdk/tracer/tracer_can_parser.h"
 
 #include "string.h"
 
 static void EncodeTracerMotionControlMsgToCAN(const MotionCmdMessage *msg, struct can_frame *tx_frame);
+static void EncodeTracerModeControlMsgToCAN(const ModSelectMessage *msg, struct can_frame *tx_frame);
 
 bool DecodeTracerMsgFromCAN(const struct can_frame *rx_frame, TracerMessage *msg)
 {
@@ -36,14 +37,18 @@ bool DecodeTracerMsgFromCAN(const struct can_frame *rx_frame, TracerMessage *msg
     {
         msg->type = TracerMotorDriverStatusMsg;
         msg->body.motor_driver_status_msg.motor_id = TRACER_MOTOR1_ID;
+        msg->body.motor_heigh_speed_msg.motor_id=TRACER_MOTOR1_ID;
         memcpy(msg->body.motor_driver_status_msg.data.raw, rx_frame->data, rx_frame->can_dlc * sizeof(uint8_t));
+        memcpy(msg->body.motor_heigh_speed_msg.data.raw, rx_frame->data, rx_frame->can_dlc * sizeof(uint8_t));
         break;
     }
     case CAN_MSG_MOTOR2_DRIVER_STATUS_ID:
     {
         msg->type = TracerMotorDriverStatusMsg;
         msg->body.motor_driver_status_msg.motor_id = TRACER_MOTOR2_ID;
+        msg->body.motor_heigh_speed_msg.motor_id = TRACER_MOTOR2_ID;
         memcpy(msg->body.motor_driver_status_msg.data.raw, rx_frame->data, rx_frame->can_dlc * sizeof(uint8_t));
+        memcpy(msg->body.motor_heigh_speed_msg.data.raw, rx_frame->data, rx_frame->can_dlc * sizeof(uint8_t));
         break;
     }
     // in the current implementation, both MsgType and can_frame include 8 * uint8_t
@@ -51,6 +56,12 @@ bool DecodeTracerMsgFromCAN(const struct can_frame *rx_frame, TracerMessage *msg
     {
         msg->type = TracerMotionCmdMsg;
         memcpy(msg->body.motion_cmd_msg.data.raw, rx_frame->data, rx_frame->can_dlc * sizeof(uint8_t));
+        break;
+    }
+    case CAN_MSG_ODOMETER_ID:
+    {
+        msg->type = TracerOdometerMsg;
+        memcpy(msg->body.odom_msg.data.raw, rx_frame->data, rx_frame->can_dlc * sizeof(uint8_t));
         break;
     }
     default:
@@ -94,10 +105,15 @@ void EncodeTracerMsgToCAN(const TracerMessage *msg, struct can_frame *tx_frame)
         EncodeTracerMotionControlMsgToCAN(&(msg->body.motion_cmd_msg), tx_frame);
         break;
     }
+    case TracerModeControlMsg:
+    {
+        EncodeTracerModeControlMsgToCAN(&(msg->body.mode_cmd_msg), tx_frame);
+        break;
+    }
     default:
         break;
     }
-    tx_frame->data[7] = CalcTracerCANChecksum(tx_frame->can_id, tx_frame->data, tx_frame->can_dlc);
+    //tx_frame->data[7] = CalcTracerCANChecksum(tx_frame->can_id, tx_frame->data, tx_frame->can_dlc);
 }
 
 void EncodeTracerMotionControlMsgToCAN(const MotionCmdMessage *msg, struct can_frame *tx_frame)
@@ -105,9 +121,15 @@ void EncodeTracerMotionControlMsgToCAN(const MotionCmdMessage *msg, struct can_f
     tx_frame->can_id = CAN_MSG_MOTION_CMD_ID;
     tx_frame->can_dlc = 8;
     memcpy(tx_frame->data, msg->data.raw, tx_frame->can_dlc);
-    tx_frame->data[7] = CalcTracerCANChecksum(tx_frame->can_id, tx_frame->data, tx_frame->can_dlc);
+    //tx_frame->data[7] = CalcTracerCANChecksum(tx_frame->can_id, tx_frame->data, tx_frame->can_dlc);
 }
-
+void EncodeTracerModeControlMsgToCAN(const ModSelectMessage *msg, struct can_frame *tx_frame)
+{
+    tx_frame->can_id = CAN_MSG_COMTROL_MODE_ID;
+    tx_frame->can_dlc = 8;
+    memcpy(tx_frame->data, msg->data.raw, tx_frame->can_dlc);
+    //tx_frame->data[7] = CalcTracerCANChecksum(tx_frame->can_id, tx_frame->data, tx_frame->can_dlc);
+}
 uint8_t CalcTracerCANChecksum(uint16_t id, uint8_t *data, uint8_t dlc)
 {
     uint8_t checksum = 0x00;
