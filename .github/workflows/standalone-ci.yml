@@ -2,9 +2,9 @@ name: Cpp
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, v2.x ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, v2.x ]
 
 jobs:
   build:
