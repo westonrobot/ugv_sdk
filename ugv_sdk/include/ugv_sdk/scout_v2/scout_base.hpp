@@ -18,10 +18,10 @@
 
 #include "ugv_sdk/mobile_base.hpp"
 
-#include "ugv_sdk/scout/scout_protocol.h"
-#include "ugv_sdk/scout/scout_can_parser.h"
-#include "ugv_sdk/scout/scout_uart_parser.h"
-#include "ugv_sdk/scout/scout_types.hpp"
+#include "ugv_sdk/scout_v2/scout_protocol.h"
+#include "ugv_sdk/scout_v2/scout_can_parser.h"
+#include "ugv_sdk/scout_v2/scout_uart_parser.h"
+#include "ugv_sdk/scout_v2/scout_types.hpp"
 
 namespace westonrobot {
 class ScoutBase : public MobileBase {
@@ -48,13 +48,18 @@ class ScoutBase : public MobileBase {
   uint8_t tx_buffer_[SCOUT_CMD_BUF_LEN];
 
   // cmd/status update related variables
+  std::thread cmd_thread_;
   std::mutex scout_state_mutex_;
   std::mutex motion_cmd_mutex_;
   std::mutex light_cmd_mutex_;
+  std::mutex mode_cmd_mutex_;
 
   ScoutState scout_state_;
   ScoutMotionCmd current_motion_cmd_;
   ScoutLightCmd current_light_cmd_;
+
+  
+ 
 
   bool light_ctrl_enabled_ = false;
   bool light_ctrl_requested_ = false;
@@ -67,6 +72,7 @@ class ScoutBase : public MobileBase {
 
   void SendMotionCmd(uint8_t count);
   void SendLightCmd(uint8_t count);
+  void SendModeCtl();
   void NewStatusMsgReceivedCallback(const ScoutMessage &msg);
 
  public:

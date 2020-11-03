@@ -1,5 +1,5 @@
-#include "ugv_sdk/scout/scout_base.hpp"
-
+#include "ugv_sdk/scout_v2/scout_base.hpp"
+#include <stdio.h>
 #include <string>
 #include <cstring>
 #include <iostream>
@@ -16,6 +16,7 @@ namespace westonrobot {
 void ScoutBase::SendRobotCmd() {
   static uint8_t cmd_count = 0;
   static uint8_t light_cmd_count = 0;
+  SendModeCtl();
   SendMotionCmd(cmd_count++);
   if (light_ctrl_requested_) SendLightCmd(light_cmd_count++);
 }
@@ -25,48 +26,67 @@ void ScoutBase::SendMotionCmd(uint8_t count) {
   ScoutMessage m_msg;
   m_msg.type = ScoutMotionControlMsg;
 
-  if (can_connected_)
-    m_msg.body.motion_control_msg.data.cmd.control_mode = CTRL_MODE_CMD_CAN;
-  else if (serial_connected_)
-    m_msg.body.motion_control_msg.data.cmd.control_mode = CTRL_MODE_CMD_UART;
+//  if (can_connected_)
+//    m_msg.body.motion_control_msg.data.cmd.control_mode = CTRL_MODE_CMD_CAN;
+//  else if (serial_connected_)
+//    m_msg.body.motion_control_msg.data.cmd.control_mode = CTRL_MODE_CMD_UART;
 
   motion_cmd_mutex_.lock();
-  m_msg.body.motion_control_msg.data.cmd.fault_clear_flag =
-      static_cast<uint8_t>(current_motion_cmd_.fault_clear_flag);
-  m_msg.body.motion_control_msg.data.cmd.linear_velocity_cmd =
-      current_motion_cmd_.linear_velocity;
-  m_msg.body.motion_control_msg.data.cmd.angular_velocity_cmd =
-      current_motion_cmd_.angular_velocity;
+  m_msg.body.motion_control_msg.data.cmd.linear_velocity.high_byte =
+      current_motion_cmd_.linear_velocity_height_byte;
+  m_msg.body.motion_control_msg.data.cmd.linear_velocity.low_byte =
+      current_motion_cmd_.linear_velocity_low_byte;
+  m_msg.body.motion_control_msg.data.cmd.angular_velocity.high_byte =
+      current_motion_cmd_.angular_velocity_height_byte;
+  m_msg.body.motion_control_msg.data.cmd.angular_velocity.low_byte =
+      current_motion_cmd_.angular_velocity_low_byte;
   motion_cmd_mutex_.unlock();
 
   m_msg.body.motion_control_msg.data.cmd.reserved0 = 0;
   m_msg.body.motion_control_msg.data.cmd.reserved1 = 0;
-  m_msg.body.motion_control_msg.data.cmd.count = count;
-
-  if (can_connected_)
-    m_msg.body.motion_control_msg.data.cmd.checksum =
-        CalcScoutCANChecksum(CAN_MSG_MOTION_CONTROL_CMD_ID,
-                             m_msg.body.motion_control_msg.data.raw, 8);
-  // serial_connected_: checksum will be calculated later when packed into a
-  // complete serial frame
+  m_msg.body.motion_control_msg.data.cmd.reserved2 = 0;
+  m_msg.body.motion_control_msg.data.cmd.reserved3 = 0;
 
   if (can_connected_) {
     // send to can bus
     can_frame m_frame;
     EncodeScoutMsgToCAN(&m_msg, &m_frame);
     can_if_->SendFrame(m_frame);
-    // std::cout << "CAN cmd sent" << std::endl;
   } else {
     // send to serial port
     EncodeScoutMsgToUART(&m_msg, tx_buffer_, &tx_cmd_len_);
     serial_if_->SendBytes(tx_buffer_, tx_cmd_len_);
-    // std::cout << "serial cmd sent" << std::endl;
   }
 }
 
+void ScoutBase::SendModeCtl(){
+  ScoutMessage m_msg;
+  m_msg.type = ScoutControlModeMsg;
+  mode_cmd_mutex_.lock();
+  m_msg.body.mode_cmd_msg.data.cmd.control_mode=0x01;
+  mode_cmd_mutex_.unlock();
+  m_msg.body.mode_cmd_msg.data.cmd.reserved0=0;
+  m_msg.body.mode_cmd_msg.data.cmd.reserved1=0;
+  m_msg.body.mode_cmd_msg.data.cmd.reserved2=0;
+  m_msg.body.mode_cmd_msg.data.cmd.reserved3=0;
+  m_msg.body.mode_cmd_msg.data.cmd.reserved4=0;
+  m_msg.body.mode_cmd_msg.data.cmd.reserved5=0;
+  m_msg.body.mode_cmd_msg.data.cmd.reserved6=0;
+  if (can_connected_) {
+    // send to can bus
+    can_frame m_frame;
+    EncodeScoutMsgToCAN(&m_msg, &m_frame);
+    can_if_->SendFrame(m_frame);
+  } else {
+    // send to serial port
+    EncodeScoutMsgToUART(&m_msg, tx_buffer_, &tx_cmd_len_);
+    serial_if_->SendBytes(tx_buffer_, tx_cmd_len_);
+  }
+}
 void ScoutBase::SendLightCmd(uint8_t count) {
   ScoutMessage l_msg;
   l_msg.type = ScoutLightControlMsg;
+
 
   light_cmd_mutex_.lock();
   if (light_ctrl_enabled_) {
@@ -103,9 +123,9 @@ void ScoutBase::SendLightCmd(uint8_t count) {
   l_msg.body.light_control_msg.data.cmd.reserved0 = 0;
   l_msg.body.light_control_msg.data.cmd.count = count;
 
-  if (can_connected_)
-    l_msg.body.light_control_msg.data.cmd.checksum = CalcScoutCANChecksum(
-        CAN_MSG_LIGHT_CONTROL_CMD_ID, l_msg.body.light_control_msg.data.raw, 8);
+//  if (can_connected_)
+//    l_msg.body.light_control_msg.data.cmd.checksum = CalcScoutCANChecksum(
+//        CAN_MSG_LIGHT_CONTROL_CMD_ID, l_msg.body.light_control_msg.data.raw, 8);
   // serial_connected_: checksum will be calculated later when packed into a
   // complete serial frame
 
@@ -155,13 +175,11 @@ void ScoutBase::SetMotionCommand(
     angular_vel = ScoutMotionCmd::max_angular_velocity;
 
   std::lock_guard<std::mutex> guard(motion_cmd_mutex_);
-  current_motion_cmd_.linear_velocity = static_cast<int8_t>(
-      linear_vel / ScoutMotionCmd::max_linear_velocity * 100.0);
-  current_motion_cmd_.angular_velocity = static_cast<int8_t>(
-      angular_vel / ScoutMotionCmd::max_angular_velocity * 100.0);
+  current_motion_cmd_.linear_velocity_height_byte = static_cast<int16_t>(linear_vel*1000)>>8;
+  current_motion_cmd_.linear_velocity_low_byte = static_cast<int16_t>(linear_vel*1000)&0xff;
+  current_motion_cmd_.angular_velocity_height_byte = static_cast<int16_t>(angular_vel*1000)>>8;
+  current_motion_cmd_.angular_velocity_low_byte = static_cast<int16_t>(angular_vel*1000)&0xff;
   current_motion_cmd_.fault_clear_flag = fault_clr_flag;
-
-  FeedCmdTimeoutWatchdog();
 }
 
 void ScoutBase::SetLightCommand(ScoutLightCmd cmd) {
@@ -181,17 +199,21 @@ void ScoutBase::DisableLightCmdControl() {
 
 void ScoutBase::ParseCANFrame(can_frame *rx_frame) {
   // validate checksum, discard frame if fails
-  if (!rx_frame->data[7] == CalcScoutCANChecksum(rx_frame->can_id,
-                                                 rx_frame->data,
-                                                 rx_frame->can_dlc)) {
-    std::cerr << "ERROR: checksum mismatch, discard frame with id "
-              << rx_frame->can_id << std::endl;
-    return;
-  }
+//  if (!rx_frame->data[7] == CalcScoutCANChecksum(rx_frame->can_id,
+//                                                 rx_frame->data,
+//                                                 rx_frame->can_dlc)) {
+//    std::cerr << "ERROR: checksum mismatch, discard frame with id "
+//              << rx_frame->can_id << std::endl;
+//    return;
+//  }
 
   // otherwise, update robot state with new frame
   ScoutMessage status_msg;
   DecodeScoutMsgFromCAN(rx_frame, &status_msg);
+//  printf("%x\t",status_msg.body.odom_msg.data.status.left.heighest);
+//   printf("%x\t",status_msg.body.odom_msg.data.status.left.sec_heighest);
+//   printf("%x\t",status_msg.body.odom_msg.data.status.left.sec_lowest);
+//   printf("%x\r\n",status_msg.body.odom_msg.data.status.left.lowest);
   NewStatusMsgReceivedCallback(status_msg);
 }
 
@@ -219,18 +241,8 @@ void ScoutBase::UpdateScoutState(const ScoutMessage &status_msg,
     case ScoutMotionStatusMsg: {
       // std::cout << "motion control feedback received" << std::endl;
       const MotionStatusMessage &msg = status_msg.body.motion_status_msg;
-      state.linear_velocity =
-          static_cast<int16_t>(
-              static_cast<uint16_t>(msg.data.status.linear_velocity.low_byte) |
-              static_cast<uint16_t>(msg.data.status.linear_velocity.high_byte)
-                  << 8) /
-          1000.0;
-      state.angular_velocity =
-          static_cast<int16_t>(
-              static_cast<uint16_t>(msg.data.status.angular_velocity.low_byte) |
-              static_cast<uint16_t>(msg.data.status.angular_velocity.high_byte)
-                  << 8) /
-          1000.0;
+      state.linear_velocity =static_cast<int16_t>(static_cast<uint16_t>(msg.data.cmd.linear_velocity.low_byte) |static_cast<uint16_t>(msg.data.cmd.linear_velocity.high_byte)<< 8)/1000.0;
+      state.angular_velocity =static_cast<int16_t>(static_cast<uint16_t>(msg.data.cmd.angular_velocity.low_byte) |static_cast<uint16_t>(msg.data.cmd.angular_velocity.high_byte)<< 8)/1000.0;
       break;
     }
     case ScoutLightStatusMsg: {
@@ -256,28 +268,77 @@ void ScoutBase::UpdateScoutState(const ScoutMessage &status_msg,
            static_cast<uint16_t>(msg.data.status.battery_voltage.high_byte)
                << 8) /
           10.0;
-      state.fault_code =
-          (static_cast<uint16_t>(msg.data.status.fault_code.low_byte) |
-           static_cast<uint16_t>(msg.data.status.fault_code.high_byte) << 8);
+      state.fault_code =msg.data.status.fault_code;
       break;
     }
-    case ScoutMotorDriverStatusMsg: {
+//    case ScoutMotorDriverStatusMsg: {
+//      // std::cout << "motor 1 driver feedback received" << std::endl;
+//      const MotorDriverStatusMessage &msg =
+//          status_msg.body.motor_driver_status_msg;
+//      for (int i = 0; i < ScoutState::motor_num; ++i) {
+//        state.motor_states[status_msg.body.motor_driver_status_msg.motor_id]
+//            .current =
+//            (static_cast<uint16_t>(msg.data.status.current.low_byte) |
+//             static_cast<uint16_t>(msg.data.status.current.high_byte) << 8) /
+//            10.0;
+//        state.motor_states[status_msg.body.motor_driver_status_msg.motor_id]
+//            .rpm = static_cast<int16_t>(
+//            static_cast<uint16_t>(msg.data.status.rpm.low_byte) |
+//            static_cast<uint16_t>(msg.data.status.rpm.high_byte) << 8);
+//        state.motor_states[status_msg.body.motor_driver_status_msg.motor_id]
+//            .temperature = msg.data.status.temperature;
+//      }
+//      break;
+//    }
+    case ScoutMotorDriverHeightSpeedStatusMsg: {
       // std::cout << "motor 1 driver feedback received" << std::endl;
-      const MotorDriverStatusMessage &msg =
-          status_msg.body.motor_driver_status_msg;
+      const MotorDriverHeightSpeedStatusMessage &msg =status_msg.body.motor_driver_height_speed_status_msg;
       for (int i = 0; i < ScoutState::motor_num; ++i) {
-        state.motor_states[status_msg.body.motor_driver_status_msg.motor_id]
+        state.motor_H_state[status_msg.body.motor_driver_height_speed_status_msg.motor_id]
             .current =
             (static_cast<uint16_t>(msg.data.status.current.low_byte) |
              static_cast<uint16_t>(msg.data.status.current.high_byte) << 8) /
             10.0;
-        state.motor_states[status_msg.body.motor_driver_status_msg.motor_id]
+        state.motor_H_state[status_msg.body.motor_driver_height_speed_status_msg.motor_id]
             .rpm = static_cast<int16_t>(
-            static_cast<uint16_t>(msg.data.status.rpm.low_byte) |
-            static_cast<uint16_t>(msg.data.status.rpm.high_byte) << 8);
-        state.motor_states[status_msg.body.motor_driver_status_msg.motor_id]
-            .temperature = msg.data.status.temperature;
+            static_cast<int16_t>(msg.data.status.rpm.low_byte) |
+            static_cast<int16_t>(msg.data.status.rpm.high_byte) << 8);
+        state.motor_H_state[status_msg.body.motor_driver_height_speed_status_msg.motor_id]
+            .motor_pose = static_cast<int32_t>(static_cast<uint32_t>(msg.data.status.moter_pose.lowest)|static_cast<uint32_t>(msg.data.status.moter_pose.sec_lowest
+                                                                                                                                 )<<8|static_cast<uint32_t>(msg.data.status.moter_pose.sec_heighest)<<16|static_cast<uint32_t>(msg.data.status.moter_pose.heighest)<<24);
       }
+      break;
+    }
+    case ScoutMotorDriverLowSpeedStatusMsg: {
+      // std::cout << "motor 1 driver feedback received" << std::endl;
+      const MotorDriverLowSpeedStatusMessage &msg =status_msg.body.motor_driver_low_speed_status_msg;
+      for (int i = 0; i < ScoutState::motor_num; ++i) {
+        state.motor_L_state[status_msg.body.motor_driver_low_speed_status_msg.motor_id]
+            .driver_voltage =
+            (static_cast<uint16_t>(msg.data.status.driver_voltage.low_byte) |
+             static_cast<uint16_t>(msg.data.status.driver_voltage.high_byte) << 8) /
+            10.0;
+        state.motor_L_state[status_msg.body.motor_driver_low_speed_status_msg.motor_id]
+            .driver_temperature = static_cast<int16_t>(
+            static_cast<uint16_t>(msg.data.status.driver_temperature.low_byte) |
+            static_cast<uint16_t>(msg.data.status.driver_temperature.high_byte) << 8);
+        state.motor_L_state[status_msg.body.motor_driver_low_speed_status_msg.motor_id]
+            .motor_temperature = msg.data.status.motor_temperature;
+        state.motor_L_state[status_msg.body.motor_driver_low_speed_status_msg.motor_id]
+            .driver_state = msg.data.status.driver_state;
+      }
+      break;
+    }
+    case ScoutodometerMsg:{
+      const OdomterMessage &msg=status_msg.body.odom_msg;
+
+
+      state.left_odomter=static_cast<int32_t>(static_cast<uint32_t>(msg.data.status.left.lowest)|static_cast<uint32_t>(msg.data.status.left.sec_lowest)<<8|(static_cast<uint32_t>(msg.data.status.left.sec_heighest))<<16|static_cast<uint32_t>(msg.data.status.left.heighest)<<24);
+      state.right_odomter=static_cast<int32_t>((static_cast<uint32_t>(msg.data.status.right.lowest))|(static_cast<uint32_t>(msg.data.status.right.sec_lowest)<<8)|(static_cast<uint32_t>(msg.data.status.right.sec_heighest)<<16)|(static_cast<uint32_t>(msg.data.status.right.heighest)<<24));
+//      printf("%x\t",status_msg.body.odom_msg.data.status.left.heighest);
+//       printf("%x\t",status_msg.body.odom_msg.data.status.left.sec_heighest);
+//       printf("%x\t",status_msg.body.odom_msg.data.status.left.sec_lowest);
+//       printf("%x\r\n",status_msg.body.odom_msg.data.status.left.lowest);
       break;
     }
   }

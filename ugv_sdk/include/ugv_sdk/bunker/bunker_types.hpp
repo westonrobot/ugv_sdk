@@ -1,5 +1,5 @@
 /* 
- * scout_state.hpp
+ * bunker_state.hpp
  * 
  * Created on: Jun 11, 2019 08:48
  * Description: 
@@ -7,15 +7,15 @@
  * Copyright (c) 2019 Ruixiang Du (rdu)
  */
 
-#ifndef SCOUT_STATE_HPP
-#define SCOUT_STATE_HPP
+#ifndef BUNKER_STATE_HPP
+#define BUNKER_STATE_HPP
 
 #include <cstdint>
 #include <iostream>
 
 namespace westonrobot
 {
-struct ScoutState
+struct BunkerState
 {
     enum MotorID
     {
@@ -58,7 +58,7 @@ struct ScoutState
     double angular_velocity = 0;
 };
 
-struct ScoutMotionCmd
+struct BunkerMotionCmd
 {
     enum class FaultClearFlag
     {
@@ -73,7 +73,7 @@ struct ScoutMotionCmd
         MOTOR_OVERCURRENT = 0x08
     };
 
-    ScoutMotionCmd(int8_t linear = 0, int8_t angular = 0,
+    BunkerMotionCmd(int8_t linear = 0, int8_t angular = 0,
                    FaultClearFlag fault_clr_flag = FaultClearFlag::NO_FAULT)
         : linear_velocity(linear), angular_velocity(angular),
           fault_clear_flag(fault_clr_flag) {}
@@ -84,11 +84,11 @@ struct ScoutMotionCmd
 
     static constexpr double max_linear_velocity = 1.5;      // 1.5 m/s
     static constexpr double min_linear_velocity = -1.5;     // -1.5 m/s
-    static constexpr double max_angular_velocity = 0.5235;  // 0.5235 rad/s
-    static constexpr double min_angular_velocity = -0.5235; // -0.5235 rad/s
+    static constexpr double max_angular_velocity = 1.0;  // 3.1415 rad/s
+    static constexpr double min_angular_velocity = -1.0; // -3.1415 rad/s
 };
 
-struct ScoutLightCmd
+struct BunkerLightCmd
 {
     enum class LightMode
     {
@@ -98,8 +98,8 @@ struct ScoutLightCmd
         CUSTOM = 0x03
     };
 
-    ScoutLightCmd() = default;
-    ScoutLightCmd(LightMode f_mode, uint8_t f_value, LightMode r_mode, uint8_t r_value) : front_mode(f_mode), front_custom_value(f_value),
+    BunkerLightCmd() = default;
+    BunkerLightCmd(LightMode f_mode, uint8_t f_value, LightMode r_mode, uint8_t r_value) : front_mode(f_mode), front_custom_value(f_value),
                                                                                           rear_mode(r_mode), rear_custom_value(r_value) {}
 
     LightMode front_mode;
@@ -109,4 +109,4 @@ struct ScoutLightCmd
 };
 } // namespace westonrobot
 
-#endif /* SCOUT_STATE_HPP */
+#endif /* BUNKER_STATE_HPP */

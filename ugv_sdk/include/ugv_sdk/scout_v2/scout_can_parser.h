@@ -17,7 +17,7 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "ugv_sdk/scout/scout_protocol.h"
+#include "ugv_sdk/scout_v2/scout_protocol.h"
 
 #ifdef __linux__
 #include <linux/can.h>

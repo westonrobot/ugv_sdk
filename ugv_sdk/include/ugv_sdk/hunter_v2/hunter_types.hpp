@@ -17,16 +17,24 @@ namespace westonrobot
 {
 struct HunterState
 {
-    struct MotorState
+    struct MotorHeightSpeedState
     {
         double current = 0; // in A
         double rpm = 0;
-        double temperature = 0;
+        double motor_pose = 0;
+    };
+    struct MotorLowSpeedState
+    {
+        double driver_voltage = 0;
+        double driver_temperature = 0;
+        double motor_temperature = 0;
+        uint8_t driver_state = 0;
     };
 
     // base state
     uint8_t base_state = 0;
     uint8_t control_mode = 0;
+    uint8_t park_mode = 1;
     uint16_t fault_code = 0;
     double battery_voltage = 0.0;
 
@@ -34,7 +42,8 @@ struct HunterState
 
     // motor state
     static constexpr uint8_t motor_num = 3;
-    MotorState motor_states[motor_num];
+    MotorHeightSpeedState motor_H_state[motor_num];
+    MotorLowSpeedState motor_L_state[motor_num];
 
     // motion state
     double linear_velocity = 0;
@@ -56,19 +65,22 @@ struct HunterMotionCmd
         MOTOR_OVERCURRENT = 0x08
     };
 
-    HunterMotionCmd(int8_t linear = 0, int8_t angular = 0,
+    HunterMotionCmd(int8_t linear_height_byte = 0, int8_t linear_low_byte = 0, int8_t angular_height_byte = 0, int8_t angular_low_byte = 0,
                    FaultClearFlag fault_clr_flag = FaultClearFlag::NO_FAULT)
-        : linear_velocity(linear), angular_velocity(angular),
+        : linear_velocity_height_byte(linear_height_byte),linear_velocity_low_byte(linear_low_byte), angular_velocity_height_byte(angular_height_byte),angular_velocity_low_byte(angular_low_byte),
           fault_clear_flag(fault_clr_flag) {}
 
-    int8_t linear_velocity;
-    int8_t angular_velocity;
+    int8_t linear_velocity_height_byte;
+    int8_t linear_velocity_low_byte;
+    int8_t angular_velocity_height_byte;
+    int8_t angular_velocity_low_byte;
     FaultClearFlag fault_clear_flag;
 
     static constexpr double max_linear_velocity = 1.5;      // 1.5 m/s
     static constexpr double min_linear_velocity = -1.5;     // -1.5 m/s
-    static constexpr double max_steering_angle = 0.4622;    // 0.4622 rad ~= 26.5 degree
-    static constexpr double min_steering_angle = -0.4622;   // -0.4622 rad
+    static constexpr double max_steering_angle = 0.576;    // 0.576 rad ~= 30.00 degree
+    static constexpr double min_steering_angle = -0.576;   // -0.576 rad
+
 };
 } // namespace westonrobot
 
