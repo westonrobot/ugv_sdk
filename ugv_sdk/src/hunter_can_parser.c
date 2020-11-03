@@ -7,7 +7,7 @@
  * Copyright (c) 2019 Ruixiang Du (rdu)
  */ 
 
-#include "ugv_sdk/hunter_v2/hunter_can_parser.h"
+#include "ugv_sdk/hunter/hunter_can_parser.h"
 #include "string.h"
 
 static void EncodeHunterMotionControlMsgToCAN(const MotionControlMessage *msg, struct can_frame *tx_frame);

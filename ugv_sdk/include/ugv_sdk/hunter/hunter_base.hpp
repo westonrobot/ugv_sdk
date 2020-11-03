@@ -17,9 +17,9 @@
 
 #include "ugv_sdk/mobile_base.hpp"
 
-#include "ugv_sdk/hunter_v2/hunter_protocol.h"
-#include "ugv_sdk/hunter_v2/hunter_can_parser.h"
-#include "ugv_sdk/hunter_v2/hunter_types.hpp"
+#include "ugv_sdk/hunter/hunter_protocol.h"
+#include "ugv_sdk/hunter/hunter_can_parser.h"
+#include "ugv_sdk/hunter/hunter_types.hpp"
 
 namespace westonrobot {
 class HunterBase : public MobileBase {
@@ -31,7 +31,8 @@ class HunterBase : public MobileBase {
   HunterState GetHunterState();
 
   // motion control
-  void SetMotionCommand(double linear_vel, double angular_vel, double steering_angle,
+  void SetMotionCommand(double linear_vel, double angular_vel,
+                        double steering_angle,
                         HunterMotionCmd::FaultClearFlag fault_clr_flag =
                             HunterMotionCmd::FaultClearFlag::NO_FAULT);
 

@@ -117,7 +117,7 @@ if(BUILD_WITHOUT_ROS)
     endif()
 
     # add app source directory
-    add_subdirectory(apps)
+    # add_subdirectory(apps)
 endif()
 
 # Build tests

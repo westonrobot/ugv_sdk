@@ -18,7 +18,7 @@ extern "C" {
 #include <string.h>
 #include <stdbool.h>
 
-#include "ugv_sdk/scout_v2/scout_protocol.h"
+#include "ugv_sdk/scout/scout_protocol.h"
 
 bool DecodeScoutMsgFromUART(uint8_t c, ScoutMessage *msg);
 void EncodeScoutMsgToUART(const ScoutMessage *msg, uint8_t *buf, uint8_t *len);

@@ -18,10 +18,10 @@
 
 #include "ugv_sdk/mobile_base.hpp"
 
-#include "ugv_sdk/scout_v2/scout_protocol.h"
-#include "ugv_sdk/scout_v2/scout_can_parser.h"
-#include "ugv_sdk/scout_v2/scout_uart_parser.h"
-#include "ugv_sdk/scout_v2/scout_types.hpp"
+#include "ugv_sdk/scout/scout_protocol.h"
+#include "ugv_sdk/scout/scout_can_parser.h"
+#include "ugv_sdk/scout/scout_uart_parser.h"
+#include "ugv_sdk/scout/scout_types.hpp"
 
 namespace westonrobot {
 class ScoutBase : public MobileBase {

@@ -17,7 +17,7 @@ namespace westonrobot
 {
 struct HunterState
 {
-    struct MotorHeightSpeedState
+    struct MotorHighSpeedState
     {
         double current = 0; // in A
         double rpm = 0;
@@ -42,8 +42,8 @@ struct HunterState
 
     // motor state
     static constexpr uint8_t motor_num = 3;
-    MotorHeightSpeedState motor_H_state[motor_num];
-    MotorLowSpeedState motor_L_state[motor_num];
+    MotorHighSpeedState motor_hs_state[motor_num];
+    MotorLowSpeedState motor_ls_state[motor_num];
 
     // motion state
     double linear_velocity = 0;

@@ -7,7 +7,7 @@
  * Copyright (c) 2019 Ruixiang Du (rdu)
  */
 
-#include "ugv_sdk/scout_v2/scout_uart_parser.h"
+#include "ugv_sdk/scout/scout_uart_parser.h"
 
 // #define USE_XOR_CHECKSUM
 

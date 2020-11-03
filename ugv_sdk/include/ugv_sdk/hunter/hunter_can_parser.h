@@ -17,7 +17,7 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "ugv_sdk/hunter_v2/hunter_protocol.h"
+#include "ugv_sdk/hunter/hunter_protocol.h"
 
 #ifdef __linux__
 #include <linux/can.h>

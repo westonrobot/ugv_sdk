@@ -1,4 +1,4 @@
-#include "ugv_sdk/scout_v2/scout_base.hpp"
+#include "ugv_sdk/scout/scout_base.hpp"
 #include <stdio.h>
 #include <string>
 #include <cstring>
@@ -294,16 +294,16 @@ void ScoutBase::UpdateScoutState(const ScoutMessage &status_msg,
       // std::cout << "motor 1 driver feedback received" << std::endl;
       const MotorDriverHeightSpeedStatusMessage &msg =status_msg.body.motor_driver_height_speed_status_msg;
       for (int i = 0; i < ScoutState::motor_num; ++i) {
-        state.motor_H_state[status_msg.body.motor_driver_height_speed_status_msg.motor_id]
+        state.motor_hs_state[status_msg.body.motor_driver_height_speed_status_msg.motor_id]
             .current =
             (static_cast<uint16_t>(msg.data.status.current.low_byte) |
              static_cast<uint16_t>(msg.data.status.current.high_byte) << 8) /
             10.0;
-        state.motor_H_state[status_msg.body.motor_driver_height_speed_status_msg.motor_id]
+        state.motor_hs_state[status_msg.body.motor_driver_height_speed_status_msg.motor_id]
             .rpm = static_cast<int16_t>(
             static_cast<int16_t>(msg.data.status.rpm.low_byte) |
             static_cast<int16_t>(msg.data.status.rpm.high_byte) << 8);
-        state.motor_H_state[status_msg.body.motor_driver_height_speed_status_msg.motor_id]
+        state.motor_hs_state[status_msg.body.motor_driver_height_speed_status_msg.motor_id]
             .motor_pose = static_cast<int32_t>(static_cast<uint32_t>(msg.data.status.moter_pose.lowest)|static_cast<uint32_t>(msg.data.status.moter_pose.sec_lowest
                                                                                                                                  )<<8|static_cast<uint32_t>(msg.data.status.moter_pose.sec_heighest)<<16|static_cast<uint32_t>(msg.data.status.moter_pose.heighest)<<24);
       }
@@ -313,18 +313,18 @@ void ScoutBase::UpdateScoutState(const ScoutMessage &status_msg,
       // std::cout << "motor 1 driver feedback received" << std::endl;
       const MotorDriverLowSpeedStatusMessage &msg =status_msg.body.motor_driver_low_speed_status_msg;
       for (int i = 0; i < ScoutState::motor_num; ++i) {
-        state.motor_L_state[status_msg.body.motor_driver_low_speed_status_msg.motor_id]
+        state.motor_ls_state[status_msg.body.motor_driver_low_speed_status_msg.motor_id]
             .driver_voltage =
             (static_cast<uint16_t>(msg.data.status.driver_voltage.low_byte) |
              static_cast<uint16_t>(msg.data.status.driver_voltage.high_byte) << 8) /
             10.0;
-        state.motor_L_state[status_msg.body.motor_driver_low_speed_status_msg.motor_id]
+        state.motor_ls_state[status_msg.body.motor_driver_low_speed_status_msg.motor_id]
             .driver_temperature = static_cast<int16_t>(
             static_cast<uint16_t>(msg.data.status.driver_temperature.low_byte) |
             static_cast<uint16_t>(msg.data.status.driver_temperature.high_byte) << 8);
-        state.motor_L_state[status_msg.body.motor_driver_low_speed_status_msg.motor_id]
+        state.motor_ls_state[status_msg.body.motor_driver_low_speed_status_msg.motor_id]
             .motor_temperature = msg.data.status.motor_temperature;
-        state.motor_L_state[status_msg.body.motor_driver_low_speed_status_msg.motor_id]
+        state.motor_ls_state[status_msg.body.motor_driver_low_speed_status_msg.motor_id]
             .driver_state = msg.data.status.driver_state;
       }
       break;
