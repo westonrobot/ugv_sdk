@@ -7,7 +7,7 @@
  * Copyright (c) 2019 Ruixiang Du (rdu)
  */
 
-#include "ugv_sdk/scout/scout_uart_parser.h"
+#include "ugv_sdk/scout_v2/scout_uart_parser.h"
 
 // #define USE_XOR_CHECKSUM
 
@@ -96,13 +96,13 @@ void EncodeScoutMsgToUART(const ScoutMessage *msg, uint8_t *buf, uint8_t *len)
     case ScoutMotionStatusMsg:
     {
         buf[4] = UART_FRAME_MOTION_STATUS_ID;
-        buf[5] = msg->body.motion_status_msg.data.status.linear_velocity.high_byte;
-        buf[6] = msg->body.motion_status_msg.data.status.linear_velocity.low_byte;
-        buf[7] = msg->body.motion_status_msg.data.status.angular_velocity.high_byte;
-        buf[8] = msg->body.motion_status_msg.data.status.angular_velocity.low_byte;
+        buf[5] = msg->body.motion_status_msg.data.cmd.linear_velocity.high_byte;
+        buf[6] = msg->body.motion_status_msg.data.cmd.linear_velocity.low_byte;
+        buf[7] = msg->body.motion_status_msg.data.cmd.angular_velocity.high_byte;
+        buf[8] = msg->body.motion_status_msg.data.cmd.angular_velocity.low_byte;
         buf[9] = 0;
         buf[10] = 0;
-        buf[11] = msg->body.motion_status_msg.data.status.count;
+        buf[11] = 0;
         break;
     }
     case ScoutLightStatusMsg:
@@ -124,9 +124,9 @@ void EncodeScoutMsgToUART(const ScoutMessage *msg, uint8_t *buf, uint8_t *len)
         buf[6] = msg->body.system_status_msg.data.status.control_mode;
         buf[7] = msg->body.system_status_msg.data.status.battery_voltage.high_byte;
         buf[8] = msg->body.system_status_msg.data.status.battery_voltage.low_byte;
-        buf[9] = msg->body.system_status_msg.data.status.fault_code.high_byte;
-        buf[10] = msg->body.system_status_msg.data.status.fault_code.low_byte;
-        buf[11] = msg->body.system_status_msg.data.status.count;
+        buf[9] = msg->body.system_status_msg.data.status.fault_code;
+        buf[10] = 0;
+        buf[11] = 0;
         break;
     }
     case ScoutMotorDriverStatusMsg:
@@ -190,16 +190,16 @@ void EncodeMotionControlMsgToUART(const MotionControlMessage *msg, uint8_t *buf,
     buf[4] = UART_FRAME_MOTION_CONTROL_ID;
 
     // frame payload
-    buf[5] = msg->data.cmd.control_mode;
-    buf[6] = msg->data.cmd.fault_clear_flag;
-    buf[7] = msg->data.cmd.linear_velocity_cmd;
-    buf[8] = msg->data.cmd.angular_velocity_cmd;
+    buf[5] = msg->data.cmd.linear_velocity.high_byte;
+    buf[6] = msg->data.cmd.linear_velocity.low_byte;
+    buf[7] = msg->data.cmd.angular_velocity.high_byte;
+    buf[8] = msg->data.cmd.angular_velocity.low_byte;
     buf[9] = 0x00;
     buf[10] = 0x00;
 
     // frame count, checksum
-    buf[11] = msg->data.cmd.count;
-    buf[12] = CalcScoutUARTChecksum(buf, buf[2] + FRAME_SOF_LEN);
+    buf[11] = 0x00;
+    buf[12] = 0x00;
 
     // length: SOF + Frame + Checksum
     *len = buf[2] + FRAME_SOF_LEN + 1;
@@ -453,14 +453,14 @@ bool ConstructControlMessage(ScoutMessage *msg)
     case UART_FRAME_MOTION_CONTROL_ID:
     {
         msg->type = ScoutMotionControlMsg;
-        msg->body.motion_control_msg.data.cmd.control_mode = uart_parsing_data.payload_buffer[0];
-        msg->body.motion_control_msg.data.cmd.fault_clear_flag = uart_parsing_data.payload_buffer[1];
-        msg->body.motion_control_msg.data.cmd.linear_velocity_cmd = uart_parsing_data.payload_buffer[2];
-        msg->body.motion_control_msg.data.cmd.angular_velocity_cmd = uart_parsing_data.payload_buffer[3];
+        msg->body.motion_control_msg.data.cmd.linear_velocity.high_byte = uart_parsing_data.payload_buffer[0];
+        msg->body.motion_control_msg.data.cmd.linear_velocity.low_byte = uart_parsing_data.payload_buffer[1];
+        msg->body.motion_control_msg.data.cmd.angular_velocity.high_byte = uart_parsing_data.payload_buffer[2];
+        msg->body.motion_control_msg.data.cmd.angular_velocity.low_byte = uart_parsing_data.payload_buffer[3];
         msg->body.motion_control_msg.data.cmd.reserved0 = uart_parsing_data.payload_buffer[4];
         msg->body.motion_control_msg.data.cmd.reserved1 = uart_parsing_data.payload_buffer[5];
-        msg->body.motion_control_msg.data.cmd.count = uart_parsing_data.frame_cnt;
-        msg->body.motion_control_msg.data.cmd.checksum = uart_parsing_data.frame_checksum;
+        msg->body.motion_control_msg.data.cmd.reserved2 = uart_parsing_data.payload_buffer[6];
+        msg->body.motion_control_msg.data.cmd.reserved3 = uart_parsing_data.payload_buffer[7];
         break;
     }
     case UART_FRAME_LIGHT_CONTROL_ID:
@@ -473,7 +473,7 @@ bool ConstructControlMessage(ScoutMessage *msg)
         msg->body.light_control_msg.data.cmd.rear_light_custom = uart_parsing_data.payload_buffer[4];
         msg->body.light_control_msg.data.cmd.reserved0 = uart_parsing_data.payload_buffer[5];
         msg->body.light_control_msg.data.cmd.count = uart_parsing_data.frame_cnt;
-        msg->body.light_control_msg.data.cmd.checksum = uart_parsing_data.frame_checksum;
+       // msg->body.light_control_msg.data.cmd.checksum = uart_parsing_data.frame_checksum;
         break;
     }
     }
@@ -494,23 +494,23 @@ bool ConstructStatusMessage(ScoutMessage *msg)
         msg->body.system_status_msg.data.status.control_mode = uart_parsing_data.payload_buffer[1];
         msg->body.system_status_msg.data.status.battery_voltage.high_byte = uart_parsing_data.payload_buffer[2];
         msg->body.system_status_msg.data.status.battery_voltage.low_byte = uart_parsing_data.payload_buffer[3];
-        msg->body.system_status_msg.data.status.fault_code.high_byte = uart_parsing_data.payload_buffer[4];
-        msg->body.system_status_msg.data.status.fault_code.low_byte = uart_parsing_data.payload_buffer[5];
-        msg->body.system_status_msg.data.status.count = uart_parsing_data.frame_cnt;
-        msg->body.system_status_msg.data.status.checksum = uart_parsing_data.frame_checksum;
+        msg->body.system_status_msg.data.status.fault_code = uart_parsing_data.payload_buffer[4];
+        msg->body.system_status_msg.data.status.reserved0 = uart_parsing_data.payload_buffer[5];
+        msg->body.system_status_msg.data.status.reserved1 = uart_parsing_data.frame_cnt;
+        msg->body.system_status_msg.data.status.checksum= uart_parsing_data.frame_checksum;
         break;
     }
     case UART_FRAME_MOTION_STATUS_ID:
     {
         msg->type = ScoutMotionStatusMsg;
-        msg->body.motion_status_msg.data.status.linear_velocity.high_byte = uart_parsing_data.payload_buffer[0];
-        msg->body.motion_status_msg.data.status.linear_velocity.low_byte = uart_parsing_data.payload_buffer[1];
-        msg->body.motion_status_msg.data.status.angular_velocity.high_byte = uart_parsing_data.payload_buffer[2];
-        msg->body.motion_status_msg.data.status.angular_velocity.low_byte = uart_parsing_data.payload_buffer[3];
-        msg->body.motion_status_msg.data.status.reserved0 = 0x00;
-        msg->body.motion_status_msg.data.status.reserved0 = 0x00;
-        msg->body.motion_status_msg.data.status.count = uart_parsing_data.frame_cnt;
-        msg->body.motion_status_msg.data.status.checksum = uart_parsing_data.frame_checksum;
+        msg->body.motion_status_msg.data.cmd.linear_velocity.high_byte = uart_parsing_data.payload_buffer[0];
+        msg->body.motion_status_msg.data.cmd.linear_velocity.low_byte = uart_parsing_data.payload_buffer[1];
+        msg->body.motion_status_msg.data.cmd.angular_velocity.high_byte = uart_parsing_data.payload_buffer[2];
+        msg->body.motion_status_msg.data.cmd.angular_velocity.low_byte = uart_parsing_data.payload_buffer[3];
+        msg->body.motion_status_msg.data.cmd.reserved0 = 0x00;
+        msg->body.motion_status_msg.data.cmd.reserved1 = 0x00;
+        msg->body.motion_status_msg.data.cmd.reserved2 = 0x00;
+        msg->body.motion_status_msg.data.cmd.reserved3 = 0x00;
         break;
     }
     case UART_FRAME_MOTOR1_DRIVER_STATUS_ID:
@@ -579,7 +579,7 @@ bool ConstructStatusMessage(ScoutMessage *msg)
         msg->body.light_status_msg.data.status.rear_light_custom = uart_parsing_data.payload_buffer[4];
         msg->body.light_status_msg.data.status.reserved0 = 0x00;
         msg->body.light_status_msg.data.status.count = uart_parsing_data.frame_cnt;
-        msg->body.light_status_msg.data.status.checksum = uart_parsing_data.frame_checksum;
+        msg->body.light_status_msg.data.status.reserved1 = 0x00;
         break;
     }
     }

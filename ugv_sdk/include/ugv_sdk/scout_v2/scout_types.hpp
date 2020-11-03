@@ -30,8 +30,27 @@ struct ScoutState
         double current = 0; // in A
         double rpm = 0;
         double temperature = 0;
+        double motor_pose=0;
     };
-
+    struct DriverState
+    {
+      double driver_voltage = 0;
+      double driver_temperature = 0;
+      uint8_t driver_state = 0;
+    };
+    struct MotorHeightSpeedState
+    {
+        double current = 0; // in A
+        double rpm = 0;
+        double motor_pose = 0;
+    };
+    struct MotorLowSpeedState
+    {
+        double driver_voltage = 0;
+        double driver_temperature = 0;
+        double motor_temperature = 0;
+        uint8_t driver_state = 0;
+    };
     struct LightState
     {
         uint8_t mode = 0;
@@ -41,12 +60,15 @@ struct ScoutState
     // base state
     uint8_t base_state = 0;
     uint8_t control_mode = 0;
-    uint16_t fault_code = 0;
+    uint8_t fault_code = 0;
     double battery_voltage = 0.0;
 
     // motor state
     static constexpr uint8_t motor_num = 4;
-    MotorState motor_states[motor_num];
+//    MotorState motor_states[motor_num];
+//    DriverState driver_states[motor_num];
+    MotorHeightSpeedState motor_H_state[motor_num];
+    MotorLowSpeedState motor_L_state[motor_num];
 
     // light state
     bool light_control_enabled = false;
@@ -56,6 +78,10 @@ struct ScoutState
     // motion state
     double linear_velocity = 0;
     double angular_velocity = 0;
+
+    //odometer state
+    double left_odomter=0;
+    double right_odomter=0;
 };
 
 struct ScoutMotionCmd
@@ -73,13 +99,15 @@ struct ScoutMotionCmd
         MOTOR_OVERCURRENT = 0x08
     };
 
-    ScoutMotionCmd(int8_t linear = 0, int8_t angular = 0,
+    ScoutMotionCmd(int8_t linear_height_byte = 0, int8_t linear_low_byte = 0,int8_t angular_height_byte = 0,int8_t angular_low_byte = 0,
                    FaultClearFlag fault_clr_flag = FaultClearFlag::NO_FAULT)
-        : linear_velocity(linear), angular_velocity(angular),
+        : linear_velocity_height_byte(linear_height_byte),linear_velocity_low_byte(linear_low_byte), angular_velocity_height_byte(angular_height_byte),angular_velocity_low_byte(angular_low_byte),
           fault_clear_flag(fault_clr_flag) {}
 
-    int8_t linear_velocity;
-    int8_t angular_velocity;
+    int8_t linear_velocity_height_byte;
+    int8_t linear_velocity_low_byte;
+    int8_t angular_velocity_height_byte;
+    int8_t angular_velocity_low_byte;
     FaultClearFlag fault_clear_flag;
 
     static constexpr double max_linear_velocity = 1.5;      // 1.5 m/s
