@@ -10,7 +10,7 @@
 #include <string>
 #include <thread>
 
-#include "stopwatch.h"
+#include "stopwatch.hpp"
 
 namespace westonrobot {
 

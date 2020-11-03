@@ -1,32 +1,21 @@
-/* 
-This is free and unencumbered software released into the public domain.
+/*
+ * stopwatch.hpp
+ *
+ * Created on: Jul 12, 2020 12:07
+ * Description:
+ *
+ * Source:
+ * [1] https://github.com/sailormoon/stopwatch
+ * [2] https://github.com/rxdu/stopwatch
+ *
+ * Copyright (c) 2019 sailormoon <http://unlicense.org>
+ * Copyright (c) 2020 Ruixiang Du (rdu)
+ *
+ * License: <http://unlicense.org>
+ */
 
-Anyone is free to copy, modify, publish, use, compile, sell, or
-distribute this software, either in source code form or as a compiled
-binary, for any purpose, commercial or non-commercial, and by any
-means.
-
-In jurisdictions that recognize copyright laws, the author or authors
-of this software dedicate any and all copyright interest in the
-software to the public domain. We make this dedication for the benefit
-of the public at large and to the detriment of our heirs and
-successors. We intend this dedication to be an overt act of
-relinquishment in perpetuity of all present and future rights to this
-software under copyright law.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
-
-For more information, please refer to <http://unlicense.org> 
-*/
-
-#ifndef STOPWATCH_H
-#define STOPWATCH_H
+#ifndef STOPWATCH_HPP
+#define STOPWATCH_HPP
 
 #include <array>
 #include <chrono>
@@ -74,7 +63,7 @@ constexpr timer<Clock> make_timer(const typename Clock::duration duration) {
 
 // Times how long it takes a function to execute using the specified clock.
 template <class Clock = rdtscp_clock, class Func>
-typename Clock::duration time(Func &&function) {
+typename Clock::duration time_func(Func &&function) {
   const auto start = Clock::now();
   function();
   return Clock::now() - start;
@@ -85,7 +74,7 @@ template <std::size_t N, class Clock = rdtscp_clock, class Func>
 std::array<typename Clock::duration, N> sample(Func &&function) {
   std::array<typename Clock::duration, N> samples;
   for (std::size_t i = 0u; i < N; ++i) {
-    samples[i] = time<Clock>(function);
+    samples[i] = time_func<Clock>(function);
   }
   std::sort(samples.begin(), samples.end());
   return samples;
@@ -134,14 +123,25 @@ struct StopWatch {
                                                                 tic_point)
         .count();
   };
+};
 
-  // you have to call tic() before calling this function
+struct Timer {
+  using Clock = std::chrono::high_resolution_clock;
+  using time_point = typename Clock::time_point;
+  using duration = typename Clock::duration;
+
+  Timer() { tic_point = Clock::now(); };
+
+  time_point tic_point;
+
+  void reset() { tic_point = Clock::now(); };
+
+  // you have to call reset() before calling sleep functions
   void sleep_until_ms(int64_t period_ms) {
     int64_t duration =
         period_ms - std::chrono::duration_cast<std::chrono::milliseconds>(
                         Clock::now() - tic_point)
                         .count();
-
     if (duration > 0)
       std::this_thread::sleep_for(std::chrono::milliseconds(duration));
   };
@@ -151,12 +151,10 @@ struct StopWatch {
         period_us - std::chrono::duration_cast<std::chrono::microseconds>(
                         Clock::now() - tic_point)
                         .count();
-
     if (duration > 0)
       std::this_thread::sleep_for(std::chrono::microseconds(duration));
   };
 };
-
 }  // namespace westonrobot
 
-#endif  // STOPWATCH_H
+#endif  // STOPWATCH_HPP

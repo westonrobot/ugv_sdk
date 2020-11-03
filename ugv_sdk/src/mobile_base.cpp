@@ -7,13 +7,13 @@
  * Copyright (c) 2020 Ruixiang Du (rdu)
  */
 
-#include "ugv_sdk/common/mobile_base.hpp"
+#include "ugv_sdk/mobile_base.hpp"
 
 #include <cstring>
 #include <iostream>
 #include <algorithm>
 
-#include "stopwatch.h"
+#include "stopwatch.hpp"
 
 namespace westonrobot {
 MobileBase::~MobileBase() {
@@ -65,8 +65,7 @@ void MobileBase::StartCmdThread() {
 }
 
 void MobileBase::ControlLoop(int32_t period_ms) {
-  StopWatch ctrl_sw;
-  bool print_loop_freq = false;
+  Timer ctrl_timer;
   uint32_t timeout_iter_num;
 
   if (enable_timeout_) {
@@ -76,7 +75,7 @@ void MobileBase::ControlLoop(int32_t period_ms) {
   }
 
   while (true) {
-    ctrl_sw.tic();
+    ctrl_timer.reset();
     if (enable_timeout_) {
       if (watchdog_counter_ < timeout_iter_num) {
         SendRobotCmd();
@@ -87,10 +86,7 @@ void MobileBase::ControlLoop(int32_t period_ms) {
     } else {
       SendRobotCmd();
     }
-    ctrl_sw.sleep_until_ms(period_ms);
-    if (print_loop_freq)
-      std::cout << "control loop frequency: " << 1.0 / ctrl_sw.toc()
-                << std::endl;
+    ctrl_timer.sleep_until_ms(period_ms);
   }
 }
 }  // namespace westonrobot

@@ -10,7 +10,7 @@
 #include <ratio>
 #include <thread>
 
-#include "stopwatch.h"
+#include "stopwatch.hpp"
 
 namespace westonrobot {
 void ScoutBase::SendRobotCmd() {
