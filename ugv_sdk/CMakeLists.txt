@@ -83,6 +83,8 @@ find_package(Threads REQUIRED)
 
 add_library(${PROJECT_NAME} 
     src/mobile_base.cpp
+    src/agx_msg_parser.c
+    # robots
     src/hunter_base.cpp
     src/hunter_can_parser.c
     src/scout_base.cpp
@@ -91,8 +93,8 @@ add_library(${PROJECT_NAME}
     src/tracer_base.cpp
     src/tracer_can_parser.c
     src/tracer_uart_parser.c
-    src/bunker_base.cpp
-    src/bunker_can_parser.c
+    # src/bunker_base.cpp
+    # src/bunker_can_parser.c
 )
 if(BUILD_WITHOUT_ROS)
     target_link_libraries(${PROJECT_NAME} wrp_io Threads::Threads)

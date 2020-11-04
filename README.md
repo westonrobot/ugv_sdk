@@ -25,6 +25,17 @@ Supported environments
 
 It should also work in other similar Linux environments but only the above listed environments are regularly tested.
 
+Communication protocol
+
+| Robot  | Protocol Version |
+| :----: | :--------------: |
+| Scout  |      V1, V2      |
+| Hunter |      V1, V2      |
+| Tracer |        V2        |
+| Bunker |        V1        |
+
+Currently we're transitioning the communication protocol from version 1 to version 2. Upgrading protocol won't affect your ROS packages but you will need to make sure the robot is running a compatible firmware.
+
 Generally, you only need to instantiate an object of the robot base class (such as ScoutBase), then use the object to programmatically control the robot. Internally, the base class manages two background threads, one to process CAN/UART messages of the robot state and accordingly update state variables in the robot state data structure, and the other to maintain a 50Hz loop and send the latest command to the robot base. User can iteratively perform tasks in the main thread and check the robot state or set control commands. Advanced users may also use this setup as a reference and maintain the control and monitoring loops in a different way.
 
 ## Build SDK
