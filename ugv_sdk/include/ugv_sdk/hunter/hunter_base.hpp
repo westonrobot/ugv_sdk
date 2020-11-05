@@ -15,7 +15,7 @@
 #include <thread>
 #include <mutex>
 
-#include "ugv_sdk/common/mobile_base.hpp"
+#include "ugv_sdk/mobile_base.hpp"
 
 #include "ugv_sdk/hunter/hunter_protocol.h"
 #include "ugv_sdk/hunter/hunter_can_parser.h"

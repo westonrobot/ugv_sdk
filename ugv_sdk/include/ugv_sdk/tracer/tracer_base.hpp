@@ -17,7 +17,7 @@
 
 //#include "wrp_sdk/asyncio/async_can.hpp"
 //#include "wrp_sdk/asyncio/async_serial.hpp"
-#include "ugv_sdk/common/mobile_base.hpp"
+#include "ugv_sdk/mobile_base.hpp"
 
 #include "ugv_sdk/tracer/tracer_protocol.h"
 #include "ugv_sdk/tracer/tracer_can_parser.h"

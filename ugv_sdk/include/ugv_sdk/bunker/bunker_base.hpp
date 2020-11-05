@@ -16,7 +16,7 @@
 #include <mutex>
 #include <functional>
 
-#include "ugv_sdk/common/mobile_base.hpp"
+#include "ugv_sdk/mobile_base.hpp"
 
 #include "ugv_sdk/bunker/bunker_protocol.h"
 #include "ugv_sdk/bunker/bunker_can_parser.h"
