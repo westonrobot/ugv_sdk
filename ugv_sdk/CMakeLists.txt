@@ -90,7 +90,7 @@ add_library(${PROJECT_NAME}
     # src/scout_base.cpp
     # src/scout_can_parser.c
     # src/scout_uart_parser.c
-    # src/tracer_base.cpp
+    src/tracer_base.cpp
     # src/tracer_can_parser.c
     # src/tracer_uart_parser.c
     # src/bunker_base.cpp
@@ -119,7 +119,7 @@ if(BUILD_WITHOUT_ROS)
     endif()
 
     # add app source directory
-    # add_subdirectory(apps)
+    add_subdirectory(apps)
 endif()
 
 # Build tests

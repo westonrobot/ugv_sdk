@@ -30,13 +30,47 @@ struct can_frame {
 };
 #endif
 
+#pragma pack(push, 1)
+typedef enum {
+  AgxMsgUnkonwn = 0x00,
+  // command
+  AgxMsgMotionCommand = 0x01,
+  AgxMsgLightCommand = 0x02,
+  AgxMsgCtrlModeSelect = 0x03,
+  AgxMsgFaultByteReset = 0x04,
+  // state feedback
+  AgxMsgSystemState = 0x21,
+  AgxMsgMotionState = 0x22,
+  AgxMsgLightState = 0x23,
+  AgxMsgRcState = 0x24,
+  AgxMsgActuatorHSState = 0x25,
+  AgxMsgActuatorLSState = 0x26,
+  AgxMsgOdometry = 0x27
+} MsgType;
+
+typedef struct {
+  MsgType type;
+  union {
+    // command
+    MotionCommandMessage motion_command_msg;
+    LightCommandMessage light_command_msg;
+    CtrlModeSelectMessage ctrl_mode_select_msg;
+    StateResetMessage state_reset_msg;
+    // state feedback
+    SystemStateMessage system_state_msg;
+    MotionStateMessage motion_state_msg;
+    LightStateMessage light_state_msg;
+    RcStateMessage rc_state_msg;
+    ActuatorHSStateMessage actuator_hs_state_msg;
+    ActuatorLSStateMessage actuator_ls_state_msg;
+    OdometryMessage odometry_msg;
+  } body;
+} AgxMessage;
+#pragma pack(pop)
+
 bool DecodeCanFrame(const struct can_frame *rx_frame, AgxMessage *msg);
 void EncodeCanFrame(const AgxMessage *msg, struct can_frame *tx_frame);
 uint8_t CalcCanFrameChecksum(uint16_t id, uint8_t *data, uint8_t dlc);
-
-bool DecodeUartData(uint8_t c, AgxMessage *msg);
-void EncodeUartData(const AgxMessage *msg, uint8_t *buf, uint8_t *len);
-uint8_t CalcUartDataChecksum(uint8_t *buf, uint8_t len);
 
 #ifdef __cplusplus
 }

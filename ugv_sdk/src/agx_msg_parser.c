@@ -11,134 +11,86 @@
 
 #include "string.h"
 
-// #define USE_XOR_CHECKSUM
-
-// #define PRINT_CPP_DEBUG_INFO
-// #define PRINT_JLINK_DEBUG_INFO
-
-#ifdef PRINT_CPP_DEBUG_INFO
-#define < iostream>
-#elif (defined(PRINT_JLINK_DEBUG_INFO))
-#include "segger/jlink_rtt.h"
-#endif
-
-static void EncodeScoutMotionControlMsgToCAN(const MotionControlMessage *msg,
-                                             struct can_frame *tx_frame);
-static void EncodeScoutLightControlMsgToCAN(const LightControlMessage *msg,
-                                            struct can_frame *tx_frame);
-static void EncodeScoutnControlModeMsgToCAN(const ModSelectMessage *msg,
-                                            struct can_frame *tx_frame);
-
 bool DecodeCanFrame(const struct can_frame *rx_frame, AgxMessage *msg) {
-  msg->type = ScoutMsgNone;
+  msg->type = AgxMsgUnkonwn;
 
   switch (rx_frame->can_id) {
-    // in the current implementation, both MsgType and can_frame include 8 *
-    // uint8_t
-    case CAN_MSG_MOTION_STATE_ID: {
-      msg->type = ScoutMotionStatusMsg;
-      // msg->motion_status_msg.id = CAN_MSG_MOTION_STATE_ID;
-      memcpy(msg->body.motion_status_msg.data.raw, rx_frame->data,
+    // command frame
+    case CAN_MSG_MOTION_COMMAND_ID: {
+      msg->type = AgxMsgMotionCommand;
+      memcpy(msg->body.motion_command_msg.raw, rx_frame->data,
              rx_frame->can_dlc * sizeof(uint8_t));
       break;
     }
-    case CAN_MSG_LIGHT_CONTROL_STATUS_ID: {
-      msg->type = ScoutLightStatusMsg;
-      // msg->light_status_msg.id = CAN_MSG_LIGHT_CONTROL_STATUS_ID;
-      memcpy(msg->body.light_status_msg.data.raw, rx_frame->data,
+    case CAN_MSG_LIGHT_COMMAND_ID: {
+      msg->type = AgxMsgLightCommand;
+      memcpy(msg->body.light_command_msg.raw, rx_frame->data,
              rx_frame->can_dlc * sizeof(uint8_t));
       break;
     }
+    case CAN_MSG_RC_STATE_ID: {
+      msg->type = AgxMsgRcState;
+      memcpy(msg->body.rc_state_msg.raw, rx_frame->data,
+             rx_frame->can_dlc * sizeof(uint8_t));
+      break;
+    }
+    case CAN_MSG_CTRL_MODE_SELECT_ID: {
+      msg->type = AgxMsgCtrlModeSelect;
+      memcpy(msg->body.ctrl_mode_select_msg.raw, rx_frame->data,
+             rx_frame->can_dlc * sizeof(uint8_t));
+      break;
+    }
+    case CAN_MSG_STATE_RESET_ID: {
+      msg->type = AgxMsgFaultByteReset;
+      memcpy(msg->body.state_reset_msg.raw, rx_frame->data,
+             rx_frame->can_dlc * sizeof(uint8_t));
+      break;
+    }
+    // state feedback frame
     case CAN_MSG_SYSTEM_STATE_ID: {
-      msg->type = ScoutSystemStatusMsg;
-      // msg->system_status_msg.id = CAN_MSG_SYSTEM_STATE_ID;
-      memcpy(msg->body.system_status_msg.raw, rx_frame->data,
+      msg->type = AgxMsgSystemState;
+      memcpy(msg->body.system_state_msg.raw, rx_frame->data,
              rx_frame->can_dlc * sizeof(uint8_t));
       break;
     }
-    // in the current implementation, both MsgType and can_frame include 8 *
-    // uint8_t
-    case CAN_MSG_MOTION_CONTROL_CMD_ID: {
-      msg->type = ScoutMotionControlMsg;
-      // msg->motion_control_msg.id = CAN_MSG_MOTION_CONTROL_CMD_ID;
-      memcpy(msg->body.motion_control_msg.data.raw, rx_frame->data,
+    case CAN_MSG_MOTION_STATE_ID: {
+      msg->type = AgxMsgMotionState;
+      memcpy(msg->body.motion_state_msg.raw, rx_frame->data,
              rx_frame->can_dlc * sizeof(uint8_t));
       break;
     }
-    case CAN_MSG_LIGHT_CONTROL_CMD_ID: {
-      msg->type = ScoutLightControlMsg;
-      // msg->light_control_msg.id = CAN_MSG_LIGHT_CONTROL_STATUS_ID;
-      memcpy(msg->body.light_control_msg.data.raw, rx_frame->data,
+    case CAN_MSG_LIGHT_STATE_ID: {
+      msg->type = AgxMsgLightState;
+      memcpy(msg->body.light_state_msg.raw, rx_frame->data,
              rx_frame->can_dlc * sizeof(uint8_t));
       break;
     }
-    case CAN_MSG_MOTOR1_LOW_DRIVER_STATUS_ID: {
-      msg->type = ScoutMotorDriverLowSpeedStatusMsg;
-      msg->body.motor_driver_low_speed_status_msg.motor_id = SCOUT_MOTOR1_ID;
-      memcpy(msg->body.motor_driver_low_speed_status_msg.data.raw,
-             rx_frame->data, rx_frame->can_dlc * sizeof(uint8_t));
-      break;
-    }
-    case CAN_MSG_MOTOR2_LOW_DRIVER_STATUS_ID: {
-      msg->type = ScoutMotorDriverLowSpeedStatusMsg;
-      msg->body.motor_driver_low_speed_status_msg.motor_id = SCOUT_MOTOR2_ID;
-      memcpy(msg->body.motor_driver_low_speed_status_msg.data.raw,
-             rx_frame->data, rx_frame->can_dlc * sizeof(uint8_t));
-      break;
-    }
-    case CAN_MSG_MOTOR3_LOW_DRIVER_STATUS_ID: {
-      msg->type = ScoutMotorDriverLowSpeedStatusMsg;
-      msg->body.motor_driver_low_speed_status_msg.motor_id = SCOUT_MOTOR3_ID;
-      memcpy(msg->body.motor_driver_low_speed_status_msg.data.raw,
-             rx_frame->data, rx_frame->can_dlc * sizeof(uint8_t));
-      break;
-    }
-    case CAN_MSG_MOTOR4_LOW_DRIVER_STATUS_ID: {
-      msg->type = ScoutMotorDriverLowSpeedStatusMsg;
-      msg->body.motor_driver_low_speed_status_msg.motor_id = SCOUT_MOTOR4_ID;
-      memcpy(msg->body.motor_driver_low_speed_status_msg.data.raw,
-             rx_frame->data, rx_frame->can_dlc * sizeof(uint8_t));
-      break;
-    }
-    case CAN_MSG_MOTOR1_HEIGHT_DRIVER_STATUS_ID: {
-      msg->type = ScoutMotorDriverHeightSpeedStatusMsg;
-      msg->body.motor_driver_height_speed_status_msg.motor_id = SCOUT_MOTOR1_ID;
-      memcpy(msg->body.motor_driver_height_speed_status_msg.data.raw,
-             rx_frame->data, rx_frame->can_dlc * sizeof(uint8_t));
-      break;
-    }
-    case CAN_MSG_MOTOR2_HEIGHT_DRIVER_STATUS_ID: {
-      msg->type = ScoutMotorDriverHeightSpeedStatusMsg;
-      msg->body.motor_driver_height_speed_status_msg.motor_id = SCOUT_MOTOR2_ID;
-      memcpy(msg->body.motor_driver_height_speed_status_msg.data.raw,
-             rx_frame->data, rx_frame->can_dlc * sizeof(uint8_t));
-      break;
-    }
-    case CAN_MSG_MOTOR3_HEIGHT_DRIVER_STATUS_ID: {
-      msg->type = ScoutMotorDriverHeightSpeedStatusMsg;
-      msg->body.motor_driver_height_speed_status_msg.motor_id = SCOUT_MOTOR3_ID;
-      memcpy(msg->body.motor_driver_height_speed_status_msg.data.raw,
-             rx_frame->data, rx_frame->can_dlc * sizeof(uint8_t));
-      break;
-    }
-    case CAN_MSG_MOTOR4_HEIGHT_DRIVER_STATUS_ID: {
-      msg->type = ScoutMotorDriverHeightSpeedStatusMsg;
-      msg->body.motor_driver_height_speed_status_msg.motor_id = SCOUT_MOTOR4_ID;
-      memcpy(msg->body.motor_driver_height_speed_status_msg.data.raw,
-             rx_frame->data, rx_frame->can_dlc * sizeof(uint8_t));
-      break;
-    }
-    case CAN_MSG_ODOMETER_ID: {
-      msg->type = ScoutodometerMsg;
-      // msg->light_control_msg.id = CAN_MSG_LIGHT_CONTROL_STATUS_ID;
-      memcpy(msg->body.odom_msg.data.raw, rx_frame->data,
+    case CAN_MSG_ODOMETRY_ID: {
+      msg->type = AgxMsgOdometry;
+      memcpy(msg->body.odometry_msg.raw, rx_frame->data,
              rx_frame->can_dlc * sizeof(uint8_t));
-      //        printf("%x\t",msg->body.odom_msg.data.status.left.heighest);
-      //        printf("%x\t",msg->body.odom_msg.data.status.left.sec_heighest);
-      //        printf("%x\t",msg->body.odom_msg.data.status.left.sec_lowest);
-      //        printf("%x\r\n",msg->body.odom_msg.data.status.left.lowest);
-      //        printf("%x\t",msg->body.odom_msg.data.raw);
-      //        printf("%x\r\n",msg->body.odom_msg.data.status);
+      break;
+    }
+    case CAN_MSG_ACTUATOR1_HS_STATE_ID:
+    case CAN_MSG_ACTUATOR2_HS_STATE_ID:
+    case CAN_MSG_ACTUATOR3_HS_STATE_ID:
+    case CAN_MSG_ACTUATOR4_HS_STATE_ID: {
+      msg->type = AgxMsgActuatorLSState;
+      msg->body.actuator_hs_state_msg.motor_id =
+          (uint8_t)(rx_frame->can_id - CAN_MSG_ACTUATOR1_HS_STATE_ID);
+      memcpy(msg->body.actuator_hs_state_msg.data.raw, rx_frame->data,
+             rx_frame->can_dlc * sizeof(uint8_t));
+      break;
+    }
+    case CAN_MSG_ACTUATOR1_LS_STATE_ID:
+    case CAN_MSG_ACTUATOR2_LS_STATE_ID:
+    case CAN_MSG_ACTUATOR3_LS_STATE_ID:
+    case CAN_MSG_ACTUATOR4_LS_STATE_ID: {
+      msg->type = AgxMsgActuatorLSState;
+      msg->body.actuator_ls_state_msg.motor_id =
+          (uint8_t)(rx_frame->can_id - CAN_MSG_ACTUATOR1_LS_STATE_ID);
+      memcpy(msg->body.actuator_ls_state_msg.data.raw, rx_frame->data,
+             rx_frame->can_dlc * sizeof(uint8_t));
       break;
     }
     default:
@@ -150,91 +102,118 @@ bool DecodeCanFrame(const struct can_frame *rx_frame, AgxMessage *msg) {
 
 void EncodeCanFrame(const AgxMessage *msg, struct can_frame *tx_frame) {
   switch (msg->type) {
-    // in the current implementation, both MsgType and can_frame include 8 *
-    // uint8_t
-    case ScoutMotionStatusMsg: {
-      tx_frame->can_id = CAN_MSG_MOTION_STATE_ID;
+    // command frame
+    case AgxMsgMotionCommand: {
+      tx_frame->can_id = CAN_MSG_MOTION_COMMAND_ID;
       tx_frame->can_dlc = 8;
-      memcpy(tx_frame->data, msg->body.motion_status_msg.data.raw,
+      memcpy(tx_frame->data, msg->body.motion_command_msg.raw,
              tx_frame->can_dlc);
+    //   tx_frame->data[7] = CalcCanFrameChecksum(tx_frame->can_id, tx_frame->data,
+    //                                            tx_frame->can_dlc);
       break;
     }
-    case ScoutLightStatusMsg: {
-      tx_frame->can_id = CAN_MSG_LIGHT_CONTROL_STATUS_ID;
+    case AgxMsgLightCommand: {
+      tx_frame->can_id = CAN_MSG_LIGHT_COMMAND_ID;
       tx_frame->can_dlc = 8;
-      memcpy(tx_frame->data, msg->body.light_status_msg.data.raw,
+      memcpy(tx_frame->data, msg->body.light_command_msg.raw,
              tx_frame->can_dlc);
+    //   tx_frame->data[7] = CalcCanFrameChecksum(tx_frame->can_id, tx_frame->data,
+    //                                            tx_frame->can_dlc);
       break;
     }
-    case ScoutSystemStatusMsg: {
+    case AgxMsgCtrlModeSelect: {
+      tx_frame->can_id = CAN_MSG_CTRL_MODE_SELECT_ID;
+      tx_frame->can_dlc = 8;
+      memcpy(tx_frame->data, msg->body.ctrl_mode_select_msg.raw,
+             tx_frame->can_dlc);
+    //   tx_frame->data[7] = CalcCanFrameChecksum(tx_frame->can_id, tx_frame->data,
+    //                                            tx_frame->can_dlc);
+      break;
+    }
+    case AgxMsgFaultByteReset: {
+      tx_frame->can_id = CAN_MSG_STATE_RESET_ID;
+      tx_frame->can_dlc = 8;
+      memcpy(tx_frame->data, msg->body.state_reset_msg.raw, tx_frame->can_dlc);
+      tx_frame->data[7] = CalcCanFrameChecksum(tx_frame->can_id, tx_frame->data,
+                                               tx_frame->can_dlc);
+      break;
+    }
+    // state feedback frame
+    case AgxMsgSystemState: {
       tx_frame->can_id = CAN_MSG_SYSTEM_STATE_ID;
       tx_frame->can_dlc = 8;
-      memcpy(tx_frame->data, msg->body.system_status_msg.raw,
+      memcpy(tx_frame->data, msg->body.system_state_msg.raw, tx_frame->can_dlc);
+      break;
+    }
+    case AgxMsgMotionState: {
+      tx_frame->can_id = CAN_MSG_MOTION_STATE_ID;
+      tx_frame->can_dlc = 8;
+      memcpy(tx_frame->data, msg->body.motion_state_msg.raw, tx_frame->can_dlc);
+      break;
+    }
+    case AgxMsgLightState: {
+      tx_frame->can_id = CAN_MSG_LIGHT_STATE_ID;
+      tx_frame->can_dlc = 8;
+      memcpy(tx_frame->data, msg->body.light_state_msg.raw, tx_frame->can_dlc);
+      break;
+    }
+    case AgxMsgOdometry: {
+      tx_frame->can_id = CAN_MSG_ODOMETRY_ID;
+      tx_frame->can_dlc = 8;
+      memcpy(tx_frame->data, msg->body.odometry_msg.raw, tx_frame->can_dlc);
+      break;
+    }
+    case AgxMsgActuatorHSState: {
+      switch (msg->body.actuator_hs_state_msg.motor_id) {
+        case ACTUATOR1_ID: {
+          tx_frame->can_id = CAN_MSG_ACTUATOR1_HS_STATE_ID;
+          break;
+        }
+        case ACTUATOR2_ID: {
+          tx_frame->can_id = CAN_MSG_ACTUATOR2_HS_STATE_ID;
+          break;
+        }
+        case ACTUATOR3_ID: {
+          tx_frame->can_id = CAN_MSG_ACTUATOR3_HS_STATE_ID;
+          break;
+        }
+        case ACTUATOR4_ID: {
+          tx_frame->can_id = CAN_MSG_ACTUATOR4_HS_STATE_ID;
+          break;
+        }
+      }
+      tx_frame->can_dlc = 8;
+      memcpy(tx_frame->data, msg->body.actuator_hs_state_msg.data.raw,
              tx_frame->can_dlc);
       break;
     }
-      //    case ScoutMotorDriverStatusMsg:
-      //    {
-      //        if (msg->body.motor_driver_status_msg.motor_id ==
-      //        SCOUT_MOTOR1_ID)
-      //            tx_frame->can_id = CAN_MSG_MOTOR1_DRIVER_STATUS_ID;
-      //        else if (msg->body.motor_driver_status_msg.motor_id ==
-      //        SCOUT_MOTOR2_ID)
-      //            tx_frame->can_id = CAN_MSG_MOTOR2_DRIVER_STATUS_ID;
-      //        else if (msg->body.motor_driver_status_msg.motor_id ==
-      //        SCOUT_MOTOR3_ID)
-      //            tx_frame->can_id = CAN_MSG_MOTOR3_DRIVER_STATUS_ID;
-      //        else if (msg->body.motor_driver_status_msg.motor_id ==
-      //        SCOUT_MOTOR4_ID)
-      //            tx_frame->can_id = CAN_MSG_MOTOR4_DRIVER_STATUS_ID;
-      //        tx_frame->can_dlc = 8;
-      //        memcpy(tx_frame->data,
-      //        msg->body.motor_driver_status_msg.data.raw, tx_frame->can_dlc);
-      //        break;
-      //    }
-    case ScoutMotionControlMsg: {
-      EncodeScoutMotionControlMsgToCAN(&(msg->body.motion_control_msg),
-                                       tx_frame);
-      break;
-    }
-    // TODO check correctiveness
-    // case ScoutControlModeMsg: {
-    //   EncodeScoutnControlModeMsgToCAN(&(msg->body.motion_control_msg),
-    //                                   tx_frame);
-    //   break;
-    // }
-    case ScoutLightControlMsg: {
-      EncodeScoutLightControlMsgToCAN(&(msg->body.light_control_msg), tx_frame);
+    case AgxMsgActuatorLSState: {
+      switch (msg->body.actuator_ls_state_msg.motor_id) {
+        case ACTUATOR1_ID: {
+          tx_frame->can_id = CAN_MSG_ACTUATOR1_LS_STATE_ID;
+          break;
+        }
+        case ACTUATOR2_ID: {
+          tx_frame->can_id = CAN_MSG_ACTUATOR2_LS_STATE_ID;
+          break;
+        }
+        case ACTUATOR3_ID: {
+          tx_frame->can_id = CAN_MSG_ACTUATOR3_LS_STATE_ID;
+          break;
+        }
+        case ACTUATOR4_ID: {
+          tx_frame->can_id = CAN_MSG_ACTUATOR4_LS_STATE_ID;
+          break;
+        }
+      }
+      tx_frame->can_dlc = 8;
+      memcpy(tx_frame->data, msg->body.actuator_ls_state_msg.data.raw,
+             tx_frame->can_dlc);
       break;
     }
     default:
       break;
   }
-  //    tx_frame->data[7] = CalcCanFrameChecksum(tx_frame->can_id,
-  //    tx_frame->data, tx_frame->can_dlc);
-}
-
-void EncodeScoutMotionControlMsgToCAN(const MotionControlMessage *msg,
-                                      struct can_frame *tx_frame) {
-  tx_frame->can_id = CAN_MSG_MOTION_CONTROL_CMD_ID;
-  tx_frame->can_dlc = 8;
-  memcpy(tx_frame->data, msg->data.raw, tx_frame->can_dlc);
-  tx_frame->data[7] =
-      CalcCanFrameChecksum(tx_frame->can_id, tx_frame->data, tx_frame->can_dlc);
-}
-void EncodeScoutnControlModeMsgToCAN(const ModSelectMessage *msg,
-                                     struct can_frame *tx_frame) {
-  tx_frame->can_id = CAN_MSG_SELECT_CONTROL_MODE_ID;
-  tx_frame->can_dlc = 8;
-  memcpy(tx_frame->data, msg->data.raw, tx_frame->can_dlc);
-  tx_frame->data[7] =
-      CalcCanFrameChecksum(tx_frame->can_id, tx_frame->data, tx_frame->can_dlc);
-}
-void EncodeScoutLightControlMsgToCAN(const LightControlMessage *msg,
-                                     struct can_frame *tx_frame) {
-  tx_frame->can_id = CAN_MSG_LIGHT_CONTROL_CMD_ID;
-  tx_frame->can_dlc = 8;
-  memcpy(tx_frame->data, msg->data.raw, tx_frame->can_dlc);
   tx_frame->data[7] =
       CalcCanFrameChecksum(tx_frame->can_id, tx_frame->data, tx_frame->can_dlc);
 }
