@@ -32,18 +32,6 @@
 
 /*--------------------------- Message IDs ------------------------------*/
 
-// UART Message IDs
-#define UART_MSG_SYSTEM_STATUS_ID ((uint8_t)0x01)
-#define UART_MSG_MOTION_STATUS_ID ((uint8_t)0x02)
-#define UART_MSG_MOTOR1_DRIVER_STATUS_ID ((uint8_t)0x03)
-#define UART_MSG_MOTOR2_DRIVER_STATUS_ID ((uint8_t)0x04)
-#define UART_MSG_MOTOR3_DRIVER_STATUS_ID ((uint8_t)0x05)
-#define UART_MSG_MOTOR4_DRIVER_STATUS_ID ((uint8_t)0x06)
-#define UART_MSG_LIGHT_STATUS_ID ((uint8_t)0x07)
-
-#define UART_MSG_MOTION_CONTROL_ID ((uint8_t)0x01)
-#define UART_MSG_LIGHT_CONTROL_ID ((uint8_t)0x02)
-
 // CAN Message IDs
 #define CAN_MSG_MOTION_COMMAND_ID ((uint32_t)0x111)
 #define CAN_MSG_LIGHT_COMMAND_ID ((uint32_t)0x121)
