@@ -10,9 +10,9 @@
 #ifndef AGX_MSG_PARSER_H
 #define AGX_MSG_PARSER_H
 
-// #ifdef __cplusplus
-// extern "C" {
-// #endif
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -30,16 +30,16 @@ struct can_frame {
 };
 #endif
 
-bool DecodeScoutMsgFromCAN(const struct can_frame *rx_frame, AgxMessage *msg);
-void EncodeScoutMsgToCAN(const AgxMessage *msg, struct can_frame *tx_frame);
-uint8_t CalcScoutCANChecksum(uint16_t id, uint8_t *data, uint8_t dlc);
+bool DecodeCanFrame(const struct can_frame *rx_frame, AgxMessage *msg);
+void EncodeCanFrame(const AgxMessage *msg, struct can_frame *tx_frame);
+uint8_t CalcCanFrameChecksum(uint16_t id, uint8_t *data, uint8_t dlc);
 
-bool DecodeScoutMsgFromUART(uint8_t c, AgxMessage *msg);
-void EncodeScoutMsgToUART(const AgxMessage *msg, uint8_t *buf, uint8_t *len);
-uint8_t CalcScoutUARTChecksum(uint8_t *buf, uint8_t len);
+bool DecodeUartData(uint8_t c, AgxMessage *msg);
+void EncodeUartData(const AgxMessage *msg, uint8_t *buf, uint8_t *len);
+uint8_t CalcUartDataChecksum(uint8_t *buf, uint8_t len);
 
-// #ifdef __cplusplus
-// }
-// #endif
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* AGX_PARSER_H */

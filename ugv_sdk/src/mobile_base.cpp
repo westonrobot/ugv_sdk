@@ -19,6 +19,7 @@ namespace westonrobot {
 MobileBase::~MobileBase() {
   // release resource if occupied
   Disconnect();
+
   // joint cmd thread
   if (cmd_thread_.joinable()) cmd_thread_.join();
 }
@@ -40,6 +41,11 @@ void MobileBase::Disconnect() {
   }
 }
 
+void MobileBase::Terminate() {
+  keep_running_ = false;
+  std::terminate();
+}
+
 void MobileBase::ConfigureCAN(const std::string &can_if_name) {
   can_if_ = std::make_shared<AsyncCAN>(can_if_name);
   can_if_->SetReceiveCallback(
@@ -58,35 +64,44 @@ void MobileBase::ConfigureSerial(const std::string uart_name,
   if (serial_if_->IsOpened()) serial_connected_ = true;
 }
 
+void MobileBase::SetCmdTimeout(bool enable, uint32_t timeout_ms) {
+  enable_timeout_ = true;
+  timeout_ms_ = timeout_ms;
+}
+
 void MobileBase::StartCmdThread() {
+  keep_running_ = true;
   cmd_thread_ = std::thread(
       std::bind(&MobileBase::ControlLoop, this, cmd_thread_period_ms_));
   cmd_thread_started_ = true;
 }
 
 void MobileBase::ControlLoop(int32_t period_ms) {
-  Timer ctrl_timer;
   uint32_t timeout_iter_num;
 
   if (enable_timeout_) {
     if (timeout_ms_ < period_ms) timeout_ms_ = period_ms;
     timeout_iter_num = static_cast<uint32_t>(timeout_ms_ / period_ms);
-    std::cout << "Timeout iteration number: " << timeout_iter_num << std::endl;
+    // std::cout << "Timeout iteration number: " << timeout_iter_num <<
+    // std::endl;
   }
 
-  while (true) {
-    ctrl_timer.reset();
+  Timer tm;
+  while (keep_running_) {
+    tm.reset();
     if (enable_timeout_) {
       if (watchdog_counter_ < timeout_iter_num) {
         SendRobotCmd();
         ++watchdog_counter_;
-      } else {
-        std::cout << "Warning: cmd timeout, old cmd not sent to robot" << std::endl;
       }
+      //   else {
+      //     std::cout << "Warning: cmd timeout, no cmd sent to robot" <<
+      //     std::endl;
+      //   }
     } else {
       SendRobotCmd();
     }
-    ctrl_timer.sleep_until_ms(period_ms);
+    tm.sleep_until_ms(period_ms);
   }
 }
 }  // namespace westonrobot

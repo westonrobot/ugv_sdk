@@ -16,34 +16,46 @@
 
 #include <stdint.h>
 
+/*---------------------------- Motor IDs -------------------------------*/
+
 #define SCOUT_MOTOR1_ID ((uint8_t)0x00)
 #define SCOUT_MOTOR2_ID ((uint8_t)0x01)
 #define SCOUT_MOTOR3_ID ((uint8_t)0x02)
 #define SCOUT_MOTOR4_ID ((uint8_t)0x03)
 
-// UART Definitions
-#define UART_FRAME_SYSTEM_STATUS_ID ((uint8_t)0x01)
-#define UART_FRAME_MOTION_STATUS_ID ((uint8_t)0x02)
-#define UART_FRAME_MOTOR1_DRIVER_STATUS_ID ((uint8_t)0x03)
-#define UART_FRAME_MOTOR2_DRIVER_STATUS_ID ((uint8_t)0x04)
-#define UART_FRAME_MOTOR3_DRIVER_STATUS_ID ((uint8_t)0x05)
-#define UART_FRAME_MOTOR4_DRIVER_STATUS_ID ((uint8_t)0x06)
-#define UART_FRAME_LIGHT_STATUS_ID ((uint8_t)0x07)
+#define HUNTER_MOTOR1_ID ((uint8_t)0x00)
+#define HUNTER_MOTOR2_ID ((uint8_t)0x01)
+#define HUNTER_MOTOR3_ID ((uint8_t)0x02)
 
-#define UART_FRAME_MOTION_CONTROL_ID ((uint8_t)0x01)
-#define UART_FRAME_LIGHT_CONTROL_ID ((uint8_t)0x02)
+#define TRACER_MOTOR1_ID ((uint8_t)0x00)
+#define TRACER_MOTOR2_ID ((uint8_t)0x01)
 
-// CAN Definitions
+/*--------------------------- Message IDs ------------------------------*/
+
+// UART Message IDs
+#define UART_MSG_SYSTEM_STATUS_ID ((uint8_t)0x01)
+#define UART_MSG_MOTION_STATUS_ID ((uint8_t)0x02)
+#define UART_MSG_MOTOR1_DRIVER_STATUS_ID ((uint8_t)0x03)
+#define UART_MSG_MOTOR2_DRIVER_STATUS_ID ((uint8_t)0x04)
+#define UART_MSG_MOTOR3_DRIVER_STATUS_ID ((uint8_t)0x05)
+#define UART_MSG_MOTOR4_DRIVER_STATUS_ID ((uint8_t)0x06)
+#define UART_MSG_LIGHT_STATUS_ID ((uint8_t)0x07)
+
+#define UART_MSG_MOTION_CONTROL_ID ((uint8_t)0x01)
+#define UART_MSG_LIGHT_CONTROL_ID ((uint8_t)0x02)
+
+// CAN Message IDs
+#define CAN_MSG_MOTION_COMMAND_ID ((uint32_t)0x111)
+#define CAN_MSG_LIGHT_COMMAND_ID ((uint32_t)0x121)
+
+#define CAN_MSG_SYSTEM_STATE_ID ((uint32_t)0x211)
+#define CAN_MSG_MOTION_STATE_ID ((uint32_t)0x221)
+
 #define CAN_MSG_MOTION_CONTROL_CMD_ID ((uint32_t)0x111)
-#define CAN_MSG_MOTION_CONTROL_STATUS_ID ((uint32_t)0x221)
 #define CAN_MSG_SELECT_CONTROL_MODE_ID ((uint32_t)0x421)
 #define CAN_MSG_LIGHT_CONTROL_CMD_ID ((uint32_t)0x121)
 #define CAN_MSG_LIGHT_CONTROL_STATUS_ID ((uint32_t)0x231)
-#define CAN_MSG_SYSTEM_STATUS_STATUS_ID ((uint32_t)0x211)
-//#define CAN_MSG_MOTOR1_DRIVER_STATUS_ID     ((uint32_t)0x251)
-//#define CAN_MSG_MOTOR2_DRIVER_STATUS_ID     ((uint32_t)0x252)
-//#define CAN_MSG_MOTOR3_DRIVER_STATUS_ID     ((uint32_t)0x253)
-//#define CAN_MSG_MOTOR4_DRIVER_STATUS_ID     ((uint32_t)0x254)
+
 #define CAN_MSG_MOTOR1_HEIGHT_DRIVER_STATUS_ID ((uint32_t)0x251)
 #define CAN_MSG_MOTOR2_HEIGHT_DRIVER_STATUS_ID ((uint32_t)0x252)
 #define CAN_MSG_MOTOR3_HEIGHT_DRIVER_STATUS_ID ((uint32_t)0x253)
@@ -57,10 +69,9 @@
 /*--------------------- Control/State Constants ------------------------*/
 
 // Motion Control
-#define CTRL_MODE_REMOTE ((uint8_t)0x00)
+#define CTRL_MODE_RC ((uint8_t)0x00)
 #define CTRL_MODE_CMD_CAN ((uint8_t)0x01)
 #define CTRL_MODE_CMD_UART ((uint8_t)0x02)
-#define CTRL_MODE_COMMANDED ((uint8_t)0x03)
 
 #define FAULT_CLR_NONE ((uint8_t)0x00)
 #define FAULT_CLR_BAT_UNDER_VOL ((uint8_t)0x01)
@@ -81,19 +92,19 @@
 #define LIGHT_MODE_BREATH ((uint8_t)0x02)
 #define LIGHT_MODE_CUSTOM ((uint8_t)0x03)
 
-// System Status Feedback
-#define BASE_STATE_NORMAL ((uint8_t)0x00)
-#define BASE_STATE_ESTOP ((uint8_t)0x01)
-#define BASE_STATE_EXCEPTION ((uint8_t)0x02)
+// System State
+#define VEHICLE_STATE_NORMAL ((uint8_t)0x00)
+#define VEHICLE_STATE_ESTOP ((uint8_t)0x01)
+#define VEHICLE_STATE_EXCEPTION ((uint8_t)0x02)
 
-#define FAULT_CAN_CHECKSUM_ERROR ((uint16_t)0x0100)
-#define FAULT_MOTOR_DRV_OVERHEAT_W ((uint16_t)0x0200)
-#define FAULT_MOTOR_OVERCURRENT_W ((uint16_t)0x0400)
-#define FAULT_BAT_UNDER_VOL_W ((uint16_t)0x0800)
-#define FAULT_RC_SIGNAL_LOSS ((uint16_t)0x1000)
-#define FAULT_HIGH_BYTE_RESERVED2 ((uint16_t)0x2000)
-#define FAULT_HIGH_BYTE_RESERVED3 ((uint16_t)0x4000)
-#define FAULT_HIGH_BYTE_RESERVED4 ((uint16_t)0x8000)
+#define SYSTEM_FAULT_BAT_LOW_CRITICAL ((uint8_t)0x01)
+#define SYSTEM_FAULT_BAT_LOW_WARNING ((uint8_t)0x02)
+#define SYSTEM_FAULT_RC_SIG_LOST ((uint8_t)0x04)
+#define SYSTEM_FAULT_BYTE_RESERVED1 ((uint8_t)0x08)
+#define SYSTEM_FAULT_BYTE_RESERVED2 ((uint8_t)0x10)
+#define SYSTEM_FAULT_BYTE_RESERVED3 ((uint8_t)0x20)
+#define SYSTEM_FAULT_BYTE_RESERVED4 ((uint8_t)0x40)
+#define SYSTEM_FAULT_BYTE_RESERVED5 ((uint8_t)0x80)
 
 #define FAULT_BAT_UNDER_VOL_F ((uint16_t)0x0001)
 #define FAULT_BAT_OVER_VOL_F ((uint16_t)0x0002)
@@ -110,10 +121,25 @@
 // reference: https://stackoverflow.com/questions/3318410/pragma-pack-effect
 #pragma pack(push, 1)
 
-// Note: id could be different for UART and CAN protocol
+// System Status Feedback
+typedef union {
+  struct {
+    uint8_t vehicle_state;
+    uint8_t control_mode;
+    struct {
+      uint8_t high_byte;
+      uint8_t low_byte;
+    } battery_voltage;
+    uint8_t fault_code;
+    uint8_t reserved0;
+    uint8_t reserved1;
+    uint8_t count;
+  } status;
+  uint8_t raw[8];
+} SystemStateMessage;
 
 // Motion Control
-typedef struct {
+typedef union {
   union {
     struct {
       struct {
@@ -168,25 +194,6 @@ typedef struct {
     uint8_t raw[8];
   } data;
 } ModSelectMessage;
-
-// System Status Feedback
-typedef struct {
-  union {
-    struct {
-      uint8_t base_state;
-      uint8_t control_mode;
-      struct {
-        uint8_t high_byte;
-        uint8_t low_byte;
-      } battery_voltage;
-      uint8_t fault_code;
-      uint8_t reserved0;
-      uint8_t reserved1;
-      uint8_t checksum;
-    } status;
-    uint8_t raw[8];
-  } data;
-} SystemStatusMessage;
 
 // Light Control
 typedef struct {
@@ -332,7 +339,7 @@ typedef struct {
     // status messages
     MotionStatusMessage motion_status_msg;
     LightStatusMessage light_status_msg;
-    SystemStatusMessage system_status_msg;
+    SystemStateMessage system_status_msg;
     MotorDriverStatusMessage motor_driver_status_msg;
     MotorDriverLowSpeedStatusMessage motor_driver_low_speed_status_msg;
     MotorDriverHeightSpeedStatusMessage motor_driver_height_speed_status_msg;

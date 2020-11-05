@@ -17,6 +17,7 @@
 #include <cstdint>
 #include <thread>
 #include <mutex>
+#include <atomic>
 
 #include "wrp_io/async_can.hpp"
 #include "wrp_io/async_serial.hpp"
@@ -32,12 +33,16 @@ class MobileBase {
   MobileBase &operator=(const MobileBase &hunter) = delete;
 
   void SetCmdTimeout(bool enable, uint32_t timeout_ms = 100);
+  void DisableTimeout() { enable_timeout_ = false; }
 
   // connect to roboot from CAN or serial
   void Connect(std::string dev_name, int32_t baud_rate = 0);
 
   // disconnect from roboot, only valid for serial port
   void Disconnect();
+
+  // ask background thread to shutdown properly
+  void Terminate();
 
   // cmd thread runs at 100Hz (10ms) by default
   void SetCmdThreadPeriodMs(int32_t period_ms) {
@@ -62,6 +67,7 @@ class MobileBase {
   std::thread cmd_thread_;
   int32_t cmd_thread_period_ms_ = 10;
   bool cmd_thread_started_ = false;
+  std::atomic<bool> keep_running_;
 
   // internal functions
   void ConfigureCAN(const std::string &can_if_name = "can0");
