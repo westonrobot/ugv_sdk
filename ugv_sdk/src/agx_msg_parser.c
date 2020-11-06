@@ -108,8 +108,6 @@ void EncodeCanFrame(const AgxMessage *msg, struct can_frame *tx_frame) {
       tx_frame->can_dlc = 8;
       memcpy(tx_frame->data, msg->body.motion_command_msg.raw,
              tx_frame->can_dlc);
-    //   tx_frame->data[7] = CalcCanFrameChecksum(tx_frame->can_id, tx_frame->data,
-    //                                            tx_frame->can_dlc);
       break;
     }
     case AgxMsgLightCommand: {
@@ -117,8 +115,6 @@ void EncodeCanFrame(const AgxMessage *msg, struct can_frame *tx_frame) {
       tx_frame->can_dlc = 8;
       memcpy(tx_frame->data, msg->body.light_command_msg.raw,
              tx_frame->can_dlc);
-    //   tx_frame->data[7] = CalcCanFrameChecksum(tx_frame->can_id, tx_frame->data,
-    //                                            tx_frame->can_dlc);
       break;
     }
     case AgxMsgCtrlModeSelect: {
@@ -126,16 +122,12 @@ void EncodeCanFrame(const AgxMessage *msg, struct can_frame *tx_frame) {
       tx_frame->can_dlc = 8;
       memcpy(tx_frame->data, msg->body.ctrl_mode_select_msg.raw,
              tx_frame->can_dlc);
-    //   tx_frame->data[7] = CalcCanFrameChecksum(tx_frame->can_id, tx_frame->data,
-    //                                            tx_frame->can_dlc);
       break;
     }
     case AgxMsgFaultByteReset: {
       tx_frame->can_id = CAN_MSG_STATE_RESET_ID;
       tx_frame->can_dlc = 8;
       memcpy(tx_frame->data, msg->body.state_reset_msg.raw, tx_frame->can_dlc);
-      tx_frame->data[7] = CalcCanFrameChecksum(tx_frame->can_id, tx_frame->data,
-                                               tx_frame->can_dlc);
       break;
     }
     // state feedback frame
@@ -214,8 +206,9 @@ void EncodeCanFrame(const AgxMessage *msg, struct can_frame *tx_frame) {
     default:
       break;
   }
-  tx_frame->data[7] =
-      CalcCanFrameChecksum(tx_frame->can_id, tx_frame->data, tx_frame->can_dlc);
+  //   tx_frame->data[7] =
+  //       CalcCanFrameChecksum(tx_frame->can_id, tx_frame->data,
+  //       tx_frame->can_dlc);
 }
 
 uint8_t CalcCanFrameChecksum(uint16_t id, uint8_t *data, uint8_t dlc) {

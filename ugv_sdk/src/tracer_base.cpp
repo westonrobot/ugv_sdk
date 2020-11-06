@@ -15,14 +15,9 @@
 namespace westonrobot {
 void TracerBase::SendRobotCmd() {
   static uint8_t cmd_count = 0;
-  static uint8_t light_cmd_count = 0;
+  //   EnableCommandedMode();
   if (can_connected_) {
     SendMotionCmd(cmd_count++);
-    SendLightCmd(light_cmd_count++);
-    // if (light_ctrl_requested_)
-    //   SendLightCmd(light_cmd_count++);
-    // else
-    //   std::cout << "not updating light cmd" << std::endl;
   }
 }
 
@@ -46,9 +41,9 @@ void TracerBase::SendMotionCmd(uint8_t count) {
 
   motion_cmd_mutex_.lock();
   int16_t linear_cmd =
-      static_cast<int16_t>(current_motion_cmd_.linear_velocity) * 1000;
+      static_cast<int16_t>(current_motion_cmd_.linear_velocity * 1000);
   int16_t angular_cmd =
-      static_cast<int16_t>(current_motion_cmd_.angular_velocity) * 1000;
+      static_cast<int16_t>(current_motion_cmd_.angular_velocity * 1000);
   motion_cmd_mutex_.unlock();
 
   // SendControlCmd();
@@ -67,28 +62,24 @@ void TracerBase::SendMotionCmd(uint8_t count) {
   can_if_->SendFrame(m_frame);
 }
 
-void TracerBase::SendLightCmd(uint8_t count) {
+void TracerBase::SendLightCmd(const TracerLightCmd &lcmd, uint8_t count) {
   AgxMessage l_msg;
   l_msg.type = AgxMsgLightCommand;
   memset(l_msg.body.light_command_msg.raw, 0, 8);
 
-  light_cmd_mutex_.lock();
-  if (light_ctrl_enabled_) {
+  if (lcmd.enable_ctrl) {
     l_msg.body.light_command_msg.cmd.light_ctrl_enabled = LIGHT_CTRL_ENABLE;
 
     l_msg.body.light_command_msg.cmd.front_light_mode =
-        static_cast<uint8_t>(current_light_cmd_.front_mode);
+        static_cast<uint8_t>(lcmd.front_mode);
     l_msg.body.light_command_msg.cmd.front_light_custom =
-        current_light_cmd_.front_custom_value;
+        lcmd.front_custom_value;
     l_msg.body.light_command_msg.cmd.rear_light_mode =
-        static_cast<uint8_t>(current_light_cmd_.rear_mode);
-    l_msg.body.light_command_msg.cmd.rear_light_custom =
-        current_light_cmd_.rear_custom_value;
+        static_cast<uint8_t>(lcmd.rear_mode);
+    l_msg.body.light_command_msg.cmd.rear_light_custom = lcmd.rear_custom_value;
   } else {
     l_msg.body.light_command_msg.cmd.light_ctrl_enabled = LIGHT_CTRL_DISABLE;
   }
-  light_ctrl_requested_ = false;
-  light_cmd_mutex_.unlock();
 
   l_msg.body.light_command_msg.cmd.count = count;
 
@@ -96,6 +87,8 @@ void TracerBase::SendLightCmd(uint8_t count) {
   can_frame l_frame;
   EncodeCanFrame(&l_msg, &l_frame);
   can_if_->SendFrame(l_frame);
+
+  std::cout << "light cmd sent <---------------------" << std::endl;
 }
 
 TracerState TracerBase::GetTracerState() {
@@ -123,19 +116,9 @@ void TracerBase::SetMotionCommand(double linear_vel, double angular_vel) {
   FeedCmdTimeoutWatchdog();
 }
 
-void TracerBase::SetLightCommand(TracerLightCmd cmd) {
-  if (!cmd_thread_started_) StartCmdThread();
-
-  std::lock_guard<std::mutex> guard(light_cmd_mutex_);
-  current_light_cmd_ = cmd;
-  light_ctrl_enabled_ = true;
-  light_ctrl_requested_ = true;
-}
-
-void TracerBase::DisableLightCmdControl() {
-  std::lock_guard<std::mutex> guard(light_cmd_mutex_);
-  light_ctrl_enabled_ = false;
-  light_ctrl_requested_ = true;
+void TracerBase::SetLightCommand(const TracerLightCmd &cmd) {
+  static uint8_t light_cmd_count = 0;
+  SendLightCmd(cmd, light_cmd_count++);
 }
 
 void TracerBase::ParseCANFrame(can_frame *rx_frame) {

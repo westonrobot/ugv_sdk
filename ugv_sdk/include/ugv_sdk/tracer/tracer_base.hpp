@@ -34,8 +34,7 @@ class TracerBase : public MobileBase {
   void SetMotionCommand(double linear_vel, double angular_vel);
 
   // light control
-  void SetLightCommand(TracerLightCmd cmd);
-  void DisableLightCmdControl();
+  void SetLightCommand(const TracerLightCmd &cmd);
 
  private:
   // cmd/status update related variables
@@ -53,7 +52,7 @@ class TracerBase : public MobileBase {
   bool light_ctrl_requested_ = false;
 
   void SendMotionCmd(uint8_t count);
-  void SendLightCmd(uint8_t count);
+  void SendLightCmd(const TracerLightCmd &cmd, uint8_t count);
 
   void SendRobotCmd() override;
   void ParseCANFrame(can_frame *rx_frame) override;

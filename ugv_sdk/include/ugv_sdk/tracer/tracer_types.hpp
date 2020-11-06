@@ -77,11 +77,13 @@ struct TracerLightCmd {
   TracerLightCmd() = default;
   TracerLightCmd(LightMode f_mode, uint8_t f_value, LightMode r_mode,
                  uint8_t r_value)
-      : front_mode(f_mode),
+      : enable_ctrl(true),
+        front_mode(f_mode),
         front_custom_value(f_value),
         rear_mode(r_mode),
         rear_custom_value(r_value) {}
 
+  bool enable_ctrl = false;
   LightMode front_mode;
   uint8_t front_custom_value;
   LightMode rear_mode;

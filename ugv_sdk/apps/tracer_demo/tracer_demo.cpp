@@ -28,55 +28,61 @@ int main(int argc, char **argv) {
   tracer.Connect(device_name);
 
   tracer.EnableCommandedMode();
+  //   tracer.DisableTimeout();
 
   // light control
   std::cout << "Light: const off" << std::endl;
   tracer.SetLightCommand({TracerLightCmd::LightMode::CONST_OFF, 0,
                           TracerLightCmd::LightMode::CONST_OFF, 0});
-  sleep(5);
+  //   usleep(50000);
+  sleep(3);
   std::cout << "Light: const on" << std::endl;
   tracer.SetLightCommand({TracerLightCmd::LightMode::CONST_ON, 0,
                           TracerLightCmd::LightMode::CONST_ON, 0});
+  //   usleep(50000);
   sleep(3);
   std::cout << "Light: breath" << std::endl;
   tracer.SetLightCommand({TracerLightCmd::LightMode::BREATH, 0,
                           TracerLightCmd::LightMode::BREATH, 0});
-  sleep(3);
+  //   usleep(50000);
+  sleep(8);
   std::cout << "Light: custom 90-80" << std::endl;
   tracer.SetLightCommand({TracerLightCmd::LightMode::CUSTOM, 90,
                           TracerLightCmd::LightMode::CUSTOM, 80});
+  //   usleep(50000);
   sleep(3);
   std::cout << "Light: diabled cmd control" << std::endl;
-  tracer.DisableLightCmdControl();
+  tracer.SetLightCommand(TracerLightCmd());
 
   int count = 0;
   while (true) {
-    // // motion control
-    // if (count < 5) {
-    //   std::cout << "Motor: 0.2, 0.0" << std::endl;
-    //   tracer.SetMotionCommand(0.2, 0.0);
-    // } else if (count < 10) {
-    //   std::cout << "Motor: 0.8, 0.3" << std::endl;
-    //   tracer.SetMotionCommand(0.8, 0.3);
-    // } else if (count < 15) {
-    //   std::cout << "Motor: 1.5, 0.5" << std::endl;
-    //   tracer.SetMotionCommand(1.5, 0.5);
-    // } else if (count < 20) {
-    //   std::cout << "Motor: 1.0, 0.3" << std::endl;
-    //   tracer.SetMotionCommand(1.0, 0.3);
-    // } else if (count < 25) {
-    //   std::cout << "Motor: 0.0, 0.0" << std::endl;
-    //   tracer.SetMotionCommand(0.0, 0.0);
-    // } else if (count < 30) {
-    //   std::cout << "Motor: -0.5, -0.3" << std::endl;
-    //   tracer.SetMotionCommand(-0.5, -0.3);
-    // } else if (count < 35) {
-    //   std::cout << "Motor: -1.0, -0.5" << std::endl;
-    //   tracer.SetMotionCommand(-1.0, -0.5);
-    // } else if (count < 40) {
-    //   std::cout << "Motor: 0.0, 0.0," << std::endl;
-    //   tracer.SetMotionCommand(0.0, 0.0);
-    // }
+    // motion control
+    if (count < 5) {
+      std::cout << "Motor: 0.2, 0.0" << std::endl;
+      tracer.SetMotionCommand(0.2, 0.0);
+    } else if (count < 10) {
+      std::cout << "Motor: 0.8, 0.3" << std::endl;
+      tracer.SetMotionCommand(0.8, 0.3);
+    } else if (count < 15) {
+      std::cout << "Motor: 1.5, 0.5" << std::endl;
+      tracer.SetMotionCommand(1.5, 0.5);
+    } else if (count < 20) {
+      std::cout << "Motor: 1.0, 0.3" << std::endl;
+      tracer.SetMotionCommand(1.0, 0.3);
+    } else if (count < 25) {
+      std::cout << "Motor: 0.0, 0.0" << std::endl;
+      tracer.SetMotionCommand(0.0, 0.0);
+    } else if (count < 30) {
+      std::cout << "Motor: -0.5, -0.3" << std::endl;
+      tracer.SetMotionCommand(-0.5, -0.3);
+    } else if (count < 35) {
+      std::cout << "Motor: -1.0, -0.5" << std::endl;
+      tracer.SetMotionCommand(-1.0, -0.5);
+    } else if (count < 40) {
+      std::cout << "Motor: 0.0, 0.0," << std::endl;
+      tracer.SetMotionCommand(0.0, 0.0);
+    }
+    // tracer.SetMotionCommand(0.8, 0.8);
 
     auto state = tracer.GetTracerState();
     std::cout << "-------------------------------" << std::endl;
@@ -89,6 +95,7 @@ int main(int argc, char **argv) {
               << state.angular_velocity << std::endl;
     std::cout << "-------------------------------" << std::endl;
 
+    // usleep(20000);
     sleep(1);
     ++count;
   }
