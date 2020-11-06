@@ -45,7 +45,9 @@ typedef enum {
   AgxMsgRcState = 0x24,
   AgxMsgActuatorHSState = 0x25,
   AgxMsgActuatorLSState = 0x26,
-  AgxMsgOdometry = 0x27
+  AgxMsgOdometry = 0x27,
+  AgxMsgVersionQuery = 0x28,
+  AgxMsgPlatformVersion = 0x29
 } MsgType;
 
 typedef struct {
@@ -64,6 +66,8 @@ typedef struct {
     ActuatorHSStateMessage actuator_hs_state_msg;
     ActuatorLSStateMessage actuator_ls_state_msg;
     OdometryMessage odometry_msg;
+    VersionQueryMessage version_query_msg;
+    PlatformVersionMessage platform_version_msg;
   } body;
 } AgxMessage;
 #pragma pack(pop)

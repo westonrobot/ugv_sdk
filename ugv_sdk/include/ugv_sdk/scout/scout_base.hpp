@@ -17,10 +17,7 @@
 #include <functional>
 
 #include "ugv_sdk/mobile_base.hpp"
-
-#include "ugv_sdk/scout/scout_protocol.h"
-#include "ugv_sdk/scout/scout_can_parser.h"
-#include "ugv_sdk/scout/scout_uart_parser.h"
+#include "ugv_sdk/proto/agx_msg_parser.h"
 #include "ugv_sdk/scout/scout_types.hpp"
 
 namespace westonrobot {
@@ -29,55 +26,34 @@ class ScoutBase : public MobileBase {
   ScoutBase() : MobileBase(){};
   ~ScoutBase() = default;
 
- public:
-  // motion control
-  void SetMotionCommand(double linear_vel, double angular_vel,
-                        ScoutMotionCmd::FaultClearFlag fault_clr_flag =
-                            ScoutMotionCmd::FaultClearFlag::NO_FAULT);
-
-  // light control
-  void SetLightCommand(ScoutLightCmd cmd);
-  void DisableLightCmdControl();
-
   // get robot state
   ScoutState GetScoutState();
 
- private:
-  // serial port buffer
-  uint8_t tx_cmd_len_;
-  uint8_t tx_buffer_[SCOUT_CMD_BUF_LEN];
+  void EnableCommandedMode();
 
+  // motion control
+  void SetMotionCommand(double linear_vel, double angular_vel);
+
+  // light control
+  void SetLightCommand(const ScoutLightCmd &cmd);
+
+ private:
   // cmd/status update related variables
-  std::thread cmd_thread_;
   std::mutex scout_state_mutex_;
   std::mutex motion_cmd_mutex_;
-  std::mutex light_cmd_mutex_;
-  std::mutex mode_cmd_mutex_;
 
   ScoutState scout_state_;
   ScoutMotionCmd current_motion_cmd_;
-  ScoutLightCmd current_light_cmd_;
-
-  
- 
-
-  bool light_ctrl_enabled_ = false;
-  bool light_ctrl_requested_ = false;
 
   // internal functions
-  void SendRobotCmd() override;
-  void ParseCANFrame(can_frame *rx_frame);
-  void ParseUARTBuffer(uint8_t *buf, const size_t bufsize,
-                       size_t bytes_received);
-
   void SendMotionCmd(uint8_t count);
-  void SendLightCmd(uint8_t count);
-  void SendModeCtl();
-  void NewStatusMsgReceivedCallback(const ScoutMessage &msg);
+  void SendLightCmd(const ScoutLightCmd &cmd, uint8_t count);
 
- public:
-  static void UpdateScoutState(const ScoutMessage &status_msg,
-                               ScoutState &state);
+  void SendRobotCmd() override;
+  void ParseCANFrame(can_frame *rx_frame) override;
+
+  void NewStatusMsgReceivedCallback(const AgxMessage &msg);
+  static void UpdateScoutState(const AgxMessage &status_msg, ScoutState &state);
 };
 }  // namespace westonrobot
 

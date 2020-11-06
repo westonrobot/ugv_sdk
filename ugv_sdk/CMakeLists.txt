@@ -78,21 +78,15 @@ endif()
 # Build libraries
 find_package(Threads REQUIRED)
 
-# import asio library
-# add_subdirectory(asio)
-
 add_library(${PROJECT_NAME} 
+    # agx common
     src/mobile_base.cpp
     src/agx_msg_parser.c
-    # robots
+    # robot support
+    src/scout_base.cpp
     # src/hunter_base.cpp
-    # src/hunter_can_parser.c
-    # src/scout_base.cpp
-    # src/scout_can_parser.c
-    # src/scout_uart_parser.c
     src/tracer_base.cpp
     # src/bunker_base.cpp
-    # src/bunker_can_parser.c
 )
 if(BUILD_WITHOUT_ROS)
     target_link_libraries(${PROJECT_NAME} wrp_io Threads::Threads)

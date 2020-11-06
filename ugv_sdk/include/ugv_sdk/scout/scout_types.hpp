@@ -22,28 +22,17 @@ struct ScoutState {
     REAR_RIGHT = 3
   };
 
-  struct MotorState {
-    double current = 0;  // in A
-    double rpm = 0;
-    double temperature = 0;
-    double motor_pose = 0;
-  };
-  struct DriverState {
-    double driver_voltage = 0;
-    double driver_temperature = 0;
-    uint8_t driver_state = 0;
-  };
-  struct MotorHighSpeedState {
-    double current = 0;  // in A
-    double rpm = 0;
-    double motor_pose = 0;
-  };
-  struct MotorLowSpeedState {
-    double driver_voltage = 0;
-    double driver_temperature = 0;
+  struct ActuatorState {
+    double motor_current = 0;  // in A
+    uint16_t motor_rpm = 0;
+    uint16_t motor_pulses = 0;
     double motor_temperature = 0;
+
+    double driver_voltage = 0;
+    double driver_temperature = 0;
     uint8_t driver_state = 0;
   };
+
   struct LightState {
     uint8_t mode = 0;
     uint8_t custom_value = 0;
@@ -57,10 +46,7 @@ struct ScoutState {
 
   // motor state
   static constexpr uint8_t motor_num = 4;
-  //    MotorState motor_states[motor_num];
-  //    DriverState driver_states[motor_num];
-  MotorHighSpeedState motor_hs_state[motor_num];
-  MotorLowSpeedState motor_ls_state[motor_num];
+  ActuatorState actuator_states[motor_num];
 
   // light state
   bool light_control_enabled = false;
@@ -72,37 +58,16 @@ struct ScoutState {
   double angular_velocity = 0;
 
   // odometer state
-  double left_odomter = 0;
-  double right_odomter = 0;
+  double left_odometry = 0;
+  double right_odometry = 0;
 };
 
 struct ScoutMotionCmd {
-  enum class FaultClearFlag {
-    NO_FAULT = 0x00,
-    BAT_UNDER_VOL = 0x01,
-    BAT_OVER_VOL = 0x02,
-    MOTOR1_COMM = 0x03,
-    MOTOR2_COMM = 0x04,
-    MOTOR3_COMM = 0x05,
-    MOTOR4_COMM = 0x06,
-    MOTOR_DRV_OVERHEAT = 0x07,
-    MOTOR_OVERCURRENT = 0x08
-  };
+  ScoutMotionCmd(double linear = 0.0, double angular = 0.0)
+      : linear_velocity(linear), angular_velocity(angular) {}
 
-  ScoutMotionCmd(int8_t linear_height_byte = 0, int8_t linear_low_byte = 0,
-                 int8_t angular_height_byte = 0, int8_t angular_low_byte = 0,
-                 FaultClearFlag fault_clr_flag = FaultClearFlag::NO_FAULT)
-      : linear_velocity_height_byte(linear_height_byte),
-        linear_velocity_low_byte(linear_low_byte),
-        angular_velocity_height_byte(angular_height_byte),
-        angular_velocity_low_byte(angular_low_byte),
-        fault_clear_flag(fault_clr_flag) {}
-
-  int8_t linear_velocity_height_byte;
-  int8_t linear_velocity_low_byte;
-  int8_t angular_velocity_height_byte;
-  int8_t angular_velocity_low_byte;
-  FaultClearFlag fault_clear_flag;
+  double linear_velocity;
+  double angular_velocity;
 
   static constexpr double max_linear_velocity = 1.5;       // 1.5 m/s
   static constexpr double min_linear_velocity = -1.5;      // -1.5 m/s
@@ -121,11 +86,13 @@ struct ScoutLightCmd {
   ScoutLightCmd() = default;
   ScoutLightCmd(LightMode f_mode, uint8_t f_value, LightMode r_mode,
                 uint8_t r_value)
-      : front_mode(f_mode),
+      : enable_ctrl(true),
+        front_mode(f_mode),
         front_custom_value(f_value),
         rear_mode(r_mode),
         rear_custom_value(r_value) {}
 
+  bool enable_ctrl = false;
   LightMode front_mode;
   uint8_t front_custom_value;
   LightMode rear_mode;

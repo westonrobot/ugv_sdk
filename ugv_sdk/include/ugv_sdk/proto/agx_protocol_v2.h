@@ -45,6 +45,9 @@ extern "C" {
 
 #define CAN_MSG_ODOMETRY_ID ((uint32_t)0x311)
 
+#define CAN_MSG_VERSION_QUERY_ID ((uint32_t)0x411)
+#define CAN_MSG_PLATFORM_VERSION_ID ((uint32_t)0x41a)
+
 #define CAN_MSG_CTRL_MODE_SELECT_ID ((uint32_t)0x421)
 #define CAN_MSG_STATE_RESET_ID ((uint32_t)0x441)
 
@@ -55,11 +58,17 @@ extern "C" {
 #define VEHICLE_STATE_ESTOP ((uint8_t)0x01)
 #define VEHICLE_STATE_EXCEPTION ((uint8_t)0x02)
 
+#define FAULT_BATTERY_LOW_ERROR ((uint8_t)0x01)
+#define FAULT_BATTERY_LOW_WARN ((uint8_t)0x02)
+#define FAULT_RC_SIGNAL_LOSS ((uint8_t)0x04)
+
 #define FAULT_CLR_ALL ((uint8_t)0x00)
 #define FAULT_CLR_MOTOR1_COMM ((uint8_t)0x01)
 #define FAULT_CLR_MOTOR2_COMM ((uint8_t)0x02)
-#define FAULT_CLR_MOTOR3_COMM ((uint8_t)0x04)
-#define FAULT_CLR_MOTOR4_COMM ((uint8_t)0x08)
+#define FAULT_CLR_MOTOR3_COMM ((uint8_t)0x03)
+#define FAULT_CLR_MOTOR4_COMM ((uint8_t)0x04)
+
+#define QUERY_PLATFORM_VERSION_REQUEST ((uint8_t)0x01)
 
 // Motion Control
 #define CTRL_MODE_RC ((uint8_t)0x00)
@@ -69,20 +78,21 @@ extern "C" {
 // Light Control
 #define LIGHT_CTRL_DISABLE ((uint8_t)0x00)
 #define LIGHT_CTRL_ENABLE ((uint8_t)0x01)
+
 #define LIGHT_MODE_CONST_OFF ((uint8_t)0x00)
 #define LIGHT_MODE_CONST_ON ((uint8_t)0x01)
 #define LIGHT_MODE_BREATH ((uint8_t)0x02)
 #define LIGHT_MODE_CUSTOM ((uint8_t)0x03)
 
 // Actuator State
-#define BATTERY_VOLTAGE_LOW ((uint8_t)0x00)
-#define MOTOR_OVERHEAT ((uint8_t)0x01)
-#define MOTOR_DRIVER_OVERLOAD ((uint8_t)0x02)
-#define MOTOR_DRIVER_OVERHEAT ((uint8_t)0x03)
-#define MOTOR_SENSOR_FAULT ((uint8_t)0x04)
-#define MOTOR_DRIVER_FAULT ((uint8_t)0x05)
-#define MOTOR_DRIVER_ENABLED ((uint8_t)0x06)
-#define MOTOR_DRIVER_RESERVED0 ((uint8_t)0x07)
+#define BATTERY_VOLTAGE_LOW ((uint8_t)0x01)
+#define MOTOR_OVERHEAT ((uint8_t)0x02)
+#define MOTOR_DRIVER_OVERLOAD ((uint8_t)0x04)
+#define MOTOR_DRIVER_OVERHEAT ((uint8_t)0x08)
+#define MOTOR_SENSOR_FAULT ((uint8_t)0x10)
+#define MOTOR_DRIVER_FAULT ((uint8_t)0x20)
+#define MOTOR_DRIVER_ENABLED ((uint8_t)0x40)
+#define MOTOR_DRIVER_RESERVED0 ((uint8_t)0x80)
 
 /*-------------------- Control/Feedback Messages -----------------------*/
 
@@ -182,11 +192,13 @@ typedef union {
     struct {
       uint8_t high_byte;
       uint8_t low_byte;
-    } angular_velocity;
+    } angular_velocity;  // only valid for differential drivering
     uint8_t reserved0;
     uint8_t reserved1;
-    uint8_t reserved2;
-    uint8_t reserved3;
+    struct {
+      uint8_t high_byte;
+      uint8_t low_byte;
+    } steering_angle;  // only valid for ackermann steering
   } state;
   uint8_t raw[8];
 } MotionStateMessage;
@@ -280,6 +292,42 @@ typedef union {
   } state;
   uint8_t raw[8];
 } OdometryMessage;
+
+typedef union {
+  struct {
+    uint8_t request;
+    uint8_t reserved0;
+    uint8_t reserved1;
+    uint8_t reserved2;
+    uint8_t reserved3;
+    uint8_t reserved4;
+    uint8_t reserved5;
+    uint8_t reserved6;
+  } state;
+  uint8_t raw[8];
+} VersionQueryMessage;
+
+typedef union {
+  struct {
+    struct {
+      uint8_t high_byte;
+      uint8_t low_byte;
+    } controller_hw_version;
+    struct {
+      uint8_t high_byte;
+      uint8_t low_byte;
+    } motor_driver_hw_version;
+    struct {
+      uint8_t high_byte;
+      uint8_t low_byte;
+    } controller_sw_version;
+    struct {
+      uint8_t high_byte;
+      uint8_t low_byte;
+    } motor_driver_sw_version;
+  } state;
+  uint8_t raw[8];
+} PlatformVersionMessage;
 
 #pragma pack(pop)
 

@@ -44,9 +44,6 @@ class TracerBase : public MobileBase {
   TracerState tracer_state_;
   TracerMotionCmd current_motion_cmd_;
 
-  bool light_ctrl_enabled_ = false;
-  bool light_ctrl_requested_ = false;
-
   void SendMotionCmd(uint8_t count);
   void SendLightCmd(const TracerLightCmd &cmd, uint8_t count);
 

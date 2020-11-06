@@ -87,8 +87,6 @@ void TracerBase::SendLightCmd(const TracerLightCmd &lcmd, uint8_t count) {
   can_frame l_frame;
   EncodeCanFrame(&l_msg, &l_frame);
   can_if_->SendFrame(l_frame);
-
-  std::cout << "light cmd sent <---------------------" << std::endl;
 }
 
 TracerState TracerBase::GetTracerState() {
