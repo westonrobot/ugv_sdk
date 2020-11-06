@@ -39,14 +39,10 @@ class TracerBase : public MobileBase {
  private:
   // cmd/status update related variables
   std::mutex tracer_state_mutex_;
-  std::mutex uart_tracer_state_mutex_;
   std::mutex motion_cmd_mutex_;
-  std::mutex light_cmd_mutex_;
-  std::mutex mode_cmd_mutex_;
 
   TracerState tracer_state_;
   TracerMotionCmd current_motion_cmd_;
-  TracerLightCmd current_light_cmd_;
 
   bool light_ctrl_enabled_ = false;
   bool light_ctrl_requested_ = false;

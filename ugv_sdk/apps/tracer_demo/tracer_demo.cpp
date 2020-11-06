@@ -32,23 +32,19 @@ int main(int argc, char **argv) {
 
   // light control
   std::cout << "Light: const off" << std::endl;
-  tracer.SetLightCommand({TracerLightCmd::LightMode::CONST_OFF, 0,
-                          TracerLightCmd::LightMode::CONST_OFF, 0});
+  tracer.SetLightCommand({TracerLightCmd::LightMode::CONST_OFF, 0});
   //   usleep(50000);
   sleep(3);
   std::cout << "Light: const on" << std::endl;
-  tracer.SetLightCommand({TracerLightCmd::LightMode::CONST_ON, 0,
-                          TracerLightCmd::LightMode::CONST_ON, 0});
+  tracer.SetLightCommand({TracerLightCmd::LightMode::CONST_ON, 0});
   //   usleep(50000);
   sleep(3);
   std::cout << "Light: breath" << std::endl;
-  tracer.SetLightCommand({TracerLightCmd::LightMode::BREATH, 0,
-                          TracerLightCmd::LightMode::BREATH, 0});
+  tracer.SetLightCommand({TracerLightCmd::LightMode::BREATH, 0});
   //   usleep(50000);
   sleep(8);
   std::cout << "Light: custom 90-80" << std::endl;
-  tracer.SetLightCommand({TracerLightCmd::LightMode::CUSTOM, 90,
-                          TracerLightCmd::LightMode::CUSTOM, 80});
+  tracer.SetLightCommand({TracerLightCmd::LightMode::CUSTOM, 90});
   //   usleep(50000);
   sleep(3);
   std::cout << "Light: diabled cmd control" << std::endl;

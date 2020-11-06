@@ -75,19 +75,14 @@ struct TracerLightCmd {
   };
 
   TracerLightCmd() = default;
-  TracerLightCmd(LightMode f_mode, uint8_t f_value, LightMode r_mode,
-                 uint8_t r_value)
-      : enable_ctrl(true),
-        front_mode(f_mode),
-        front_custom_value(f_value),
-        rear_mode(r_mode),
-        rear_custom_value(r_value) {}
+  TracerLightCmd(LightMode f_mode, uint8_t f_value)
+      : enable_ctrl(true), front_mode(f_mode), front_custom_value(f_value) {}
 
   bool enable_ctrl = false;
   LightMode front_mode;
   uint8_t front_custom_value;
-  LightMode rear_mode;
-  uint8_t rear_custom_value;
+  LightMode rear_mode = LightMode::CONST_OFF;
+  uint8_t rear_custom_value = 0;
 };
 }  // namespace westonrobot
 
