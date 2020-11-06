@@ -27,6 +27,7 @@ extern "C" {
 
 #define CAN_MSG_MOTION_COMMAND_ID ((uint32_t)0x111)
 #define CAN_MSG_LIGHT_COMMAND_ID ((uint32_t)0x121)
+#define CAN_MSG_PARK_COMMAND_ID ((uint32_t)0x131)
 
 #define CAN_MSG_SYSTEM_STATE_ID ((uint32_t)0x211)
 #define CAN_MSG_MOTION_STATE_ID ((uint32_t)0x221)
@@ -49,11 +50,13 @@ extern "C" {
 #define CAN_MSG_PLATFORM_VERSION_ID ((uint32_t)0x41a)
 
 #define CAN_MSG_CTRL_MODE_SELECT_ID ((uint32_t)0x421)
+#define CAN_MSG_STEER_NEUTRAL_RESET_ID ((uint32_t)0x431)
+#define CAN_MSG_STEER_NEUTRAL_RESET_ACK_ID ((uint32_t)0x43a)
 #define CAN_MSG_STATE_RESET_ID ((uint32_t)0x441)
 
 /*--------------------- Control/State Constants ------------------------*/
 
-// System State
+// Control
 #define VEHICLE_STATE_NORMAL ((uint8_t)0x00)
 #define VEHICLE_STATE_ESTOP ((uint8_t)0x01)
 #define VEHICLE_STATE_EXCEPTION ((uint8_t)0x02)
@@ -68,23 +71,13 @@ extern "C" {
 #define FAULT_CLR_MOTOR3_COMM ((uint8_t)0x03)
 #define FAULT_CLR_MOTOR4_COMM ((uint8_t)0x04)
 
-#define QUERY_PLATFORM_VERSION_REQUEST ((uint8_t)0x01)
-
-// Motion Control
 #define CTRL_MODE_RC ((uint8_t)0x00)
 #define CTRL_MODE_CMD_CAN ((uint8_t)0x01)
 #define CTRL_MODE_CMD_UART ((uint8_t)0x02)
 
-// Light Control
-#define LIGHT_CTRL_DISABLE ((uint8_t)0x00)
-#define LIGHT_CTRL_ENABLE ((uint8_t)0x01)
+#define QUERY_PLATFORM_VERSION_REQUEST ((uint8_t)0x01)
 
-#define LIGHT_MODE_CONST_OFF ((uint8_t)0x00)
-#define LIGHT_MODE_CONST_ON ((uint8_t)0x01)
-#define LIGHT_MODE_BREATH ((uint8_t)0x02)
-#define LIGHT_MODE_CUSTOM ((uint8_t)0x03)
-
-// Actuator State
+// Actuator
 #define BATTERY_VOLTAGE_LOW ((uint8_t)0x01)
 #define MOTOR_OVERHEAT ((uint8_t)0x02)
 #define MOTOR_DRIVER_OVERLOAD ((uint8_t)0x04)
@@ -93,6 +86,17 @@ extern "C" {
 #define MOTOR_DRIVER_FAULT ((uint8_t)0x20)
 #define MOTOR_DRIVER_ENABLED ((uint8_t)0x40)
 #define MOTOR_DRIVER_RESERVED0 ((uint8_t)0x80)
+
+#define STEER_NEUTRAL_RESET_ACK ((uint8_t)0xee)
+
+// Light
+#define LIGHT_CTRL_DISABLE ((uint8_t)0x00)
+#define LIGHT_CTRL_ENABLE ((uint8_t)0x01)
+
+#define LIGHT_MODE_CONST_OFF ((uint8_t)0x00)
+#define LIGHT_MODE_CONST_ON ((uint8_t)0x01)
+#define LIGHT_MODE_BREATH ((uint8_t)0x02)
+#define LIGHT_MODE_CUSTOM ((uint8_t)0x03)
 
 /*-------------------- Control/Feedback Messages -----------------------*/
 
