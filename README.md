@@ -15,7 +15,10 @@ This software package provides a C++ interface to communicate with the mobile pl
 Supported robot platforms
 
 * **Scout**: skid-steer mobile base
+* **Scout-Mini**: skid-steer mobile base
 * **Hunter**: ackermann mobile base
+* **Tracer**: differential-drive mobile base
+* **Bunker**: tracked mobile base
 
 Supported environments
 

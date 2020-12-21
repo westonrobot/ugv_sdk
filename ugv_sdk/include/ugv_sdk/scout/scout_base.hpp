@@ -26,7 +26,8 @@
 namespace westonrobot {
 class ScoutBase : public MobileBase {
  public:
-  ScoutBase() : MobileBase(){};
+  ScoutBase(bool is_scout_mini = false)
+      : MobileBase(), is_scout_mini_(is_scout_mini){};
   ~ScoutBase() = default;
 
  public:
@@ -43,6 +44,8 @@ class ScoutBase : public MobileBase {
   ScoutState GetScoutState();
 
  private:
+  bool is_scout_mini_ = false;
+
   // serial port buffer
   uint8_t tx_cmd_len_;
   uint8_t tx_buffer_[SCOUT_CMD_BUF_LEN];
