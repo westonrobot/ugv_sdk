@@ -3,10 +3,14 @@
 ![GitHub Workflow Status](https://github.com/westonrobot/wrp_sdk/workflows/Cpp/badge.svg)
 ![GitHub Workflow Status](https://github.com/westonrobot/wrp_sdk/workflows/ROS/badge.svg)
 
-This repository is a joint effort by the development teams at Weston Robot (Singapore) and AgileX Robotics (China).
+This repository is a joint effort by the development teams at [Weston Robot](https://www.westonrobot.com/) (Singapore) and [AgileX Robotics](http://www.agilex.ai) (China). 
 
-- Copyright (c) 2020 [Weston Robot](https://www.westonrobot.com/) 
-- Copyright (c) 2020 [AgileX Robotics](http://www.agilex.ai/?lang=zh-cn)
+| Package Name |                    Description                     |           Developed By           |
+| :----------: | :------------------------------------------------: | :------------------------------: |
+|   ugv_sdk    | encoding/decoding of robot communication protocols | Weston Robot and AgileX Robotics |
+|    wrp_io    |    generic asynchronous communication handling     |           Weston Robot           |
+
+Please create an issue on Github at https://github.com/westonrobot/ugv_sdk/issues if you encounter any problems in using the packages.
 
 ## Introduction
 
