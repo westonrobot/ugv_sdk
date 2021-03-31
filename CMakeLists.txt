@@ -67,7 +67,9 @@ if(BUILD_WITHOUT_ROS)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 endif()
 
-if(NOT BUILD_WITHOUT_ROS)
+if(BUILD_WITHOUT_ROS)
+    find_package(async_port REQUIRED)
+else()
     find_package(catkin REQUIRED COMPONENTS async_port)
     include_directories(
         include
@@ -80,7 +82,7 @@ find_package(Threads REQUIRED)
 
 add_library(${PROJECT_NAME} 
     # agx common
-    src/mobile_base.cpp
+    src/agilex_base.cpp
     src/agx_msg_parser.c
     # robot support
     src/scout_base.cpp
@@ -89,7 +91,7 @@ add_library(${PROJECT_NAME}
     # src/bunker_base.cpp
 )
 if(BUILD_WITHOUT_ROS)
-    target_link_libraries(${PROJECT_NAME} wrp_io Threads::Threads)
+    target_link_libraries(${PROJECT_NAME} westonrobot::async_port Threads::Threads)
 else()
     target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} Threads::Threads)
 endif() 
@@ -195,7 +197,7 @@ else() # BUILD_WITHOUT_ROS
     catkin_package(
         LIBRARIES ${PROJECT_NAME}
         INCLUDE_DIRS include 
-         CATKIN_DEPENDS wrp_io
+         CATKIN_DEPENDS async_port
         #  DEPENDS system_lib
     )
 
