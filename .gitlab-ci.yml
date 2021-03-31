@@ -7,7 +7,7 @@ xenial-cpp-build:
     - cd /async_port && mkdir build && cd build
     - cmake .. && cpack
     - apt install ./async_port_0.1.0_amd64.deb
-    - cd /ugv_sdk
+    - cd /$CI_PROJECT_PATH
     - mkdir build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Release ..
     - cmake --build . && cpack
@@ -20,7 +20,7 @@ bionic-cpp-build:
     - cd /async_port && mkdir build && cd build
     - cmake .. && cpack
     - apt install ./async_port_0.1.0_amd64.deb
-    - cd /ugv_sdk
+    - cd /$CI_PROJECT_PATH
     - mkdir build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Release ..
     - cmake --build . && cpack
@@ -33,7 +33,7 @@ focal-cpp-build:
     - cd /async_port && mkdir build && cd build
     - cmake .. && cpack
     - apt install ./async_port_0.1.0_amd64.deb
-    - cd /ugv_sdk
+    - cd /$CI_PROJECT_PATH
     - mkdir build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Release ..
     - cmake --build . && cpack
