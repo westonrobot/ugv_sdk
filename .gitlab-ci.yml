@@ -3,25 +3,30 @@ xenial-cpp-build:
   stage: build
   image: rduweston/ubuntu-ci:16.04
   script:
+    - cd / && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/public/async_port.git
+    - cd /async_port && mkdir build && cd build
+    - cmake .. && cpack
+    - dkpg async_port_0.1.0_amd64.deb
+    - cd /ugv_sdk
     - mkdir build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Release ..
     - cmake --build . && cpack
 
-bionic-cpp-build:
-  stage: build
-  image: rduweston/ubuntu-ci:18.04
-  script:
-    - mkdir build && cd build
-    - cmake -DCMAKE_BUILD_TYPE=Release ..
-    - cmake --build . && cpack
+# bionic-cpp-build:
+#   stage: build
+#   image: rduweston/ubuntu-ci:18.04
+#   script:
+#     - mkdir build && cd build
+#     - cmake -DCMAKE_BUILD_TYPE=Release ..
+#     - cmake --build . && cpack
 
-focal-cpp-build:
-  stage: build
-  image: rduweston/ubuntu-ci:20.04
-  script:
-    - mkdir build && cd build
-    - cmake -DCMAKE_BUILD_TYPE=Release ..
-    - cmake --build . && cpack
+# focal-cpp-build:
+#   stage: build
+#   image: rduweston/ubuntu-ci:20.04
+#   script:
+#     - mkdir build && cd build
+#     - cmake -DCMAKE_BUILD_TYPE=Release ..
+#     - cmake --build . && cpack
 
 ## Build and test as catkin package
 kinetic-catkin-build:
