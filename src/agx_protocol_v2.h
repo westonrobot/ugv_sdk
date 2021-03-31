@@ -98,8 +98,8 @@ extern "C" {
 
 /*--------------------- Control/State Constants ------------------------*/
 
-#define LIGHT_CMD_CTRL_ALLOWED ((uint8_t)0x00)
-#define LIGHT_CMD_CTRL_DISALLOWED ((uint8_t)0x01)
+#define LIGHT_CMD_CTRL_ALLOWED ((uint8_t)0x01)
+#define LIGHT_CMD_CTRL_DISALLOWED ((uint8_t)0x00)
 
 #define VERSION_REQUEST_VALUE ((uint8_t)0x01)
 #define STEER_NEUTRAL_REQUEST_VALUE ((uint8_t)0xee)
