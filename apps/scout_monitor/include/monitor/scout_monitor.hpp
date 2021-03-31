@@ -10,7 +10,7 @@
 #ifndef SCOUT_MONITOR_HPP
 #define SCOUT_MONITOR_HPP
 
-#include "ugv_sdk/scout/scout_base.hpp"
+#include "ugv_sdk/scout_base.hpp"
 
 #include <ncurses.h>
 

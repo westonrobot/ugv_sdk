@@ -7,7 +7,7 @@
  * Copyright (c) 2019 Ruixiang Du (rdu)
  */
 
-#include "ugv_sdk/hunter/hunter_base.hpp"
+#include "ugv_sdk/hunter_base.hpp"
 
 using namespace westonrobot;
 
