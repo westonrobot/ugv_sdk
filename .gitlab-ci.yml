@@ -6,7 +6,8 @@ xenial-cpp-build:
     - cd / && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/public/async_port.git
     - cd /async_port && mkdir build && cd build
     - cmake .. && cpack
-    - apt install ./async_port_0.1.0_amd64.deb
+    - apt-get install -y apt-utils
+    - apt-get install ./async_port_0.1.0_amd64.deb
     - cd /$CI_PROJECT_PATH
     - mkdir build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Release ..
@@ -19,7 +20,8 @@ bionic-cpp-build:
     - cd / && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/public/async_port.git
     - cd /async_port && mkdir build && cd build
     - cmake .. && cpack
-    - apt install ./async_port_0.1.0_amd64.deb
+    - apt-get install -y apt-utils
+    - apt-get install ./async_port_0.1.0_amd64.deb
     - cd /$CI_PROJECT_PATH
     - mkdir build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Release ..
@@ -32,7 +34,8 @@ focal-cpp-build:
     - cd / && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/public/async_port.git
     - cd /async_port && mkdir build && cd build
     - cmake .. && cpack
-    - apt install ./async_port_0.1.0_amd64.deb
+    - apt-get install -y apt-utils
+    - apt-get install ./async_port_0.1.0_amd64.deb
     - cd /$CI_PROJECT_PATH
     - mkdir build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Release ..
