@@ -7,51 +7,46 @@
  * Copyright (c) 2019 Ruixiang Du (rdu)
  */
 
-#include "ugv_sdk/scout/scout_base.hpp"
+#include "ugv_sdk/scout_base.hpp"
 
 using namespace westonrobot;
 
 int main(int argc, char **argv) {
   std::string device_name;
-  int32_t baud_rate = 0;
 
   if (argc == 2) {
     device_name = {argv[1]};
     std::cout << "Specified CAN: " << device_name << std::endl;
-  } else if (argc == 3) {
-    device_name = {argv[1]};
-    baud_rate = std::stol(argv[2]);
-    std::cout << "Specified serial: " << device_name << "@" << baud_rate
-              << std::endl;
   } else {
     std::cout << "Usage: app_scout_demo <interface>" << std::endl
-              << "Example 1: ./app_scout_demo can0" << std::endl
-              << "Example 2: ./app_scout_demo /dev/ttyUSB0 115200" << std::endl;
+              << "Example 1: ./app_scout_demo can0" << std::endl;
     return -1;
   }
 
   ScoutBase scout;
-  scout.Connect(device_name, baud_rate);
+  scout.Connect(device_name);
+  
+  scout.EnableCommandedMode();
 
 //   // light control
-//   std::cout << "Light: const off" << std::endl;
-//   scout.SetLightCommand({ScoutLightCmd::LightMode::CONST_OFF, 0,
-//                          ScoutLightCmd::LightMode::CONST_OFF, 0});
-//   sleep(3);
-//   std::cout << "Light: const on" << std::endl;
-//   scout.SetLightCommand({ScoutLightCmd::LightMode::CONST_ON, 0,
-//                          ScoutLightCmd::LightMode::CONST_ON, 0});
-//   sleep(3);
-//   std::cout << "Light: breath" << std::endl;
-//   scout.SetLightCommand({ScoutLightCmd::LightMode::BREATH, 0,
-//                          ScoutLightCmd::LightMode::BREATH, 0});
-//   sleep(3);
-//   std::cout << "Light: custom 90-80" << std::endl;
-//   scout.SetLightCommand({ScoutLightCmd::LightMode::CUSTOM, 90,
-//                          ScoutLightCmd::LightMode::CUSTOM, 80});
-//   sleep(3);
-//   std::cout << "Light: diabled cmd control" << std::endl;
-//   scout.DisableLightCmdControl();
+  std::cout << "Light: const off" << std::endl;
+  scout.SetLightCommand({CONST_OFF, 0,
+                         CONST_OFF, 0});
+  sleep(3);
+  std::cout << "Light: const on" << std::endl;
+  scout.SetLightCommand({CONST_ON, 0,
+                         CONST_ON, 0});
+  sleep(3);
+  std::cout << "Light: breath" << std::endl;
+  scout.SetLightCommand({BREATH, 0,
+                         BREATH, 0});
+  sleep(3);
+  std::cout << "Light: custom 90-80" << std::endl;
+  scout.SetLightCommand({CUSTOM, 90,
+                         CUSTOM, 80});
+  sleep(3);
+  std::cout << "Light: diabled cmd control" << std::endl;
+  scout.DisableLightControl();
 
   int count = 0;
   while (true) {
@@ -95,8 +90,8 @@ int main(int argc, char **argv) {
     // {
     //     std::cout << "Motor: 0.0, 0, Light: breath" << std::endl;
     //     scout.SetMotionCommand(0.0, 0.0);
-    //     scout.SetLightCommand({ScoutLightCmd::LightMode::BREATH, 0,
-    //     ScoutLightCmd::LightMode::BREATH, 0});
+    //     scout.SetLightCommand({BREATH, 0,
+    //     BREATH, 0});
     // }
     if (count < 100) {
       std::cout << "Motor: 0.2, 0" << std::endl;
@@ -106,12 +101,12 @@ int main(int argc, char **argv) {
     auto state = scout.GetScoutState();
     std::cout << "-------------------------------" << std::endl;
     std::cout << "count: " << count << std::endl;
-    std::cout << "control mode: " << static_cast<int>(state.control_mode)
-              << " , base state: " << static_cast<int>(state.base_state)
+    std::cout << "control mode: " << static_cast<int>(state.system_state.control_mode)
+              << " , vehicle state: " << static_cast<int>(state.system_state.vehicle_state)
               << std::endl;
-    std::cout << "battery voltage: " << state.battery_voltage << std::endl;
-    std::cout << "velocity (linear, angular): " << state.linear_velocity << ", "
-              << state.angular_velocity << std::endl;
+    std::cout << "battery voltage: " << state.system_state.battery_voltage << std::endl;
+    std::cout << "velocity (linear, angular): " << state.motion_state.linear_velocity << ", "
+              << state.motion_state.angular_velocity << std::endl;
     std::cout << "-------------------------------" << std::endl;
 
     usleep(20000);

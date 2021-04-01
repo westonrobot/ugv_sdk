@@ -7,25 +7,18 @@
  * Copyright (c) 2019 Ruixiang Du (rdu)
  */
 
-#include "scout_base/scout_base.hpp"
+#include "ugv_sdk/scout_base.hpp"
 
 using namespace westonrobot;
 
 int main(int argc, char **argv)
 {
     std::string device_name;
-    int32_t baud_rate = 0;
 
     if (argc == 2)
     {
         device_name = {argv[1]};
         std::cout << "Specified CAN: " << device_name << std::endl;
-    }
-    else if (argc == 3)
-    {
-        device_name = {argv[1]};
-        baud_rate = std::stol(argv[2]);
-        std::cout << "Specified serial: " << device_name << "@" << baud_rate << std::endl;
     }
     else
     {
@@ -36,34 +29,36 @@ int main(int argc, char **argv)
     }
 
     ScoutBase scout;
-    scout.Connect(device_name, baud_rate);
+    scout.Connect(device_name);
+
+    scout.EnableCommandedMode();
 
     // light control
     std::cout << "Light: const on" << std::endl;
-    scout.SetLightCommand({ScoutLightCmd::LightMode::CONST_ON, 0, ScoutLightCmd::LightMode::CONST_ON, 0});
+    scout.SetLightCommand({CONST_ON, 0, CONST_ON, 0});
 
     int count = 0;
     while (true)
     {
         auto state = scout.GetScoutState();
 
-        if (state.battery_voltage >= 22.5)
+        if (state.system_state.battery_voltage >= 22.5)
         {
             scout.SetMotionCommand(1.35, 0);
 
             std::cout << "-------------------------------" << std::endl;
             std::cout << "------->  discharging <--------" << std::endl;
             std::cout << "elapsed time: " << count / 60 << " minutes " << count % 60 << " seconds" << std::endl;
-            std::cout << "control mode: " << static_cast<int>(state.control_mode) << " , base state: " << static_cast<int>(state.base_state) << std::endl;
-            std::cout << "battery voltage: " << state.battery_voltage << std::endl;
-            std::cout << "velocity (linear, angular): " << state.linear_velocity << ", " << state.angular_velocity << std::endl;
+            std::cout << "control mode: " << static_cast<int>(state.system_state.control_mode) << " , vehicle state: " << static_cast<int>(state.system_state.vehicle_state) << std::endl;
+            std::cout << "battery voltage: " << state.system_state.battery_voltage << std::endl;
+            std::cout << "velocity (linear, angular): " << state.motion_state.linear_velocity << ", " << state.motion_state.angular_velocity << std::endl;
             std::cout << "-------------------------------" << std::endl;
         }
         else
         {
             scout.SetMotionCommand(0, 0);
             std::cout << "-------------------------------" << std::endl;
-            std::cout << "discharge stopped at: " << state.battery_voltage << " V" << std::endl;
+            std::cout << "discharge stopped at: " << state.system_state.battery_voltage << " V" << std::endl;
             std::cout << "-------------------------------" << std::endl;
         }
         sleep(1);
