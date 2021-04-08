@@ -14,8 +14,8 @@ Please create an issue on Github at https://github.com/westonrobot/ugv_sdk/issue
 
 **Important Note:** Currently we're transitioning the communication protocol from version 1 to version 2. Please check with Weston Robot or AgileX Robotics to confirm which version your robot is using. 
 
-V1 Protocol: master branch of scout_ros and ugv_sdk
-V2 Protocol: v2.x branch of scout_ros and ugv_sdk
+* V1 Protocol: master branch of scout_ros and ugv_sdk
+* V2 Protocol: v2.x branch of scout_ros and ugv_sdk
 
 **Supported robot platforms**
 
