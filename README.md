@@ -60,9 +60,7 @@ $ cd ..
 $ catkin_make
 ```
 
-## Hardware Interface
-
-### Setup CAN-To-USB adapter 
+## Setup CAN-To-USB adapter 
  
 1. Enable gs_usb kernel module
     ```
@@ -90,17 +88,6 @@ $ catkin_make
 
 Two scripts inside the "./scripts" folder are provided for easy setup. You can run "./setup_can2usb.bash" for the first-time setup and run "./bringup_can2usb.bash" to bring up the device each time you unplug and re-plug the adapter.
 
-### Setup UART
-
-Generally your UART2USB cable should be automatically recognized as "/dev/ttyUSB0" or something similar and ready for use. If you get the error "... permission denied ..." when trying to open the port, you need to grant access of the port to your user accout:
-
-```
-$ sudo usermod -a -G dialout $USER
-```
-
-You need to re-login to get the change to take effect.
-
-
 ## Run Demo Apps
 
 The demo code expects one parameter for the CAN bus mode.
@@ -108,26 +95,6 @@ The demo code expects one parameter for the CAN bus mode.
 ```
 $ ./app_scout_demo can0
 ```
-
-Both the port name and baud rate need to be provided when using the RS232 interface.
-
-```
-$./app_scout_demo /dev/ttyUSB0 115200
-```
-
-If you've installed "libncurses5-dev" and built "app_scout_monitor", you can run it in a similar way:
-
-```
-$ ./app_scout_monitor can0
-```
-
-or
-
-```
-$./app_scout_monitor /dev/ttyUSB0 115200
-```
-
-Note: the monitor app is not built by default if you use this SDK with ROS.
 
 ## Reference
 
