@@ -51,7 +51,7 @@ $ sudo apt-get install build-essential git cmake
 
 ```
 $ cd <your-catkin-ws>/src
-$ git clone --recursive https://github.com/westonrobot/ugv_sdk.git
+$ git clone -b v2.x https://github.com/westonrobot/ugv_sdk.git
 $ cd ..
 $ catkin_make
 ```
@@ -67,7 +67,7 @@ $ sudo apt install libncurses5-dev
 Configure and build
 
 ```
-$ git clone --recursive https://github.com/westonrobot/ugv_sdk.git
+$ git clone -b v2.x https://github.com/westonrobot/ugv_sdk.git
 $ cd ugv_sdk 
 $ mkdir build
 $ cd build
@@ -81,8 +81,8 @@ If you have already cloned the repository, use the following commands to get lat
 
 ```
 $ cd ugv_sdk
-$ git pull origin master
-$ git submodule update --init --recursive
+$ git fetch
+$ git checkout -b v2.x
 ```
 
 ## Hardware Interface
