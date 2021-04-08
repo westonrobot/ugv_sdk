@@ -3,21 +3,26 @@
 ![GitHub Workflow Status](https://github.com/westonrobot/wrp_sdk/workflows/Cpp/badge.svg)
 ![GitHub Workflow Status](https://github.com/westonrobot/wrp_sdk/workflows/ROS/badge.svg)
 
-This repository is a joint effort by the development teams at Weston Robot (Singapore) and AgileX Robotics (China).
+## Introduction
+
+This software package provides a C++ interface to communicate with the mobile platforms from Weston Robot and AgileX Robotics, for sending commands to the robot and receiving the latest robot state. The repository is a joint effort by the development teams at Weston Robot (Singapore) and AgileX Robotics (China).
 
 - Copyright (c) 2020 [Weston Robot](https://www.westonrobot.com/) 
 - Copyright (c) 2020 [AgileX Robotics](http://www.agilex.ai/?lang=zh-cn)
 
-## Introduction
+Please create an issue on Github at https://github.com/westonrobot/ugv_sdk/issues if you encounter any problems in using the packages.
 
-This software package provides a C++ interface to communicate with the mobile platforms from Weston Robot and AgileX Robotics, for sending commands to the robot and receiving the latest robot state. 
+**Important Note:** Currently we're transitioning the communication protocol from version 1 to version 2. Please check with Weston Robot or AgileX Robotics to confirm which version your robot is using. 
 
-Supported robot platforms
+V1 Protocol: master branch of scout_ros and ugv_sdk
+V2 Protocol: v2.x branch of scout_ros and ugv_sdk
+
+**Supported robot platforms**
 
 * **Scout**: skid-steer mobile base
 * **Hunter**: ackermann mobile base
 
-Supported environments
+**Supported environments**
 
 * **Architecture**: x86_64/arm64
 * **OS**: Ubuntu 16.04/18.04/20.04
@@ -25,7 +30,7 @@ Supported environments
 
 It should also work in other similar Linux environments but only the above listed environments are regularly tested.
 
-Communication protocol
+**Communication protocol**
 
 | Robot  | Protocol Version |
 | :----: | :--------------: |
@@ -33,8 +38,6 @@ Communication protocol
 | Hunter |      V1, V2      |
 | Tracer |        V2        |
 | Bunker |        V1        |
-
-Currently we're transitioning the communication protocol from version 1 to version 2. Upgrading protocol won't affect your ROS packages but you will need to make sure the robot is running a compatible firmware.
 
 Generally, you only need to instantiate an object of the robot base class (such as ScoutBase), then use the object to programmatically control the robot. Internally, the base class manages two background threads, one to process CAN/UART messages of the robot state and accordingly update state variables in the robot state data structure, and the other to maintain a 50Hz loop and send the latest command to the robot base. User can iteratively perform tasks in the main thread and check the robot state or set control commands. Advanced users may also use this setup as a reference and maintain the control and monitoring loops in a different way.
 
@@ -47,42 +50,14 @@ $ sudo apt-get update
 $ sudo apt-get install build-essential git cmake
 ```
 
-### I. Use the package with ROS
+### Build the package in catkin workspace
 
 ```
 $ cd <your-catkin-ws>/src
+$ git clone https://github.com/westonrobot/async_port.git
 $ git clone -b v2.x https://github.com/westonrobot/ugv_sdk.git
 $ cd ..
 $ catkin_make
-```
-
-### II. Use the package without ROS
-
-If you want to build the TUI monitor tool, additionally install libncurses
-
-```
-$ sudo apt install libncurses5-dev
-```
-
-Configure and build
-
-```
-$ git clone -b v2.x https://github.com/westonrobot/ugv_sdk.git
-$ cd ugv_sdk 
-$ mkdir build
-$ cd build
-$ cmake ..
-$ make
-```
-
-### Update repository
-
-If you have already cloned the repository, use the following commands to get latest updates
-
-```
-$ cd ugv_sdk
-$ git fetch
-$ git checkout -b v2.x
 ```
 
 ## Hardware Interface
