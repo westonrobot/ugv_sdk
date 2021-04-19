@@ -89,6 +89,7 @@ add_library(${PROJECT_NAME}
     # src/hunter_base.cpp
     src/tracer_base.cpp
     # src/bunker_base.cpp
+    src/ranger_base.cpp
 )
 if(BUILD_WITHOUT_ROS)
     target_link_libraries(${PROJECT_NAME} westonrobot::async_port Threads::Threads)
