@@ -53,11 +53,23 @@ extern "C" {
 #define CAN_MSG_ACTUATOR2_HS_STATE_ID ((uint32_t)0x252)
 #define CAN_MSG_ACTUATOR3_HS_STATE_ID ((uint32_t)0x253)
 #define CAN_MSG_ACTUATOR4_HS_STATE_ID ((uint32_t)0x254)
+#define CAN_MSG_ACTUATOR5_HS_STATE_ID ((uint32_t)0x255)
+#define CAN_MSG_ACTUATOR6_HS_STATE_ID ((uint32_t)0x256)
+#define CAN_MSG_ACTUATOR7_HS_STATE_ID ((uint32_t)0x257)
+#define CAN_MSG_ACTUATOR8_HS_STATE_ID ((uint32_t)0x258)
 
 #define CAN_MSG_ACTUATOR1_LS_STATE_ID ((uint32_t)0x261)
 #define CAN_MSG_ACTUATOR2_LS_STATE_ID ((uint32_t)0x262)
 #define CAN_MSG_ACTUATOR3_LS_STATE_ID ((uint32_t)0x263)
 #define CAN_MSG_ACTUATOR4_LS_STATE_ID ((uint32_t)0x264)
+#define CAN_MSG_ACTUATOR5_LS_STATE_ID ((uint32_t)0x265)
+#define CAN_MSG_ACTUATOR6_LS_STATE_ID ((uint32_t)0x266)
+#define CAN_MSG_ACTUATOR7_LS_STATE_ID ((uint32_t)0x267)
+#define CAN_MSG_ACTUATOR8_LS_STATE_ID ((uint32_t)0x268)
+
+#define CAN_MSG_MOTOR_ANGLE_INFO     ((uint32_t)0x271)
+#define CAN_MSG_MOTOR_SPEED_INFO     ((uint32_t)0x281)
+#define CAN_MSG_CURRENT_CTRL_MODE    ((uint32_t)0x291)
 
 // sensor data group: 0x3
 #define CAN_MSG_ODOMETRY_ID ((uint32_t)0x311)
