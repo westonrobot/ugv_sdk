@@ -77,19 +77,19 @@ bool DecodeCanFrame(const struct can_frame *rx_frame, AgxMessage *msg) {
     case CAN_MSG_MOTION_STATE_ID: {
       msg->type = AgxMsgMotionState;
       MotionStateFrame *frame = (MotionStateFrame *)(rx_frame->data);
-      msg->body.motion_command_msg.linear_velocity =
+      msg->body.motion_state_msg.linear_velocity =
           (int16_t)((uint16_t)(frame->linear_velocity.low_byte) |
                     (uint16_t)(frame->linear_velocity.high_byte) << 8) /
           1000.0;
-      msg->body.motion_command_msg.angular_velocity =
+      msg->body.motion_state_msg.angular_velocity =
           (int16_t)((uint16_t)(frame->angular_velocity.low_byte) |
                     (uint16_t)(frame->angular_velocity.high_byte) << 8) /
           1000.0;
-      msg->body.motion_command_msg.lateral_velocity =
+      msg->body.motion_state_msg.lateral_velocity =
           (int16_t)((uint16_t)(frame->lateral_velocity.low_byte) |
                     (uint16_t)(frame->lateral_velocity.high_byte) << 8) /
           1000.0;
-      msg->body.motion_command_msg.steering_angle =
+      msg->body.motion_state_msg.steering_angle =
           (int16_t)((uint16_t)(frame->steering_angle.low_byte) |
                     (uint16_t)(frame->steering_angle.high_byte) << 8) /
           1000.0;

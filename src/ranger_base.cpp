@@ -61,7 +61,7 @@ void RangerBase::UpdateRangerState(const AgxMessage &status_msg,
       break;
     }
     case AgxMsgMotionState: {
-      // std::cout << "motion control feedback received" << std::endl;
+      //  std::cout << "motion control feedback received" << std::endl;
       state.motion_state = status_msg.body.motion_state_msg;
       break;
     }
