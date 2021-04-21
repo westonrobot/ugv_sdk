@@ -53,7 +53,7 @@ void RangerBase::ParseCANFrame(can_frame *rx_frame) {
 }
 
 void RangerBase::UpdateRangerState(const AgxMessage &status_msg,
-                                 RangerState &state) {
+                                   RangerState &state) {
   switch (status_msg.type) {
     case AgxMsgSystemState: {
       //   std::cout << "system status feedback received" << std::endl;
@@ -63,6 +63,9 @@ void RangerBase::UpdateRangerState(const AgxMessage &status_msg,
     case AgxMsgMotionState: {
       //  std::cout << "motion control feedback received" << std::endl;
       state.motion_state = status_msg.body.motion_state_msg;
+      state.motion_state.steering_angle *= 10;
+      // std::cout << "steering angle: " << state.motion_state.steering_angle <<
+      // std::endl;
       break;
     }
     case AgxMsgLightState: {

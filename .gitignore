@@ -4,6 +4,7 @@ build
 */build
 cmake-build-debug
 cmake-build-release/
+*.xlsx
 
 # Temp files
 *~
