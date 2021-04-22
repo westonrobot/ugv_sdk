@@ -42,6 +42,7 @@ extern "C" {
 #define CAN_MSG_MOTION_COMMAND_ID ((uint32_t)0x111)
 #define CAN_MSG_LIGHT_COMMAND_ID ((uint32_t)0x121)
 #define CAN_MSG_BRAKING_COMMAND_ID ((uint32_t)0x131)
+#define CAN_MSG_SET_MOTION_MODE_ID  ((uint32_t)0x141)
 
 // state feedback group: 0x2
 #define CAN_MSG_SYSTEM_STATE_ID ((uint32_t)0x211)
@@ -177,6 +178,18 @@ typedef struct {
   uint8_t reserved1;
   uint8_t count;
 } BrakingCommandFrame;
+
+typedef struct
+{
+  uint8_t motion_mode;
+  uint8_t reserved0;
+  uint8_t reserved1;
+  uint8_t reserved2;
+  uint8_t reserved3;
+  uint8_t reserved4;
+  uint8_t reserved5;
+  uint8_t reserved6;
+}SetMotionModeFrame;
 
 // State feedback messages
 typedef struct {

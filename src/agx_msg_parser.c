@@ -7,11 +7,11 @@
  * Copyright (c) 2019 Weston Robot Pte. Ltd.
  */
 
-#include "ugv_sdk/details/agilex_msg_parser.h"
 #include "agx_protocol_v2.h"
+#include "ugv_sdk/details/agilex_msg_parser.h"
 
-#include "string.h"
 #include "stdio.h"
+#include "string.h"
 
 bool DecodeCanFrame(const struct can_frame *rx_frame, AgxMessage *msg) {
   msg->type = AgxMsgUnkonwn;
@@ -352,6 +352,22 @@ void EncodeCanFrame(const AgxMessage *msg, struct can_frame *tx_frame) {
       memcpy(tx_frame->data, (uint8_t *)(&frame), tx_frame->can_dlc);
       break;
     }
+    case AgxMsgSetMotionMode: {
+      tx_frame->can_id = CAN_MSG_SET_MOTION_MODE_ID;
+      tx_frame->can_dlc = 8;
+      SetMotionModeFrame frame;
+      frame.motion_mode = msg->body.motion_mode_msg.motion_mode;
+      frame.reserved0 = 0;
+      frame.reserved1 = 0;
+      frame.reserved2 = 0;
+      frame.reserved3 = 0;
+      frame.reserved4 = 0;
+      frame.reserved5 = 0;
+      frame.reserved6 = 0;
+      memcpy(tx_frame->data, (uint8_t *)(&frame), tx_frame->can_dlc);
+      break;
+    }
+
     /***************** feedback frame ****************/
     case AgxMsgSystemState: {
       tx_frame->can_id = CAN_MSG_SYSTEM_STATE_ID;

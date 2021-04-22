@@ -68,6 +68,7 @@ class RangerBase : public AgilexBase {
   // robot control
   void SetMotionCommand(double linear_vel, double angular_vel);
   void SetLightCommand(const RangerLightCmd &cmd);
+  void SetMotionMode(uint8_t mode);
 
   // get robot state
   RangerState GetRangerState();

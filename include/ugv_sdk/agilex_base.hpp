@@ -59,6 +59,9 @@ class AgilexBase {
                         LightMode rear_mode, uint8_t rear_custom_value);
   void DisableLightControl();
 
+  // motion mode change
+  void SetMotionMode(uint8_t mode);
+
   // reset fault states
   void ResetRobotState();
 
