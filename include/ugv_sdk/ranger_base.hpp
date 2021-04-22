@@ -66,7 +66,8 @@ class RangerBase : public AgilexBase {
   void Connect(std::string dev_name) override;
 
   // robot control
-  void SetMotionCommand(double linear_vel, double angular_vel);
+  void SetMotionCommand(double linear_vel, double steer_angle,
+                        double lateral_vel = 0.0, double angular_vel = 0.0);
   void SetLightCommand(const RangerLightCmd &cmd);
   void SetMotionMode(uint8_t mode);
 
