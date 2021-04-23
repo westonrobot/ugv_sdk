@@ -123,7 +123,7 @@ typedef struct {
   int8_t var_a;
 } RcStateMessage;
 
-// 0x251 - 0x254
+// 0x251 - 0x258
 typedef struct {
   uint8_t motor_id;
   int16_t rpm;

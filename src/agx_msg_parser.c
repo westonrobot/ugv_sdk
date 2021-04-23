@@ -145,7 +145,11 @@ bool DecodeCanFrame(const struct can_frame *rx_frame, AgxMessage *msg) {
     case CAN_MSG_ACTUATOR1_HS_STATE_ID:
     case CAN_MSG_ACTUATOR2_HS_STATE_ID:
     case CAN_MSG_ACTUATOR3_HS_STATE_ID:
-    case CAN_MSG_ACTUATOR4_HS_STATE_ID: {
+    case CAN_MSG_ACTUATOR4_HS_STATE_ID:
+    case CAN_MSG_ACTUATOR5_HS_STATE_ID:
+    case CAN_MSG_ACTUATOR6_HS_STATE_ID:
+    case CAN_MSG_ACTUATOR7_HS_STATE_ID:
+    case CAN_MSG_ACTUATOR8_HS_STATE_ID: {
       msg->type = AgxMsgActuatorHSState;
       ActuatorHSStateFrame *frame = (ActuatorHSStateFrame *)(rx_frame->data);
       msg->body.actuator_hs_state_msg.motor_id =
@@ -167,7 +171,11 @@ bool DecodeCanFrame(const struct can_frame *rx_frame, AgxMessage *msg) {
     case CAN_MSG_ACTUATOR1_LS_STATE_ID:
     case CAN_MSG_ACTUATOR2_LS_STATE_ID:
     case CAN_MSG_ACTUATOR3_LS_STATE_ID:
-    case CAN_MSG_ACTUATOR4_LS_STATE_ID: {
+    case CAN_MSG_ACTUATOR4_LS_STATE_ID:
+    case CAN_MSG_ACTUATOR5_LS_STATE_ID:
+    case CAN_MSG_ACTUATOR6_LS_STATE_ID:
+    case CAN_MSG_ACTUATOR7_LS_STATE_ID:
+    case CAN_MSG_ACTUATOR8_LS_STATE_ID: {
       msg->type = AgxMsgActuatorLSState;
       ActuatorLSStateFrame *frame = (ActuatorLSStateFrame *)(rx_frame->data);
       msg->body.actuator_hs_state_msg.motor_id =

@@ -24,10 +24,12 @@ struct RangerState {
   MotionStateMessage motion_state;
   LightStateMessage light_state;
 
+
+
   RcStateMessage rc_state;
 
-  ActuatorHSStateMessage actuator_hs_state[4];
-  ActuatorLSStateMessage actuator_ls_state[4];
+  ActuatorHSStateMessage actuator_hs_state[8];
+  ActuatorLSStateMessage actuator_ls_state[8];
 
   // sensor data
   OdometryMessage odometry;
