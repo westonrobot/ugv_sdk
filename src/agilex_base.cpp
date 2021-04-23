@@ -155,7 +155,6 @@ void AgilexBase::DisableLightControl() {
 
 void AgilexBase::SetMotionMode(uint8_t mode)
 {
-  printf("before set: %d", mode);
    AgxMessage msg;
    msg.type = AgxMsgSetMotionMode;
    msg.body.motion_mode_msg.motion_mode = mode;
@@ -164,6 +163,5 @@ void AgilexBase::SetMotionMode(uint8_t mode)
    can_frame frame;
    EncodeCanFrame(&msg, &frame);
    can_->SendFrame(frame);
-   printf("after set: %d", mode);
 }
 }  // namespace westonrobot
