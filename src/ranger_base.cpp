@@ -29,8 +29,10 @@ void RangerBase::Connect(std::string dev_name) {
                                           std::placeholders::_1));
 }
 
-void RangerBase::SetMotionCommand(double linear_vel, double angular_vel) {
-  AgilexBase::SetMotionCommand(linear_vel, angular_vel, 0.0, 0.0);
+void RangerBase::SetMotionCommand(double linear_vel, double steer_angle,
+                                  double lateral_vel, double angular_vel) {
+  AgilexBase::SetMotionCommand(linear_vel, angular_vel, lateral_vel,
+                               steer_angle / 10.0);
 }
 
 void RangerBase::SetLightCommand(const RangerLightCmd &cmd) {
@@ -38,6 +40,10 @@ void RangerBase::SetLightCommand(const RangerLightCmd &cmd) {
     AgilexBase::SendLightCommand(cmd.front_mode, cmd.front_custom_value,
                                  LightMode::CONST_OFF, 0);
   }
+}
+
+void RangerBase::SetMotionMode(uint8_t mode) {
+  AgilexBase::SetMotionMode(mode);
 }
 
 RangerState RangerBase::GetRangerState() {

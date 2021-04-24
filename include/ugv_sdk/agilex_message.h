@@ -53,6 +53,12 @@ typedef struct {
   bool enable_braking;
 } BrakingCommandMessage;
 
+// 0x141
+typedef  struct
+{
+  uint8_t motion_mode;
+} MotionModeMessage;
+
 /**************** Feedback messages *****************/
 
 // 0x211
@@ -117,7 +123,7 @@ typedef struct {
   int8_t var_a;
 } RcStateMessage;
 
-// 0x251 - 0x254
+// 0x251 - 0x258
 typedef struct {
   uint8_t motor_id;
   int16_t rpm;
@@ -288,6 +294,7 @@ typedef enum {
   AgxMsgMotionCommand,
   AgxMsgLightCommand,
   AgxMsgBrakingCommand,
+  AgxMsgSetMotionMode,
   // state feedback
   AgxMsgSystemState,
   AgxMsgMotionState,
@@ -321,6 +328,7 @@ typedef struct {
     MotionCommandMessage motion_command_msg;
     LightCommandMessage light_command_msg;
     BrakingCommandMessage braking_command_msg;
+    MotionModeMessage motion_mode_msg;
     // state feedback
     SystemStateMessage system_state_msg;
     MotionStateMessage motion_state_msg;

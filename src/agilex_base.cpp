@@ -152,4 +152,16 @@ void AgilexBase::DisableLightControl() {
   EncodeCanFrame(&msg, &frame);
   can_->SendFrame(frame);
 }
+
+void AgilexBase::SetMotionMode(uint8_t mode)
+{
+   AgxMessage msg;
+   msg.type = AgxMsgSetMotionMode;
+   msg.body.motion_mode_msg.motion_mode = mode;
+
+   // send to can bus
+   can_frame frame;
+   EncodeCanFrame(&msg, &frame);
+   can_->SendFrame(frame);
+}
 }  // namespace westonrobot

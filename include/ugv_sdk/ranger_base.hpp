@@ -24,10 +24,12 @@ struct RangerState {
   MotionStateMessage motion_state;
   LightStateMessage light_state;
 
+
+
   RcStateMessage rc_state;
 
-  ActuatorHSStateMessage actuator_hs_state[4];
-  ActuatorLSStateMessage actuator_ls_state[4];
+  ActuatorHSStateMessage actuator_hs_state[8];
+  ActuatorLSStateMessage actuator_ls_state[8];
 
   // sensor data
   OdometryMessage odometry;
@@ -66,8 +68,10 @@ class RangerBase : public AgilexBase {
   void Connect(std::string dev_name) override;
 
   // robot control
-  void SetMotionCommand(double linear_vel, double angular_vel);
+  void SetMotionCommand(double linear_vel, double steer_angle,
+                        double lateral_vel = 0.0, double angular_vel = 0.0);
   void SetLightCommand(const RangerLightCmd &cmd);
+  void SetMotionMode(uint8_t mode);
 
   // get robot state
   RangerState GetRangerState();
