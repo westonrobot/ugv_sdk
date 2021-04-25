@@ -95,6 +95,10 @@ void RangerBase::UpdateRangerState(const AgxMessage &status_msg,
           status_msg.body.actuator_ls_state_msg;
       break;
     }
+    case AgxMsgMotionModeState: {
+      state.current_motion_mode = status_msg.body.motion_mode_feedback_msg;
+      break;
+    }
     /* sensor feedback */
     case AgxMsgOdometry: {
       // std::cout << "Odometer msg feedback received" << std::endl;

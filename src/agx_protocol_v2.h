@@ -263,6 +263,12 @@ typedef struct {
   uint8_t reserved1;
 } ActuatorLSStateFrame;
 
+// 0x291
+typedef struct {
+  uint8_t motion_mode;
+  uint8_t mode_changing;
+}MotionModeStateFrame;
+
 // sensors
 typedef struct {
   struct32_t left_wheel;

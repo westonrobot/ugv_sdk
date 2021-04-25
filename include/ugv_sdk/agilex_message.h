@@ -15,8 +15,8 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <string.h>
 
 /***************** Control messages *****************/
@@ -54,8 +54,7 @@ typedef struct {
 } BrakingCommandMessage;
 
 // 0x141
-typedef  struct
-{
+typedef struct {
   uint8_t motion_mode;
 } MotionModeMessage;
 
@@ -69,7 +68,7 @@ typedef enum {
 } VehicleState;
 
 typedef enum {
-//   CONTROL_MODE_STANDBY = 0x00,
+  //   CONTROL_MODE_STANDBY = 0x00,
   CONTROL_MODE_RC = 0x00,
   CONTROL_MODE_CAN = 0x01,
   CONTROL_MODE_UART = 0x02
@@ -140,6 +139,12 @@ typedef struct {
 #define DRIVER_STATE_DRIVER_FAULT_MASK ((uint8_t)0x20)
 #define DRIVER_STATE_DRIVER_ENABLED_MASK ((uint8_t)0x40)
 #define DRIVER_STATE_DRIVER_RESET_MASK ((uint8_t)0x80)
+
+// 0x291
+typedef struct {
+  uint8_t motion_mode;
+  uint8_t mode_changing;
+} MotionModeFeedbackMessage;
 
 typedef struct {
   uint8_t motor_id;
@@ -302,6 +307,7 @@ typedef enum {
   AgxMsgRcState,
   AgxMsgActuatorHSState,
   AgxMsgActuatorLSState,
+  AgxMsgMotionModeState,
   // sensor
   AgxMsgOdometry,
   AgxMsgImuAccel,
@@ -336,6 +342,7 @@ typedef struct {
     RcStateMessage rc_state_msg;
     ActuatorHSStateMessage actuator_hs_state_msg;
     ActuatorLSStateMessage actuator_ls_state_msg;
+    MotionModeFeedbackMessage motion_mode_feedback_msg;
     // sensor
     OdometryMessage odometry_msg;
     ImuAccelMessage imu_accel_msg;
