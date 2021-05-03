@@ -192,6 +192,15 @@ bool DecodeCanFrame(const struct can_frame *rx_frame, AgxMessage *msg) {
       msg->body.actuator_ls_state_msg.driver_state = frame->driver_state;
       break;
     }
+    case CAN_MSG_CURRENT_CTRL_MODE:
+    {
+      msg->type=AgxMsgMotionModeState;
+      MotionModeStateFrame *frame = (MotionModeStateFrame*)(rx_frame->data);
+
+      msg->body.motion_mode_feedback_msg.motion_mode = frame->motion_mode;
+      msg->body.motion_mode_feedback_msg.mode_changing = frame->mode_changing;
+      break;
+    }
     /****************** sensor frame *****************/
     case CAN_MSG_ODOMETRY_ID: {
       msg->type = AgxMsgOdometry;
