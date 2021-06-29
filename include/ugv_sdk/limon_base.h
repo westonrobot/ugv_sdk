@@ -5,8 +5,11 @@
 #include <mutex>
 #include <string>
 #include <thread>
+#include <queue>
 
 #include "ugv_sdk/agilex_base_serialport.h"
+
+#define MAX_SERIAL_BUFFER_SIZE 2048
 
 namespace westonrobot {
 struct LimonState {
@@ -66,13 +69,16 @@ class LimonBase : public AgilexBaseSerialPort {
   // get robot state
   LimonState GetLimonState();
   void ParseSerialFrame(uint8_t *data, const size_t bufsize, size_t len);
-  void ParseSerialFrame(can_frame *rx_frame);
+
 
  private:
   LimonState ranger_state_;
 
   void ParseCANFrame(can_frame *rx_frame);
   void UpdateLimonState(const AgxMessage &status_msg, LimonState &state);
+
+    std::mutex serial_callback_mutex_;
+  std::queue<uint8_t> serial_raw_data_;
 };
 }  // namespace westonrobot
 #endif  // LIMON_BASE_H

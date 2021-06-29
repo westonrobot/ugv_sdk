@@ -18,9 +18,9 @@ using namespace std::placeholders;
 
 namespace westonrobot {
 void LimonBase::Connect(std::string dev_name) {
-//   AgilexBaseSerialPort::Connect(
-//       dev_name,
-//       std::bind(&LimonBase::ParseSerialFrame, this, ::_1, ::_2, ::_3));
+  AgilexBaseSerialPort::Connect(
+      dev_name,
+      std::bind(&LimonBase::ParseSerialFrame, this, ::_1, ::_2, ::_3));
 }
 
 void LimonBase::SetMotionCommand(double linear_vel, double steer_angle,
@@ -100,12 +100,43 @@ void LimonBase::UpdateLimonState(const AgxMessage &status_msg,
       break;
   }
 }
-void LimonBase::ParseSerialFrame(uint8_t *data, const size_t bufsize, size_t len)
-{
+void LimonBase::ParseSerialFrame(uint8_t *data, const size_t bufsize,
+                                 size_t len) {
+  std::lock_guard<std::mutex> lock(serial_callback_mutex_);
+  if (serial_raw_data_.size() >= (MAX_SERIAL_BUFFER_SIZE - len)) {
+    std::queue<uint8_t> empty;
+    std::swap(serial_raw_data_, empty);
+  }
 
-}
-void LimonBase::ParseSerialFrame(can_frame *rx_frame)
-{
-    
+  for (size_t i = 0; i < len; i++) {
+    serial_raw_data_.push(data[i]);
+  }
+
+  while (serial_raw_data_.size() > 0 && serial_raw_data_.front() != 0x55) {
+    serial_raw_data_.pop();
+  }
+
+  if (serial_raw_data_.size() < 0x0e - 1) {
+    return;
+  }
+
+  serial_raw_data_.pop();  // 0x55
+  if (serial_raw_data_.front() == 0x0e) {
+    serial_raw_data_.pop();  // 0x0e
+    can_frame frame;
+    uint16_t high = serial_raw_data_.front() << 8;
+    serial_raw_data_.pop();  // hight 8 bit
+    uint16_t low = serial_raw_data_.front();
+    serial_raw_data_.pop();  // low 8 bit
+
+    frame.can_id = high + low;
+    frame.can_dlc = 0x0e;
+    for (size_t j = 0; j < 8; j++) {
+      frame.data[j] = serial_raw_data_.front();
+      serial_raw_data_.pop();
+    }
+  } else {
+    serial_raw_data_.pop();
+  }
 }
 }  // namespace westonrobot

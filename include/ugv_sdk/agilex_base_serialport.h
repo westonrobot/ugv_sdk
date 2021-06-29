@@ -57,6 +57,11 @@ class AgilexBaseSerialPort {
   // reset fault states
   void ResetRobotState();
 
+  void SetBaudRate(unsigned baudrate) {
+    if (serial_) {
+      serial_->SetBaudRate(baudrate);
+    }
+  }
   // send the can format data
   void SendCanFrame(const can_frame &frame);
 
@@ -67,7 +72,7 @@ class AgilexBaseSerialPort {
 
   // communication interface
   bool serial_connected_ = false;
-  std::shared_ptr<AsyncSerial> serial_;
+  std::shared_ptr<AsyncSerial> serial_{nullptr};
 
   // timeout to be implemented in each vehicle
   bool enable_timeout_ = true;
@@ -94,7 +99,7 @@ class AgilexBaseSerialPort {
   void Terminate();
 
   void SendRobotCmd();
-  virtual void ParseSerialFrame(can_frame *rx_frame) = 0;
+  //   virtual void ParseSerialFrame(can_frame *rx_frame) = 0;
 };
 }  // namespace westonrobot
 
