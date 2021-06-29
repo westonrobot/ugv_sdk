@@ -162,9 +162,10 @@ void AgilexBaseSerialPort::SendCanFrame(const can_frame &frame)
   if(len <= 8){
       return;
   }
-  
+
   uint8_t data[len]={0};
   memcpy(&data[0], (void*)&frame, len);
   serial_->SendBytes(data, len);
 }
+
 }  // namespace westonrobot

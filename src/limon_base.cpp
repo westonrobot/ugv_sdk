@@ -14,28 +14,29 @@
 
 #include "ugv_sdk/details/agilex_msg_parser.h"
 
+using namespace std::placeholders;
+
 namespace westonrobot {
 void LimonBase::Connect(std::string dev_name) {
-  AgilexBase::Connect(dev_name, std::bind(&LimonBase::ParseCANFrame, this,
-                                          std::placeholders::_1));
+//   AgilexBaseSerialPort::Connect(
+//       dev_name,
+//       std::bind(&LimonBase::ParseSerialFrame, this, ::_1, ::_2, ::_3));
 }
 
 void LimonBase::SetMotionCommand(double linear_vel, double steer_angle,
-                                  double lateral_vel, double angular_vel) {
-  AgilexBase::SetMotionCommand(linear_vel, angular_vel, lateral_vel,
-                               steer_angle / 10.0);
+                                 double lateral_vel, double angular_vel) {
+  LimonBase::SetMotionCommand(linear_vel, angular_vel, lateral_vel,
+                              steer_angle / 10.0);
 }
 
 void LimonBase::SetLightCommand(const LimonLightCmd &cmd) {
   if (cmd.cmd_ctrl_allowed) {
-    AgilexBase::SendLightCommand(cmd.front_mode, cmd.front_custom_value,
-                                 LightMode::CONST_OFF, 0);
+    LimonBase::SendLightCommand(cmd.front_mode, cmd.front_custom_value,
+                                LightMode::CONST_OFF, 0);
   }
 }
 
-void LimonBase::SetMotionMode(uint8_t mode) {
-  AgilexBase::SetMotionMode(mode);
-}
+void LimonBase::SetMotionMode(uint8_t mode) { LimonBase::SetMotionMode(mode); }
 
 LimonState LimonBase::GetLimonState() {
   std::lock_guard<std::mutex> guard(state_mutex_);
@@ -50,7 +51,7 @@ void LimonBase::ParseCANFrame(can_frame *rx_frame) {
 }
 
 void LimonBase::UpdateLimonState(const AgxMessage &status_msg,
-                                   LimonState &state) {
+                                 LimonState &state) {
   switch (status_msg.type) {
     case AgxMsgSystemState: {
       //   std::cout << "system status feedback received" << std::endl;
@@ -98,5 +99,13 @@ void LimonBase::UpdateLimonState(const AgxMessage &status_msg,
     default:
       break;
   }
+}
+void LimonBase::ParseSerialFrame(uint8_t *data, const size_t bufsize, size_t len)
+{
+
+}
+void LimonBase::ParseSerialFrame(can_frame *rx_frame)
+{
+    
 }
 }  // namespace westonrobot

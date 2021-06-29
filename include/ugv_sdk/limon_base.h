@@ -15,8 +15,6 @@ struct LimonState {
   MotionStateMessage motion_state;
   LightStateMessage light_state;
 
-
-
   RcStateMessage rc_state;
 
   ActuatorHSStateMessage actuator_hs_state[8];
@@ -35,7 +33,7 @@ struct LimonMotionCmd {
 struct LimonLightCmd {
   LimonLightCmd() = default;
   LimonLightCmd(LightMode f_mode, uint8_t f_value, LightMode r_mode,
-                 uint8_t r_value)
+                uint8_t r_value)
       : cmd_ctrl_allowed(true),
         front_mode(f_mode),
         front_custom_value(f_value),
@@ -51,9 +49,9 @@ struct LimonLightCmd {
 
 /////////////////////////////////////////////////////////////////////////
 
-class LimonBase : public AgilexBase {
+class LimonBase : public AgilexBaseSerialPort {
  public:
-  LimonBase() : AgilexBase(){};
+  LimonBase() : AgilexBaseSerialPort(){};
   ~LimonBase() = default;
 
   // set up connection
@@ -67,11 +65,13 @@ class LimonBase : public AgilexBase {
 
   // get robot state
   LimonState GetLimonState();
+  void ParseSerialFrame(uint8_t *data, const size_t bufsize, size_t len);
+  void ParseSerialFrame(can_frame *rx_frame);
 
  private:
   LimonState ranger_state_;
 
-  void ParseCANFrame(can_frame *rx_frame) override;
+  void ParseCANFrame(can_frame *rx_frame);
   void UpdateLimonState(const AgxMessage &status_msg, LimonState &state);
 };
 }  // namespace westonrobot
