@@ -82,6 +82,7 @@ find_package(Threads REQUIRED)
 
 add_library(${PROJECT_NAME} 
     # agx common
+    src/agilex_base_serialport.cpp
     src/agilex_base.cpp
     src/agx_msg_parser.c
     # robot support
