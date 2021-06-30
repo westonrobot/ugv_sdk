@@ -58,7 +58,7 @@ class LimonBase : public AgilexBaseSerialPort {
   ~LimonBase() = default;
 
   // set up connection
-  void Connect(std::string dev_name) override;
+  void Connect(std::string dev_name, uint32_t bouadrate) override;
 
   // robot control
   void SetMotionCommand(double linear_vel, double steer_angle,
@@ -72,7 +72,7 @@ class LimonBase : public AgilexBaseSerialPort {
 
 
  private:
-  LimonState ranger_state_;
+  LimonState limon_state_;
 
   void ParseCANFrame(can_frame *rx_frame);
   void UpdateLimonState(const AgxMessage &status_msg, LimonState &state);

@@ -17,10 +17,10 @@
 using namespace std::placeholders;
 
 namespace westonrobot {
-void LimonBase::Connect(std::string dev_name) {
+void LimonBase::Connect(std::string dev_name, uint32_t bouadrate) {
   AgilexBaseSerialPort::Connect(
-      dev_name,
-      std::bind(&LimonBase::ParseSerialFrame, this, ::_1, ::_2, ::_3));
+      dev_name, std::bind(&LimonBase::ParseSerialFrame, this, ::_1, ::_2, ::_3),
+      bouadrate);
 }
 
 void LimonBase::SetMotionCommand(double linear_vel, double steer_angle,
@@ -40,14 +40,14 @@ void LimonBase::SetMotionMode(uint8_t mode) { LimonBase::SetMotionMode(mode); }
 
 LimonState LimonBase::GetLimonState() {
   std::lock_guard<std::mutex> guard(state_mutex_);
-  return ranger_state_;
+  return limon_state_;
 }
 
 void LimonBase::ParseCANFrame(can_frame *rx_frame) {
   AgxMessage status_msg;
   DecodeCanFrame(rx_frame, &status_msg);
   std::lock_guard<std::mutex> guard(state_mutex_);
-  UpdateLimonState(status_msg, ranger_state_);
+  UpdateLimonState(status_msg, limon_state_);
 }
 
 void LimonBase::UpdateLimonState(const AgxMessage &status_msg,
@@ -131,10 +131,18 @@ void LimonBase::ParseSerialFrame(uint8_t *data, const size_t bufsize,
 
     frame.can_id = high + low;
     frame.can_dlc = 0x0e;
+
     for (size_t j = 0; j < 8; j++) {
       frame.data[j] = serial_raw_data_.front();
       serial_raw_data_.pop();
     }
+    uint8_t frame_id = serial_raw_data_.front();
+    serial_raw_data_.pop();
+    uint8_t crc = serial_raw_data_.front();
+    serial_raw_data_.pop();
+
+    // get a can frame, decode it
+    ParseCANFrame(&frame);
   } else {
     serial_raw_data_.pop();
   }

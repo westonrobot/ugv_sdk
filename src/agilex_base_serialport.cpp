@@ -12,10 +12,11 @@ AgilexBaseSerialPort::~AgilexBaseSerialPort() {
   if (cmd_thread_.joinable()) cmd_thread_.join();
 }
 
-void AgilexBaseSerialPort::Connect(std::string dev_name, SerialFrameRxCallback cb) {
-  serial_ = std::make_shared<AsyncSerial>(dev_name);
+void AgilexBaseSerialPort::Connect(std::string dev_name, SerialFrameRxCallback cb, uint32_t bouadrate) {
+  serial_ = std::make_shared<AsyncSerial>(dev_name, bouadrate);
   serial_->SetReceiveCallback(cb);
   serial_->StartListening();
+  serial_->SetBaudRate(bouadrate);
   serial_connected_ = true;
 }
 
@@ -158,8 +159,8 @@ void AgilexBaseSerialPort::SetMotionMode(uint8_t mode)
 
 void AgilexBaseSerialPort::SendCanFrame(const can_frame &frame)
 {
-  size_t len = sizeof(frame);
-  if(len <= 8){
+  size_t len = frame.can_dlc;
+  if(len < 8){
       return;
   }
 

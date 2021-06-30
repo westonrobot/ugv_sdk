@@ -72,6 +72,7 @@ bool DecodeCanFrame(const struct can_frame *rx_frame, AgxMessage *msg) {
       msg->body.system_state_msg.error_code =
           (uint16_t)(frame->error_code.low_byte) |
           (uint16_t)(frame->error_code.high_byte) << 8;
+      msg->body.system_state_msg.motion_mode = frame->motion_mode;
       break;
     }
     case CAN_MSG_MOTION_STATE_ID: {

@@ -28,7 +28,7 @@ class AgilexBaseSerialPort {
 
   // any derived robot must implement this method with proper call back defined
   // usually: ttyUSB0, ttyTHS1
-  virtual void Connect(std::string dev_name) = 0;
+  virtual void Connect(std::string dev_name, uint32_t bouadrate) = 0;
 
   // cmd thread runs at 50Hz (20ms) by default
   void SetCmdThreadPeriodMs(int32_t period_ms) {
@@ -92,7 +92,7 @@ class AgilexBaseSerialPort {
 
   // connect to roboot from can or serial
   using SerialFrameRxCallback = AsyncSerial::ReceiveCallback;
-  void Connect(std::string dev_name, SerialFrameRxCallback cb);
+  void Connect(std::string dev_name, SerialFrameRxCallback cb, uint32_t bouadrate);
   void Disconnect();
 
   // ask background thread to shutdown properly

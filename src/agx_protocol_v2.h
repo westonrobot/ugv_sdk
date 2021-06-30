@@ -197,7 +197,7 @@ typedef struct {
   uint8_t control_mode;
   struct16_t battery_voltage;
   struct16_t error_code;
-  uint8_t reserved0;
+  uint8_t motion_mode;
   uint8_t count;
 } SystemStateFrame;
 

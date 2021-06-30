@@ -48,6 +48,12 @@ typedef struct {
   LightOperation rear_light;
 } LightCommandMessage;
 
+//0x211
+typedef enum{
+  MODE_FOUR_DIFF=0x00,
+  MODE_ACKERMANN=0x01
+} MotionMode;
+
 // 0x131
 typedef struct {
   bool enable_braking;
@@ -85,11 +91,13 @@ typedef enum {
 #define SYSTEM_ERROR_MOTOR4_COMM_MASK ((uint16_t)0x0040)
 #define SYSTEM_ERROR_STEER_ENCODER_MASK ((uint16_t)0x0080)
 
+// 0x211
 typedef struct {
   VehicleState vehicle_state;
   ControlMode control_mode;
   float battery_voltage;
   uint16_t error_code;
+  MotionMode motion_mode;
 } SystemStateMessage;
 
 // 0x221
