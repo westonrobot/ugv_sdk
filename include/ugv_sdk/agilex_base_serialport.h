@@ -92,7 +92,8 @@ class AgilexBaseSerialPort {
 
   // connect to roboot from can or serial
   using SerialFrameRxCallback = AsyncSerial::ReceiveCallback;
-  void Connect(std::string dev_name, SerialFrameRxCallback cb, uint32_t bouadrate);
+  void Connect(std::string dev_name, SerialFrameRxCallback cb,
+               uint32_t bouadrate);
   void Disconnect();
 
   // ask background thread to shutdown properly

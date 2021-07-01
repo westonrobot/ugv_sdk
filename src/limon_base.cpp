@@ -54,20 +54,14 @@ void LimonBase::UpdateLimonState(const AgxMessage &status_msg,
                                  LimonState &state) {
   switch (status_msg.type) {
     case AgxMsgSystemState: {
-      //   std::cout << "system status feedback received" << std::endl;
       state.system_state = status_msg.body.system_state_msg;
       break;
     }
     case AgxMsgMotionState: {
-      //  std::cout << "motion control feedback received" << std::endl;
       state.motion_state = status_msg.body.motion_state_msg;
-      state.motion_state.steering_angle *= 10;
-      // std::cout << "steering angle: " << state.motion_state.steering_angle <<
-      // std::endl;
       break;
     }
     case AgxMsgLightState: {
-      // std::cout << "light control feedback received" << std::endl;
       state.light_state = status_msg.body.light_state_msg;
       break;
     }
@@ -76,7 +70,6 @@ void LimonBase::UpdateLimonState(const AgxMessage &status_msg,
       break;
     }
     case AgxMsgActuatorHSState: {
-      // std::cout << "actuator hs feedback received" << std::endl;
       state.actuator_hs_state[status_msg.body.actuator_hs_state_msg.motor_id] =
           status_msg.body.actuator_hs_state_msg;
       break;
