@@ -25,18 +25,18 @@ void LimonBase::Connect(std::string dev_name, uint32_t bouadrate) {
 
 void LimonBase::SetMotionCommand(double linear_vel, double steer_angle,
                                  double lateral_vel, double angular_vel) {
-  LimonBase::SetMotionCommand(linear_vel, angular_vel, lateral_vel,
-                              steer_angle / 10.0);
+  AgilexBaseSerialPort::SetMotionCommand(linear_vel, angular_vel, lateral_vel,
+                              steer_angle);
 }
 
 void LimonBase::SetLightCommand(const LimonLightCmd &cmd) {
   if (cmd.cmd_ctrl_allowed) {
-    LimonBase::SendLightCommand(cmd.front_mode, cmd.front_custom_value,
+    AgilexBaseSerialPort::SendLightCommand(cmd.front_mode, cmd.front_custom_value,
                                 LightMode::CONST_OFF, 0);
   }
 }
 
-void LimonBase::SetMotionMode(uint8_t mode) { LimonBase::SetMotionMode(mode); }
+void LimonBase::SetMotionMode(uint8_t mode) { AgilexBaseSerialPort::SetMotionMode(mode); }
 
 LimonState LimonBase::GetLimonState() {
   std::lock_guard<std::mutex> guard(state_mutex_);
