@@ -37,6 +37,10 @@ void AgilexBase::Terminate() {
   std::terminate();
 }
 
+void AgilexBase::SetCmdThreadPeriodMs(int32_t period_ms) {
+  cmd_thread_period_ms_ = period_ms;
+};
+
 void AgilexBase::EnableCmdTimeout(uint32_t timeout_ms) {
   enable_timeout_ = true;
   timeout_ms_ = timeout_ms;
@@ -153,15 +157,14 @@ void AgilexBase::DisableLightControl() {
   can_->SendFrame(frame);
 }
 
-void AgilexBase::SetMotionMode(uint8_t mode)
-{
-   AgxMessage msg;
-   msg.type = AgxMsgSetMotionMode;
-   msg.body.motion_mode_msg.motion_mode = mode;
+void AgilexBase::SetMotionMode(uint8_t mode) {
+  AgxMessage msg;
+  msg.type = AgxMsgSetMotionMode;
+  msg.body.motion_mode_msg.motion_mode = mode;
 
-   // send to can bus
-   can_frame frame;
-   EncodeCanFrame(&msg, &frame);
-   can_->SendFrame(frame);
+  // send to can bus
+  can_frame frame;
+  EncodeCanFrame(&msg, &frame);
+  can_->SendFrame(frame);
 }
 }  // namespace westonrobot

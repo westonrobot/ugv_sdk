@@ -39,9 +39,7 @@ class AgilexBase {
   virtual void Connect(std::string dev_name) = 0;
 
   // cmd thread runs at 50Hz (20ms) by default
-  void SetCmdThreadPeriodMs(int32_t period_ms) {
-    cmd_thread_period_ms_ = period_ms;
-  };
+  void SetCmdThreadPeriodMs(int32_t period_ms);
 
   // timeout: robot stops if user does not call SetMotionCommand() periodically
   void EnableCmdTimeout(uint32_t timeout_ms = 100);
