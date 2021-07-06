@@ -85,7 +85,7 @@ add_library(${PROJECT_NAME}
     src/ranger_base.cpp
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
-target_compile_definitions(${PROJECT_NAME} PUBLIC ASIO_HAS_POSIX_STREAM_DESCRIPTOR)
+target_compile_definitions(${PROJECT_NAME} PUBLIC ASIO_ENABLE_OLD_SERVICES)
 target_include_directories(${PROJECT_NAME} PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include/ugv_sdk/details/asio/include>
