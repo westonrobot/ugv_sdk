@@ -22,7 +22,7 @@
 #include <mutex>
 #include <atomic>
 
-#include "async_port/async_can.hpp"
+#include "ugv_sdk/details/async_port/async_can.hpp"
 #include "ugv_sdk/agilex_message.h"
 
 namespace westonrobot {

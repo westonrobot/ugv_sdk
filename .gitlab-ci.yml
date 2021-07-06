@@ -3,11 +3,6 @@ xenial-cpp-build:
   stage: build
   image: rduweston/ubuntu-ci:16.04
   script:
-    - cd / && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/public/async_port.git
-    - cd /async_port && mkdir build && cd build
-    - cmake .. && make
-    - make install
-    - cd /builds/$CI_PROJECT_PATH
     - mkdir build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Release ..
     - cmake --build . && cpack
@@ -16,11 +11,6 @@ bionic-cpp-build:
   stage: build
   image: rduweston/ubuntu-ci:18.04
   script:
-    - cd / && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/public/async_port.git
-    - cd /async_port && mkdir build && cd build
-    - cmake .. && make
-    - make install
-    - cd /builds/$CI_PROJECT_PATH
     - mkdir build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Release ..
     - cmake --build . && cpack
@@ -29,11 +19,6 @@ focal-cpp-build:
   stage: build
   image: rduweston/ubuntu-ci:20.04
   script:
-    - cd / && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/public/async_port.git
-    - cd /async_port && mkdir build && cd build
-    - cmake .. && make
-    - make install
-    - cd /builds/$CI_PROJECT_PATH
     - mkdir build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Release ..
     - cmake --build . && cpack
@@ -45,8 +30,6 @@ kinetic-catkin-build:
   script:
     - mkdir -p /catkin_ws/src/ugv_sdk/ugv_sdk && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/ugv_sdk
-    - cd /catkin_ws/src/ugv_sdk
-    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/public/async_port.git
     - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make"
 
 kinetic-catkin-isolated-build:
@@ -55,8 +38,6 @@ kinetic-catkin-isolated-build:
   script:
     - mkdir -p /catkin_ws/src/ugv_sdk/ugv_sdk && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/ugv_sdk
-    - cd /catkin_ws/src/ugv_sdk 
-    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/public/async_port.git
     - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make_isolated --install"
 
 melodic-catkin-build:
@@ -65,8 +46,6 @@ melodic-catkin-build:
   script:
     - mkdir -p /catkin_ws/src/ugv_sdk && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/ugv_sdk
-    - cd /catkin_ws/src/ugv_sdk
-    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/public/async_port.git
     - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make"
 
 melodic-catkin-isolated-build:
@@ -75,8 +54,6 @@ melodic-catkin-isolated-build:
   script:
     - mkdir -p /catkin_ws/src/ugv_sdk && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/ugv_sdk
-    - cd /catkin_ws/src/ugv_sdk
-    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/public/async_port.git
     - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make_isolated --install"
 
 noetic-catkin-build:
@@ -85,8 +62,6 @@ noetic-catkin-build:
   script:
     - mkdir -p /catkin_ws/src/ugv_sdk && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/ugv_sdk
-    - cd /catkin_ws/src/ugv_sdk
-    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/public/async_port.git
     - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make"
 
 noetic-catkin-isolated-build:
@@ -95,6 +70,4 @@ noetic-catkin-isolated-build:
   script:
     - mkdir -p /catkin_ws/src/ugv_sdk && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - cp -r /builds/$CI_PROJECT_PATH /catkin_ws/src/ugv_sdk
-    - cd /catkin_ws/src/ugv_sdk
-    - cd /catkin_ws/src && git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/westonrobot/public/async_port.git
     - cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make_isolated --install"

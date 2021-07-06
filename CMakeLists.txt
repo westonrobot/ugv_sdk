@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5.1)
-project(ugv_sdk VERSION 0.1.5)
+project(ugv_sdk VERSION 0.2.0)
 
 find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
@@ -38,7 +38,6 @@ endif()
 set(USER_CMAKE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 list(APPEND CMAKE_MODULE_PATH "${USER_CMAKE_PATH}/modules")
 list(APPEND CMAKE_PREFIX_PATH "/usr/lib/${CMAKE_SYSTEM_PROCESSOR}-linux-gnu/cmake")
-list(APPEND CMAKE_PREFIX_PATH "/opt/weston_robot/lib/cmake")
 
 ## Set compiler to use c++ 11 features
 set(CMAKE_CXX_STANDARD 11)
@@ -67,20 +66,14 @@ if(BUILD_WITHOUT_ROS)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 endif()
 
-if(BUILD_WITHOUT_ROS)
-    find_package(async_port REQUIRED)
-else()
-    find_package(catkin REQUIRED COMPONENTS async_port)
-    include_directories(
-        include
-        ${catkin_INCLUDE_DIRS}
-    )
-endif()
-
-# Build libraries
+## Build libraries
 find_package(Threads REQUIRED)
 
-add_library(${PROJECT_NAME} 
+# add sdk main library
+add_library(${PROJECT_NAME}
+    # async_port from weston robot
+    src/async_port/async_serial.cpp
+    src/async_port/async_can.cpp
     # agx common
     src/agilex_base.cpp
     src/agx_msg_parser.c
@@ -91,14 +84,11 @@ add_library(${PROJECT_NAME}
     # src/bunker_base.cpp
     src/ranger_base.cpp
 )
-if(BUILD_WITHOUT_ROS)
-    target_link_libraries(${PROJECT_NAME} westonrobot::async_port Threads::Threads)
-else()
-    target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} Threads::Threads)
-endif() 
+target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
 target_include_directories(${PROJECT_NAME} PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-	$<INSTALL_INTERFACE:include>
+    $<INSTALL_INTERFACE:include/ugv_sdk/details/asio/include>
+    $<INSTALL_INTERFACE:include>
     PRIVATE src)
     
 # Build apps
@@ -149,7 +139,7 @@ if(BUILD_WITHOUT_ROS) # BUILD_WITHOUT_ROS
     endforeach()
 
     # targets to install
-    install(TARGETS ${PROJECT_NAME}
+    install(TARGETS ${PROJECT_NAME} 
         EXPORT ugv_sdkTargets
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
@@ -168,7 +158,7 @@ if(BUILD_WITHOUT_ROS) # BUILD_WITHOUT_ROS
 
     install(EXPORT ugv_sdkTargets
         FILE ugv_sdkTargets.cmake
-        NAMESPACE westonrobot::
+        # NAMESPACE UGVSDK::
         DESTINATION lib/cmake/ugv_sdk)
 
     configure_file(cmake/ugv_sdkConfig.cmake.in ugv_sdkConfig.cmake @ONLY)
@@ -178,18 +168,18 @@ if(BUILD_WITHOUT_ROS) # BUILD_WITHOUT_ROS
 
     # Packaging support
     set(CPACK_PACKAGE_VENDOR "Weston Robot")
-    set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Weston Robot Platform - SDK")
+    set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "UGV SDK for Robots from AgileX/WestonRobot")
     set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
     set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
     set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
-    set(CPACK_PACKAGING_INSTALL_PREFIX "/opt/weston_robot")
+    # set(CPACK_PACKAGING_INSTALL_PREFIX "/opt/weston_robot")
     set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
-    # set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
+    set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
 
     set(CPACK_GENERATOR "DEB")
     set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
     set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Ruixiang Du (ruixiang.du@westonrobot.com)") 
-    # set(CPACK_DEBIAN_PACKAGE_DEPENDS "libasio-dev")
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libasio-dev")
     set(CPACK_SOURCE_IGNORE_FILES .git dist .*build.* /\\\\.DS_Store)
     include(CPack)
 
@@ -198,8 +188,8 @@ else() # BUILD_WITHOUT_ROS
     catkin_package(
         LIBRARIES ${PROJECT_NAME}
         INCLUDE_DIRS include 
-         CATKIN_DEPENDS async_port
-        #  DEPENDS system_lib
+        # CATKIN_DEPENDS async_port
+        # DEPENDS system_lib
     )
 
     ## Add catkin install targets
