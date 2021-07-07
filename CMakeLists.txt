@@ -83,6 +83,9 @@ add_library(${PROJECT_NAME}
     src/tracer_base.cpp
     # src/bunker_base.cpp
     src/ranger_base.cpp
+    ########################
+    # legacy support
+    src/legacy/scout_can_parser_v1.c
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
 target_compile_definitions(${PROJECT_NAME} PUBLIC ASIO_ENABLE_OLD_SERVICES)
