@@ -81,16 +81,18 @@ add_library(${PROJECT_NAME}
     ########################
     ## protocol v2 support
     # parser
-    # src/protocol_v2/agilex_base.cpp
     src/protocol_v2/agx_msg_parser.c
     src/protocol_v2/protocol_v2_parser.cpp
     # robots
-    src/protocol_v2/scout_base.cpp
+    # src/protocol_v2/scout_base.cpp
     # src/protocol_v2/tracer_base.cpp
     # src/protocol_v2/ranger_base.cpp
     ########################
     ## legacy protocol v1 support
-    src/protocol_v1/scout_can_parser_v1.c
+    src/protocol_v1/scout/scout_uart_parser.c
+    src/protocol_v1/scout/scout_can_parser.c
+    src/protocol_v1/scout/scout_protocol_v1_parser.cpp
+
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
 target_compile_definitions(${PROJECT_NAME} PUBLIC ASIO_ENABLE_OLD_SERVICES)

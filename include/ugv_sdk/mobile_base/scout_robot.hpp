@@ -24,7 +24,7 @@ class ScoutRobot : public RobotInterface, public ScoutInterface {
   void Connect(std::string can_name) override;
   void Connect(std::string uart_name, uint32_t baudrate) override;
 
-  void EnableCommandedMode();
+  void EnableCommandedMode() override;
 
   void SetMotionCommand(double linear_vel, double angular_vel) override;
   void SetLightCommand(LightMode f_mode, uint8_t f_value, LightMode r_mode,

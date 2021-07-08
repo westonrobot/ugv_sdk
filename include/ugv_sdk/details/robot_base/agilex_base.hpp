@@ -119,11 +119,8 @@ class AgilexBase : public RobotInterface {
   }
 
  protected:
-  std::mutex state_mutex_;
-  //   std::mutex motion_cmd_mutex_;
-  MotionCommandMessage current_motion_cmd_;
-
   ParserType parser_;
+  std::mutex state_mutex_;
 
   // communication interface
   bool can_connected_ = false;

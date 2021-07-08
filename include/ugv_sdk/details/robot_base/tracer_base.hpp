@@ -19,10 +19,10 @@
 #include "ugv_sdk/protocol_v2/agilex_base.hpp"
 
 namespace westonrobot {
-class TracerBase : public AgilexBase, public TracerInterface {
+class TracerBaseV2 : public AgilexBase, public TracerInterface {
  public:
-  TracerBase() : AgilexBase(){};
-  ~TracerBase() = default;
+  TracerBaseV2() : AgilexBase(){};
+  ~TracerBaseV2() = default;
 
   // set up connection
   void Connect(std::string can_name) override;

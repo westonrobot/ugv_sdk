@@ -15,39 +15,39 @@
 #include "ugv_sdk/protocol_v2/agilex_msg_parser.h"
 
 namespace westonrobot {
-void TracerBase::Connect(std::string dev_name) {
-  AgilexBase::ConnectPort(dev_name, std::bind(&TracerBase::ParseCANFrame, this,
+void TracerBaseV2::Connect(std::string dev_name) {
+  AgilexBase::ConnectPort(dev_name, std::bind(&TracerBaseV2::ParseCANFrame, this,
                                               std::placeholders::_1));
 }
 
-void TracerBase::Connect(std::string uart_name, uint32_t baudrate) {
+void TracerBaseV2::Connect(std::string uart_name, uint32_t baudrate) {
   // TODO
 }
 
-void TracerBase::SetMotionCommand(double linear_vel, double angular_vel) {
+void TracerBaseV2::SetMotionCommand(double linear_vel, double angular_vel) {
   AgilexBase::SetMotionCommand(linear_vel, angular_vel, 0.0, 0.0);
 }
 
-void TracerBase::SetLightCommand(const TracerLightCmd &cmd) {
+void TracerBaseV2::SetLightCommand(const TracerLightCmd &cmd) {
   if (cmd.cmd_ctrl_allowed) {
     AgilexBase::SendLightCommand(cmd.front_mode, cmd.front_custom_value,
                                  LightMode::CONST_OFF, 0);
   }
 }
 
-TracerState TracerBase::GetTracerState() {
+TracerState TracerBaseV2::GetTracerState() {
   std::lock_guard<std::mutex> guard(state_mutex_);
   return tracer_state_;
 }
 
-void TracerBase::ParseCANFrame(can_frame *rx_frame) {
+void TracerBaseV2::ParseCANFrame(can_frame *rx_frame) {
   AgxMessage status_msg;
   DecodeCanFrame(rx_frame, &status_msg);
   std::lock_guard<std::mutex> guard(state_mutex_);
   UpdateTracerState(status_msg, tracer_state_);
 }
 
-void TracerBase::UpdateTracerState(const AgxMessage &status_msg,
+void TracerBaseV2::UpdateTracerState(const AgxMessage &status_msg,
                                    TracerState &state) {
   switch (status_msg.type) {
     case AgxMsgSystemState: {

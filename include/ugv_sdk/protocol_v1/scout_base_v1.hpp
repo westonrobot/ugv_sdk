@@ -1,14 +1,14 @@
 /*
- * scout_base.hpp
+ * scout_base_v1.hpp
  *
- * Created on: Dec 23, 2020 14:39
+ * Created on: Jul 08, 2021 22:47
  * Description:
  *
- * Copyright (c) 2020 Ruixiang Du (rdu)
+ * Copyright (c) 2021 Ruixiang Du (rdu)
  */
 
-#ifndef SCOUT_BASE_HPP
-#define SCOUT_BASE_HPP
+#ifndef SCOUT_BASE_V1_HPP
+#define SCOUT_BASE_V1_HPP
 
 #include <string>
 #include <cstdint>
@@ -18,13 +18,14 @@
 #include "ugv_sdk/interface/scout_interface.hpp"
 
 #include "ugv_sdk/mobile_base/agilex_base.hpp"
-#include "ugv_sdk/protocol_v2/protocol_v2_parser.hpp"
+#include "ugv_sdk/protocol_v1/scout_protocol_v1_parser.hpp"
 
 namespace westonrobot {
-class ScoutBaseV2 : public AgilexBase<ProtocolV2Parser>, public ScoutInterface {
+class ScoutBaseV1 : public AgilexBase<ScoutProtocolV1Parser>,
+                    public ScoutInterface {
  public:
-  ScoutBaseV2() : AgilexBase(){};
-  ~ScoutBaseV2() = default;
+  ScoutBaseV1() : AgilexBase<ScoutProtocolV1Parser>(){};
+  ~ScoutBaseV1() = default;
 
   // set up connection
   void Connect(std::string can_name) override;
@@ -48,4 +49,4 @@ class ScoutBaseV2 : public AgilexBase<ProtocolV2Parser>, public ScoutInterface {
 };
 }  // namespace westonrobot
 
-#endif /* SCOUT_BASE_HPP */
+#endif /* SCOUT_BASE_V1_HPP */

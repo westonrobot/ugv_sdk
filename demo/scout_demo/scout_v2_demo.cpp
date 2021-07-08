@@ -7,7 +7,7 @@
  * Copyright (c) 2019 Ruixiang Du (rdu)
  */
 
-#include "ugv_sdk/protocol_v2/scout_base_v2.hpp"
+#include "ugv_sdk/details/robot_base/scout_base.hpp"
 
 using namespace westonrobot;
 

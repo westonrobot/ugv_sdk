@@ -7,7 +7,7 @@
  * Copyright (c) 2019 Ruixiang Du (rdu)
  */
 
-#include "ugv_sdk/protocol_v1/scout_can_parser_v1.h"
+#include "protocol_v1/scout/scout_can_parser.h"
 
 #include "string.h"
 

@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
     return -1;
   }
 
-  TracerBase tracer;
+  TracerBaseV2 tracer;
   tracer.Connect(device_name);
 
   tracer.EnableCommandedMode();

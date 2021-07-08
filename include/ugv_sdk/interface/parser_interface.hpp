@@ -31,19 +31,21 @@ struct ParserInterface {
   virtual bool DecodeMessage(const struct can_frame *rx_frame,
                              AgxMessage *msg) = 0;
   virtual void EncodeMessage(const AgxMessage *msg,
-                              struct can_frame *tx_frame) = 0;
+                             struct can_frame *tx_frame) = 0;
   virtual uint8_t CalculateChecksum(uint16_t id, uint8_t *data,
                                     uint8_t dlc) = 0;
 
   // UART support
-  virtual bool DecodeMessage(uint8_t *data, uint8_t dlc, AgxMessage *msg){
-      // throw exception
+  virtual bool DecodeMessage(uint8_t *data, uint8_t dlc, AgxMessage *msg) {
+    // throw exception
+    return false;
   };
   virtual void EncodeMessage(const AgxMessage *msg, uint8_t *buf, uint8_t *len){
       // throw exception
   };
-  virtual uint8_t CalculateChecksum(uint8_t *buf, uint8_t len){
-      // throw exception
+  virtual uint8_t CalculateChecksum(uint8_t *buf, uint8_t len) {
+    // throw exception
+    return 0;
   };
 };
 
