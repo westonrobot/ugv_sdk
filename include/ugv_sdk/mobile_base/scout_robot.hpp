@@ -12,8 +12,8 @@
 
 #include <memory>
 
-#include "ugv_sdk/interface/robot_interface.hpp"
-#include "ugv_sdk/interface/scout_interface.hpp"
+#include "ugv_sdk/details/interface/robot_interface.hpp"
+#include "ugv_sdk/details/interface/scout_interface.hpp"
 
 namespace westonrobot {
 class ScoutRobot : public RobotInterface, public ScoutInterface {

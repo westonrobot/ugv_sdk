@@ -24,7 +24,7 @@ struct can_frame {
 };
 #endif
 
-#include "ugv_sdk/interface/agilex_message.h"
+#include "ugv_sdk/details/interface/agilex_message.h"
 
 struct ParserInterface {
   // CAN support

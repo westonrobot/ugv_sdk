@@ -28,7 +28,7 @@ struct can_frame {
 };
 #endif
 
-#include "ugv_sdk/interface/agilex_message.h"
+#include "ugv_sdk/details/interface/agilex_message.h"
 
 bool DecodeCanFrame(const struct can_frame *rx_frame, AgxMessage *msg);
 void EncodeCanFrame(const AgxMessage *msg, struct can_frame *tx_frame);

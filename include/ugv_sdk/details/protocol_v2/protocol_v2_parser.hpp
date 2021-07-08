@@ -10,7 +10,7 @@
 #ifndef PROTOCOL_V2_PARSER_HPP
 #define PROTOCOL_V2_PARSER_HPP
 
-#include "ugv_sdk/interface/parser_interface.hpp"
+#include "ugv_sdk/details/interface/parser_interface.hpp"
 
 namespace westonrobot {
 class ProtocolV2Parser : public ParserInterface {

@@ -10,7 +10,7 @@
 #ifndef SCOUT_PROTOCOL_V1_PARSER_HPP
 #define SCOUT_PROTOCOL_V1_PARSER_HPP
 
-#include "ugv_sdk/interface/parser_interface.hpp"
+#include "ugv_sdk/details/interface/parser_interface.hpp"
 
 namespace westonrobot {
 class ScoutProtocolV1Parser : public ParserInterface {

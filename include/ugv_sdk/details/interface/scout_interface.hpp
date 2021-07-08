@@ -12,7 +12,7 @@
 
 #include <string>
 
-#include "ugv_sdk/interface/agilex_message.h"
+#include "ugv_sdk/details/interface/agilex_message.h"
 
 namespace westonrobot {
 struct ScoutState {

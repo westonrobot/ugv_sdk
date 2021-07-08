@@ -7,7 +7,7 @@
  * Copyright (c) 2021 Ruixiang Du (rdu)
  */
 
-#include "ugv_sdk/protocol_v1/scout_protocol_v1_parser.hpp"
+#include "ugv_sdk/details/protocol_v1/scout_protocol_v1_parser.hpp"
 
 #include "protocol_v1/scout/scout_can_parser.h"
 
