@@ -61,7 +61,7 @@ class ScoutBase : public AgilexBase<Parser>, public ScoutInterface {
 
   void ParseCANFrame(can_frame *rx_frame) override {
     AgxMessage status_msg;
-    DecodeCanFrame(rx_frame, &status_msg);
+    AgilexBase<Parser>::parser_.DecodeMessage(rx_frame, &status_msg);
     std::lock_guard<std::mutex> guard(AgilexBase<Parser>::state_mutex_);
     UpdateScoutState(status_msg, scout_state_);
   }

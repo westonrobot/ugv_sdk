@@ -8,7 +8,7 @@
  */
 
 #include "agx_protocol_v2.h"
-#include "ugv_sdk/details/protocol_v2/agilex_msg_parser.h"
+#include "protocol_v2/agilex_msg_parser.h"
 
 #include "stdio.h"
 #include "string.h"

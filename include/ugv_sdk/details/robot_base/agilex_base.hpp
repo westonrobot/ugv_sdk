@@ -25,7 +25,6 @@
 #include "ugv_sdk/details/stopwatch.hpp"
 #include "ugv_sdk/details/async_port/async_can.hpp"
 #include "ugv_sdk/details/interface/robot_interface.hpp"
-#include "ugv_sdk/details/protocol_v2/agilex_msg_parser.h"
 
 namespace westonrobot {
 template <typename ParserType>
