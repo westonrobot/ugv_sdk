@@ -77,7 +77,7 @@ add_library(${PROJECT_NAME}
     src/async_port/async_can.cpp
     ########################
     ## public interface to access robot
-    # src/mobile_base/scout_robot.cpp
+    src/mobile_base/scout_robot.cpp
     ########################
     ## protocol v2 support
     # parser

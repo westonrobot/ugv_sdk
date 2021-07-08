@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
     return -1;
   }
 
-  ScoutBase scout;
+  ScoutBaseV2 scout;
   scout.Connect(device_name);
 
   scout.EnableCommandedMode();

@@ -12,15 +12,32 @@
 
 #include <memory>
 
-#include "ugv_sdk/mobile_base/common.hpp"
+#include "ugv_sdk/interface/robot_interface.hpp"
+#include "ugv_sdk/interface/scout_interface.hpp"
 
 namespace westonrobot {
-class ScoutRobot {
+class ScoutRobot : public RobotInterface, public ScoutInterface {
  public:
-  ScoutRobot(AgilexProtocol protocol);
+  ScoutRobot(ProtocolType protocol = ProtocolType::AGX_V2);
+  ~ScoutRobot();
+
+  void Connect(std::string can_name) override;
+  void Connect(std::string uart_name, uint32_t baudrate) override;
+
+  void EnableCommandedMode();
+
+  void SetMotionCommand(double linear_vel, double angular_vel) override;
+  void SetLightCommand(LightMode f_mode, uint8_t f_value, LightMode r_mode,
+                       uint8_t r_value) override;
+  void DisableLightControl() override;
+
+  void ResetRobotState() override;
+
+  // get robot state
+  ScoutState GetRobotState() override;
 
  private:
-  std::unique_ptr<ScoutInterface> robot_;
+  RobotInterface* robot_;
 };
 }  // namespace westonrobot
 

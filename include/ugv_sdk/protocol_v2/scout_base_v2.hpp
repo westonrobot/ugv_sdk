@@ -21,10 +21,10 @@
 #include "ugv_sdk/protocol_v2/protocol_v2_parser.hpp"
 
 namespace westonrobot {
-class ScoutBase : public AgilexBase<ProtocolV2Parser>, public ScoutInterface {
+class ScoutBaseV2 : public AgilexBase<ProtocolV2Parser>, public ScoutInterface {
  public:
-  ScoutBase() : AgilexBase(){};
-  ~ScoutBase() = default;
+  ScoutBaseV2() : AgilexBase(){};
+  ~ScoutBaseV2() = default;
 
   // set up connection
   void Connect(std::string can_name) override;

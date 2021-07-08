@@ -29,8 +29,6 @@
 #include "ugv_sdk/protocol_v2/agilex_msg_parser.h"
 
 namespace westonrobot {
-enum class AgilexProtocol { V1, V2 };
-
 template <typename ParserType>
 class AgilexBase : public RobotInterface {
  public:

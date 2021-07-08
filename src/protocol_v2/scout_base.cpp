@@ -22,37 +22,37 @@
 #include "ugv_sdk/protocol_v2/agilex_msg_parser.h"
 
 namespace westonrobot {
-void ScoutBase::Connect(std::string dev_name) {
-  AgilexBase::ConnectPort(dev_name, std::bind(&ScoutBase::ParseCANFrame, this,
+void ScoutBaseV2::Connect(std::string dev_name) {
+  AgilexBase::ConnectPort(dev_name, std::bind(&ScoutBaseV2::ParseCANFrame, this,
                                               std::placeholders::_1));
 }
 
-void ScoutBase::Connect(std::string uart_name, uint32_t baudrate) {
+void ScoutBaseV2::Connect(std::string uart_name, uint32_t baudrate) {
   // TODO
 }
 
-void ScoutBase::SetMotionCommand(double linear_vel, double angular_vel) {
+void ScoutBaseV2::SetMotionCommand(double linear_vel, double angular_vel) {
   AgilexBase::SendMotionCommand(linear_vel, angular_vel, 0.0, 0.0);
 }
 
-void ScoutBase::SetLightCommand(LightMode f_mode, uint8_t f_value,
+void ScoutBaseV2::SetLightCommand(LightMode f_mode, uint8_t f_value,
                                 LightMode r_mode, uint8_t r_value) {
   AgilexBase::SendLightCommand(f_mode, f_value, r_mode, r_value);
 }
 
-ScoutState ScoutBase::GetRobotState() {
+ScoutState ScoutBaseV2::GetRobotState() {
   std::lock_guard<std::mutex> guard(state_mutex_);
   return scout_state_;
 }
 
-void ScoutBase::ParseCANFrame(can_frame *rx_frame) {
+void ScoutBaseV2::ParseCANFrame(can_frame *rx_frame) {
   AgxMessage status_msg;
   DecodeCanFrame(rx_frame, &status_msg);
   std::lock_guard<std::mutex> guard(state_mutex_);
   UpdateScoutState(status_msg, scout_state_);
 }
 
-void ScoutBase::UpdateScoutState(const AgxMessage &status_msg,
+void ScoutBaseV2::UpdateScoutState(const AgxMessage &status_msg,
                                  ScoutState &state) {
   switch (status_msg.type) {
     case AgxMsgSystemState: {
