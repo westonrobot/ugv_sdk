@@ -71,21 +71,26 @@ find_package(Threads REQUIRED)
 
 # add sdk main library
 add_library(${PROJECT_NAME}
-    # async_port from weston robot
+    ########################
+    ## async_port from weston robot
     src/async_port/async_serial.cpp
     src/async_port/async_can.cpp
-    # agx common
-    src/agilex_base.cpp
-    src/agx_msg_parser.c
-    # robot support
-    src/scout_base.cpp
-    # src/hunter_base.cpp
-    src/tracer_base.cpp
-    # src/bunker_base.cpp
-    src/ranger_base.cpp
     ########################
-    # legacy support
-    src/legacy/scout_can_parser_v1.c
+    ## public interface to access robot
+    # src/mobile_base/scout_robot.cpp
+    ########################
+    ## protocol v2 support
+    # parser
+    # src/protocol_v2/agilex_base.cpp
+    src/protocol_v2/agx_msg_parser.c
+    src/protocol_v2/protocol_v2_parser.cpp
+    # robots
+    src/protocol_v2/scout_base.cpp
+    # src/protocol_v2/tracer_base.cpp
+    # src/protocol_v2/ranger_base.cpp
+    ########################
+    ## legacy protocol v1 support
+    src/protocol_v1/scout_can_parser_v1.c
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
 target_compile_definitions(${PROJECT_NAME} PUBLIC ASIO_ENABLE_OLD_SERVICES)
@@ -108,7 +113,7 @@ if(BUILD_WITHOUT_ROS)
     endif()
 
     # add app source directory
-    add_subdirectory(apps)
+    add_subdirectory(demo)
 endif()
 
 # Build tests

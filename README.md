@@ -32,12 +32,17 @@ It should also work in other similar Linux environments but only the above liste
 
 **Communication protocol**
 
-| Robot  | Protocol Version |
-| :----: | :--------------: |
-| Scout  |      V1, V2      |
-| Hunter |      V1, V2      |
-| Tracer |        V2        |
-| Bunker |        V1        |
+|       Robot       | Protocol V1 | Protocol V2 | UART  |  CAN  | Support Status |
+| :---------------: | :---------: | :---------: | :---: | :---: | :------------: |
+|     Scout 1.0     |      Y      |      -      |   Y   |   Y   |  Discontinued  |
+|     Scout 2.0     |      Y      |      Y      |   Y   |   Y   |     Active     |
+| Scout Mini (Skid) |      Y      |      Y      |   -   |   Y   |     Active     |
+| Scout Mini (Omni) |      Y      |      Y      |   -   |   Y   |     Active     |
+|    Hunter 1.0     |      Y      |      Y      |   -   |   Y   |     Active     |
+|    Hunter 2.0     |      -      |      Y      |   -   |   Y   |     Active     |
+|      Bunker       |      Y      |      Y      |   -   |   Y   |     Active     |
+|      Tracer       |      -      |      Y      |   Y   |   Y   |     Active     |
+|    Ranger Mini    |      -      |      Y      |   -   |   Y   |     Active     |
 
 Generally, you only need to instantiate an object of the robot base class (such as ScoutBase), then use the object to programmatically control the robot. Internally, the base class manages two background threads, one to process CAN/UART messages of the robot state and accordingly update state variables in the robot state data structure, and the other to maintain a 50Hz loop and send the latest command to the robot base. User can iteratively perform tasks in the main thread and check the robot state or set control commands. Advanced users may also use this setup as a reference and maintain the control and monitoring loops in a different way.
 

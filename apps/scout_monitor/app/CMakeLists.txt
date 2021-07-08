@@ -1,3 +1,0 @@
-# Add executables
-add_executable(app_scout_monitor app_scout_monitor.cpp)
-target_link_libraries(app_scout_monitor monitor)
