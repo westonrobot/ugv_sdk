@@ -13,6 +13,7 @@
 namespace westonrobot {
 ScoutRobot::ScoutRobot(ProtocolType protocol) {
   if (protocol == ProtocolType::AGX_V1) {
+    robot_ = new ScoutBaseV1();
   } else if (protocol == ProtocolType::AGX_V2) {
     robot_ = new ScoutBaseV2();
   }

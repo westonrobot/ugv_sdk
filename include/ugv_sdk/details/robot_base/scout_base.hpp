@@ -17,7 +17,6 @@
 
 #include "ugv_sdk/interface/scout_interface.hpp"
 #include "ugv_sdk/details/robot_base/agilex_base.hpp"
-#include "ugv_sdk/protocol_v2/protocol_v2_parser.hpp"
 
 namespace westonrobot {
 template <typename Parser>
@@ -112,8 +111,13 @@ class ScoutBase : public AgilexBase<Parser>, public ScoutInterface {
     }
   }
 };
+}  // namespace westonrobot
 
+#include "ugv_sdk/protocol_v1/scout_protocol_v1_parser.hpp"
+#include "ugv_sdk/protocol_v2/protocol_v2_parser.hpp"
 
+namespace westonrobot {
+using ScoutBaseV1 = ScoutBase<ScoutProtocolV1Parser>;
 using ScoutBaseV2 = ScoutBase<ProtocolV2Parser>;
 }  // namespace westonrobot
 
