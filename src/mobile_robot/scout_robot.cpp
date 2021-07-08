@@ -7,7 +7,7 @@
  * Copyright (c) 2021 Weston Robot Pte. Ltd.
  */
 
-#include "ugv_sdk/mobile_base/scout_robot.hpp"
+#include "ugv_sdk/mobile_robot/scout_robot.hpp"
 #include "ugv_sdk/details/robot_base/scout_base.hpp"
 
 namespace westonrobot {
