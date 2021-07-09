@@ -1,5 +1,5 @@
 /*
- * agx_protocol_v2.h
+ * agilex_protocol_v2.h
  *
  * Created on: Nov 04, 2020 13:54
  * Description:
@@ -7,8 +7,8 @@
  * Copyright (c) 2020 Weston Robot Pte. Ltd.
  */
 
-#ifndef AGX_PROTOCOL_V2_H
-#define AGX_PROTOCOL_V2_H
+#ifndef AGILEX_PROTOCOL_V2_H
+#define AGILEX_PROTOCOL_V2_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -399,4 +399,4 @@ typedef struct {
 }
 #endif
 
-#endif /* AGX_PROTOCOL_V2_H */
+#endif /* AGILEX_PROTOCOL_V2_H */

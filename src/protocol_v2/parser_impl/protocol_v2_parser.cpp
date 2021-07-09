@@ -8,7 +8,7 @@
  */
 
 #include "ugv_sdk/details/protocol_v2/protocol_v2_parser.hpp"
-#include "protocol_v2/agilex_msg_parser.h"
+#include "protocol_v2/agilex_msg_parser_v2.h"
 
 namespace westonrobot {
 bool ProtocolV2Parser::DecodeMessage(const struct can_frame *rx_frame,

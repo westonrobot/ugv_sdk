@@ -19,9 +19,10 @@ extern "C" {
 #include <stdint.h>
 #include <string.h>
 
+#include "ugv_sdk/details/interface/agilex_types.h"
+
 /***************** Control messages *****************/
 
-// 0x111
 typedef struct {
   float linear_velocity;
   float angular_velocity;
@@ -29,50 +30,21 @@ typedef struct {
   float steering_angle;
 } MotionCommandMessage;
 
-// 0x121
-typedef enum {
-  CONST_OFF = 0x00,
-  CONST_ON = 0x01,
-  BREATH = 0x02,
-  CUSTOM = 0x03
-} LightMode;
-
-typedef struct {
-  LightMode mode;
-  uint8_t custom_value;
-} LightOperation;
-
 typedef struct {
   bool enable_cmd_ctrl;
   LightOperation front_light;
   LightOperation rear_light;
 } LightCommandMessage;
 
-// 0x131
 typedef struct {
   bool enable_braking;
 } BrakingCommandMessage;
 
-// 0x141
 typedef struct {
   uint8_t motion_mode;
 } MotionModeMessage;
 
 /**************** Feedback messages *****************/
-
-// 0x211
-typedef enum {
-  VehicleStateNormal = 0x00,
-  VehicleStateEStop = 0x01,
-  VehicleStateException = 0x02
-} VehicleState;
-
-typedef enum {
-  //   CONTROL_MODE_STANDBY = 0x00,
-  CONTROL_MODE_RC = 0x00,
-  CONTROL_MODE_CAN = 0x01,
-  CONTROL_MODE_UART = 0x02
-} ControlMode;
 
 #define SYSTEM_ERROR_MOTOR_DRIVER_MASK ((uint16_t)0x0100)
 #define SYSTEM_ERROR_HL_COMM_MASK ((uint16_t)0x0200)
@@ -103,13 +75,6 @@ typedef struct {
 // 0x231
 typedef LightCommandMessage LightStateMessage;
 
-// 0x241
-typedef enum {
-  RC_SWITCH_UP = 0,
-  RC_SWITCH_MIDDLE,
-  RC_SWITCH_DOWN
-} RcSwitchState;
-
 typedef struct {
   RcSwitchState swa;
   RcSwitchState swb;
@@ -122,13 +87,17 @@ typedef struct {
   int8_t var_a;
 } RcStateMessage;
 
-// 0x251 - 0x258
 typedef struct {
   uint8_t motor_id;
   int16_t rpm;
   float current;
   int32_t pulse_count;
 } ActuatorHSStateMessage;
+
+typedef struct {
+  uint8_t motion_mode;
+  uint8_t mode_changing;
+} MotionModeFeedbackMessage;
 
 // 0x261 - 0x264
 #define DRIVER_STATE_INPUT_VOLTAGE_LOW_MASK ((uint8_t)0x01)
@@ -140,12 +109,6 @@ typedef struct {
 #define DRIVER_STATE_DRIVER_ENABLED_MASK ((uint8_t)0x40)
 #define DRIVER_STATE_DRIVER_RESET_MASK ((uint8_t)0x80)
 
-// 0x291
-typedef struct {
-  uint8_t motion_mode;
-  uint8_t mode_changing;
-} MotionModeFeedbackMessage;
-
 typedef struct {
   uint8_t motor_id;
   float driver_voltage;
@@ -156,45 +119,38 @@ typedef struct {
 
 /***************** Sensor messages ******************/
 
-// 0x311
 typedef struct {
   float left_wheel;
   float right_wheel;
 } OdometryMessage;
 
-// 0x321
 typedef struct {
   float accel_x;
   float accel_y;
   float accel_z;
 } ImuAccelMessage;
 
-// 0x322
 typedef struct {
   float gyro_x;
   float gyro_y;
   float gyro_z;
 } ImuGyroMessage;
 
-// 0x323
 typedef struct {
   float yaw;
   float pitch;
   float roll;
 } ImuEulerMessage;
 
-// 0x331
 typedef struct {
   uint8_t trigger_state;
 } SafetyBumperMessage;
 
-// 0x340 + num
 typedef struct {
   uint8_t sensor_id;
   uint8_t distance[8];
 } UltrasonicMessage;
 
-// 0x350 + num
 typedef struct {
   uint8_t sensor_id;
   float relative_distance;
@@ -203,7 +159,6 @@ typedef struct {
   int8_t channels[3];
 } UwbMessage;
 
-// 0x361
 typedef struct {
   uint8_t battery_soc;
   uint8_t battery_soh;
@@ -250,12 +205,10 @@ typedef struct {
 
 /************  Query/config messages ****************/
 
-// 0x411
 typedef struct {
   bool request;
 } VersionRequestMessage;
 
-// 0x41a
 typedef struct {
   uint16_t controller_hw_version;
   uint16_t motor_driver_hw_version;
@@ -263,22 +216,18 @@ typedef struct {
   uint16_t motor_driver_sw_version;
 } VersionResponseMessage;
 
-// 0x421
 typedef struct {
   ControlMode mode;
 } ControlModeConfigMessage;
 
-// 0x431
 typedef struct {
   bool set_as_neutral;
 } SteerNeutralRequestMessage;
 
-// 0x43a
 typedef struct {
   bool neutral_set_successful;
 } SteerNeutralResponseMessage;
 
-// 0x441
 typedef enum {
   CLEAR_ALL_FAULT = 0x00,
   CLEAR_MOTOR1_FAULT = 0x01,

@@ -1,5 +1,5 @@
 /*
- * agx_protocol_v1.h
+ * agilex_protocol_v1.h
  *
  * Created on: Jul 09, 2021 20:34
  * Description:
@@ -7,8 +7,8 @@
  * Copyright (c) 2021 Ruixiang Du (rdu)
  */
 
-#ifndef AGX_PROTOCOL_V1_H
-#define AGX_PROTOCOL_V1_H
+#ifndef AGILEX_PROTOCOL_V1_H
+#define AGILEX_PROTOCOL_V1_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -194,4 +194,4 @@ typedef struct {
 }
 #endif
 
-#endif /* AGX_PROTOCOL_V1_H */
+#endif /* AGILEX_PROTOCOL_V1_H */

@@ -21,36 +21,16 @@ extern "C" {
 #include <stdint.h>
 #include <string.h>
 
+#include "ugv_sdk/details/interface/agilex_types.h"
+
 /***************** Control messages *****************/
 
-typedef enum {
-  //   CONTROL_MODE_STANDBY = 0x00,
-  CONTROL_MODE_RC = 0x00,
-  CONTROL_MODE_CAN = 0x01,
-  CONTROL_MODE_UART = 0x02
-} ControlMode;
-
-// 0x130
 typedef struct {
   ControlMode control_mode;
-  uint8_t fault_clear;
-
+  bool clear_all_error;
   float linear;
   float angular;
 } MotionCommandMessage;
-
-// 0x140
-typedef enum {
-  CONST_OFF = 0x00,
-  CONST_ON = 0x01,
-  BREATH = 0x02,
-  CUSTOM = 0x03
-} LightMode;
-
-typedef struct {
-  LightMode mode;
-  uint8_t custom_value;
-} LightOperation;
 
 typedef struct {
   bool enable_cmd_ctrl;
@@ -63,12 +43,6 @@ typedef struct {
 } ValueSetCommandMessage;
 
 /**************** Feedback messages *****************/
-
-typedef enum {
-  VehicleStateNormal = 0x00,
-  VehicleStateEStop = 0x01,
-  VehicleStateException = 0x02
-} VehicleState;
 
 #define SYSTEM_ERROR_MOTOR_DRIVER_MASK ((uint16_t)0x0100)
 #define SYSTEM_ERROR_HL_COMM_MASK ((uint16_t)0x0200)
@@ -88,48 +62,18 @@ typedef struct {
   uint16_t error_code;
 } SystemStateMessage;
 
-// 0x221
 typedef struct {
   float linear_velocity;
-  float angular_velocity;  // only valid for differential drivering
-  float lateral_velocity;
-  float steering_angle;  // only valid for ackermann steering
+  float angular_velocity;
 } MotionStateMessage;
 
-// 0x231
 typedef LightCommandMessage LightStateMessage;
 
-// 0x251 - 0x258
 typedef struct {
-  uint8_t motor_id;
-  int16_t rpm;
   float current;
-  int32_t pulse_count;
+  int16_t rpm;
+  float temperature;
 } ActuatorStateMessage;
-
-// 0x261 - 0x264
-#define DRIVER_STATE_INPUT_VOLTAGE_LOW_MASK ((uint8_t)0x01)
-#define DRIVER_STATE_MOTOR_OVERHEAT_MASK ((uint8_t)0x02)
-#define DRIVER_STATE_DRIVER_OVERLOAD_MASK ((uint8_t)0x04)
-#define DRIVER_STATE_DRIVER_OVERHEAT_MASK ((uint8_t)0x08)
-#define DRIVER_STATE_SENSOR_FAULT_MASK ((uint8_t)0x10)
-#define DRIVER_STATE_DRIVER_FAULT_MASK ((uint8_t)0x20)
-#define DRIVER_STATE_DRIVER_ENABLED_MASK ((uint8_t)0x40)
-#define DRIVER_STATE_DRIVER_RESET_MASK ((uint8_t)0x80)
-
-// 0x291
-typedef struct {
-  uint8_t motion_mode;
-  uint8_t mode_changing;
-} MotionModeFeedbackMessage;
-
-typedef struct {
-  uint8_t motor_id;
-  float driver_voltage;
-  float driver_temperature;
-  int8_t motor_temperature;
-  uint8_t driver_state;
-} ActuatorLSStateMessage;
 
 //////////////////////////////////////////////////////
 

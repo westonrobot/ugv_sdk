@@ -7,8 +7,8 @@
  * Copyright (c) 2019 Weston Robot Pte. Ltd.
  */
 
-#include "agx_protocol_v2.h"
-#include "protocol_v2/agilex_msg_parser.h"
+#include "agilex_protocol_v2.h"
+#include "protocol_v2/agilex_msg_parser_v2.h"
 
 #include "stdio.h"
 #include "string.h"
