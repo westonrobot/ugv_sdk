@@ -75,7 +75,7 @@ class AgilexBase : public RobotInterface {
     if (can_connected_) {
       AgxMessage msg;
       msg.type = AgxMsgLightCommand;
-      msg.body.light_command_msg.cmd_ctrl_allowed = true;
+      msg.body.light_command_msg.enable_cmd_ctrl = true;
       msg.body.light_command_msg.front_light.mode = front_mode;
       msg.body.light_command_msg.front_light.custom_value = front_custom_value;
       msg.body.light_command_msg.rear_light.mode = rear_mode;
@@ -93,7 +93,7 @@ class AgilexBase : public RobotInterface {
       AgxMessage msg;
       msg.type = AgxMsgLightCommand;
 
-      msg.body.light_command_msg.cmd_ctrl_allowed = false;
+      msg.body.light_command_msg.enable_cmd_ctrl = false;
 
       // send to can bus
       can_frame frame;

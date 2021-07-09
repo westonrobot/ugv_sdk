@@ -42,7 +42,7 @@ extern "C" {
 #define CAN_MSG_MOTION_COMMAND_ID ((uint32_t)0x111)
 #define CAN_MSG_LIGHT_COMMAND_ID ((uint32_t)0x121)
 #define CAN_MSG_BRAKING_COMMAND_ID ((uint32_t)0x131)
-#define CAN_MSG_SET_MOTION_MODE_ID  ((uint32_t)0x141)
+#define CAN_MSG_SET_MOTION_MODE_ID ((uint32_t)0x141)
 
 // state feedback group: 0x2
 #define CAN_MSG_SYSTEM_STATE_ID ((uint32_t)0x211)
@@ -68,9 +68,9 @@ extern "C" {
 #define CAN_MSG_ACTUATOR7_LS_STATE_ID ((uint32_t)0x267)
 #define CAN_MSG_ACTUATOR8_LS_STATE_ID ((uint32_t)0x268)
 
-#define CAN_MSG_MOTOR_ANGLE_INFO     ((uint32_t)0x271)
-#define CAN_MSG_MOTOR_SPEED_INFO     ((uint32_t)0x281)
-#define CAN_MSG_CURRENT_CTRL_MODE    ((uint32_t)0x291)
+#define CAN_MSG_MOTOR_ANGLE_INFO ((uint32_t)0x271)
+#define CAN_MSG_MOTOR_SPEED_INFO ((uint32_t)0x281)
+#define CAN_MSG_CURRENT_CTRL_MODE ((uint32_t)0x291)
 
 // sensor data group: 0x3
 #define CAN_MSG_ODOMETRY_ID ((uint32_t)0x311)
@@ -108,16 +108,6 @@ extern "C" {
 #define CAN_MSG_STEER_NEUTRAL_RESPONSE_ID ((uint32_t)0x43a)
 
 #define CAN_MSG_STATE_RESET_CONFIG_ID ((uint32_t)0x441)
-
-/*--------------------- Control/State Constants ------------------------*/
-
-#define LIGHT_CMD_CTRL_ALLOWED ((uint8_t)0x01)
-#define LIGHT_CMD_CTRL_DISALLOWED ((uint8_t)0x00)
-
-#define VERSION_REQUEST_VALUE ((uint8_t)0x01)
-#define STEER_NEUTRAL_REQUEST_VALUE ((uint8_t)0xee)
-#define STEER_NEUTRAL_RESPONSE_SUCCESS_VALUE ((uint8_t)0xee)
-#define STEER_NEUTRAL_RESPONSE_FAILURE_VALUE ((uint8_t)0xff)
 
 /*------------------------ Frame Memory Layout -------------------------*/
 
@@ -157,30 +147,26 @@ typedef struct {
   struct16_t steering_angle;
 } MotionCommandFrame;
 
+#define LIGHT_ENABLE_CMD_CTRL ((uint8_t)0x01)
+#define LIGHT_DISABLE_CMD_CTRL ((uint8_t)0x00)
+
 typedef struct {
-  uint8_t cmd_ctrl_allowed;
-  uint8_t front_light_mode;
-  uint8_t front_light_custom;
-  uint8_t rear_light_mode;
-  uint8_t rear_light_custom;
+  uint8_t enable_cmd_ctrl;
+  uint8_t front_mode;
+  uint8_t front_custom;
+  uint8_t rear_mode;
+  uint8_t rear_custom;
   uint8_t reserved0;
   uint8_t reserved1;
   uint8_t count;
 } LightCommandFrame;
 
 typedef struct {
-  uint8_t cmd_ctrl_allowed;
-  uint8_t front_light_mode;
-  uint8_t front_light_custom;
-  uint8_t rear_light_mode;
-  uint8_t rear_light_custom;
-  uint8_t reserved0;
-  uint8_t reserved1;
+  uint8_t enable_brake;
   uint8_t count;
 } BrakingCommandFrame;
 
-typedef struct
-{
+typedef struct {
   uint8_t motion_mode;
   uint8_t reserved0;
   uint8_t reserved1;
@@ -189,7 +175,7 @@ typedef struct
   uint8_t reserved4;
   uint8_t reserved5;
   uint8_t reserved6;
-}SetMotionModeFrame;
+} SetMotionModeFrame;
 
 // State feedback messages
 typedef struct {
@@ -209,11 +195,11 @@ typedef struct {
 } MotionStateFrame;
 
 typedef struct {
-  uint8_t cmd_ctrl_allowed;
-  uint8_t front_light_mode;
-  uint8_t front_light_custom;
-  uint8_t rear_light_mode;
-  uint8_t rear_light_custom;
+  uint8_t enable_cmd_ctrl;
+  uint8_t front_mode;
+  uint8_t front_custom;
+  uint8_t rear_mode;
+  uint8_t rear_custom;
   uint8_t reserved0;
   uint8_t reserved1;
   uint8_t count;
@@ -267,7 +253,7 @@ typedef struct {
 typedef struct {
   uint8_t motion_mode;
   uint8_t mode_changing;
-}MotionModeStateFrame;
+} MotionModeStateFrame;
 
 // sensors
 typedef struct {
@@ -340,6 +326,11 @@ typedef struct {
 } BmsExtendedFrame;
 
 // query/config
+#define VERSION_REQUEST_VALUE ((uint8_t)0x01)
+#define STEER_NEUTRAL_REQUEST_VALUE ((uint8_t)0xee)
+#define STEER_NEUTRAL_RESPONSE_SUCCESS_VALUE ((uint8_t)0xee)
+#define STEER_NEUTRAL_RESPONSE_FAILURE_VALUE ((uint8_t)0xff)
+
 typedef struct {
   uint8_t request;
   uint8_t reserved0;

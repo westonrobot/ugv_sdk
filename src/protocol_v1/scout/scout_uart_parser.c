@@ -109,10 +109,10 @@ void EncodeScoutMsgToUART(const ScoutMessage *msg, uint8_t *buf, uint8_t *len)
     {
         buf[4] = UART_FRAME_LIGHT_STATUS_ID;
         buf[5] = msg->body.light_status_msg.data.status.light_ctrl_enable;
-        buf[6] = msg->body.light_status_msg.data.status.front_light_mode;
-        buf[7] = msg->body.light_status_msg.data.status.front_light_custom;
-        buf[8] = msg->body.light_status_msg.data.status.rear_light_mode;
-        buf[9] = msg->body.light_status_msg.data.status.rear_light_custom;
+        buf[6] = msg->body.light_status_msg.data.status.front_mode;
+        buf[7] = msg->body.light_status_msg.data.status.front_custom;
+        buf[8] = msg->body.light_status_msg.data.status.rear_mode;
+        buf[9] = msg->body.light_status_msg.data.status.rear_custom;
         buf[10] = 0;
         buf[11] = msg->body.light_status_msg.data.status.count;
         break;
@@ -218,10 +218,10 @@ void EncodeLightControlMsgToUART(const LightControlMessage *msg, uint8_t *buf, u
 
     // frame payload
     buf[5] = msg->data.cmd.light_ctrl_enable;
-    buf[6] = msg->data.cmd.front_light_mode;
-    buf[7] = msg->data.cmd.front_light_custom;
-    buf[8] = msg->data.cmd.rear_light_mode;
-    buf[9] = msg->data.cmd.rear_light_custom;
+    buf[6] = msg->data.cmd.front_mode;
+    buf[7] = msg->data.cmd.front_custom;
+    buf[8] = msg->data.cmd.rear_mode;
+    buf[9] = msg->data.cmd.rear_custom;
     buf[10] = 0x00;
 
     // frame count, checksum
@@ -467,10 +467,10 @@ bool ConstructControlMessage(ScoutMessage *msg)
     {
         msg->type = ScoutLightControlMsg;
         msg->body.light_control_msg.data.cmd.light_ctrl_enable = uart_parsing_data.payload_buffer[0];
-        msg->body.light_control_msg.data.cmd.front_light_mode = uart_parsing_data.payload_buffer[1];
-        msg->body.light_control_msg.data.cmd.front_light_custom = uart_parsing_data.payload_buffer[2];
-        msg->body.light_control_msg.data.cmd.rear_light_mode = uart_parsing_data.payload_buffer[3];
-        msg->body.light_control_msg.data.cmd.rear_light_custom = uart_parsing_data.payload_buffer[4];
+        msg->body.light_control_msg.data.cmd.front_mode = uart_parsing_data.payload_buffer[1];
+        msg->body.light_control_msg.data.cmd.front_custom = uart_parsing_data.payload_buffer[2];
+        msg->body.light_control_msg.data.cmd.rear_mode = uart_parsing_data.payload_buffer[3];
+        msg->body.light_control_msg.data.cmd.rear_custom = uart_parsing_data.payload_buffer[4];
         msg->body.light_control_msg.data.cmd.reserved0 = uart_parsing_data.payload_buffer[5];
         msg->body.light_control_msg.data.cmd.count = uart_parsing_data.frame_cnt;
         msg->body.light_control_msg.data.cmd.checksum = uart_parsing_data.frame_checksum;
@@ -573,10 +573,10 @@ bool ConstructStatusMessage(ScoutMessage *msg)
     {
         msg->type = ScoutLightStatusMsg;
         msg->body.light_status_msg.data.status.light_ctrl_enable = uart_parsing_data.payload_buffer[0];
-        msg->body.light_status_msg.data.status.front_light_mode = uart_parsing_data.payload_buffer[1];
-        msg->body.light_status_msg.data.status.front_light_custom = uart_parsing_data.payload_buffer[2];
-        msg->body.light_status_msg.data.status.rear_light_mode = uart_parsing_data.payload_buffer[3];
-        msg->body.light_status_msg.data.status.rear_light_custom = uart_parsing_data.payload_buffer[4];
+        msg->body.light_status_msg.data.status.front_mode = uart_parsing_data.payload_buffer[1];
+        msg->body.light_status_msg.data.status.front_custom = uart_parsing_data.payload_buffer[2];
+        msg->body.light_status_msg.data.status.rear_mode = uart_parsing_data.payload_buffer[3];
+        msg->body.light_status_msg.data.status.rear_custom = uart_parsing_data.payload_buffer[4];
         msg->body.light_status_msg.data.status.reserved0 = 0x00;
         msg->body.light_status_msg.data.status.count = uart_parsing_data.frame_cnt;
         msg->body.light_status_msg.data.status.checksum = uart_parsing_data.frame_checksum;

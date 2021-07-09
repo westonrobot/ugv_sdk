@@ -38,11 +38,11 @@ struct TracerMotionCmd {
 struct TracerLightCmd {
   TracerLightCmd() = default;
   TracerLightCmd(LightMode f_mode, uint8_t f_value)
-      : cmd_ctrl_allowed(true),
+      : enable_cmd_ctrl(true),
         front_mode(f_mode),
         front_custom_value(f_value) {}
 
-  bool cmd_ctrl_allowed = false;
+  bool enable_cmd_ctrl = false;
   LightMode front_mode;
   uint8_t front_custom_value;
 };

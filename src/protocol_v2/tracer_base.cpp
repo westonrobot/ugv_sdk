@@ -29,7 +29,7 @@ void TracerBaseV2::SetMotionCommand(double linear_vel, double angular_vel) {
 }
 
 void TracerBaseV2::SetLightCommand(const TracerLightCmd &cmd) {
-  if (cmd.cmd_ctrl_allowed) {
+  if (cmd.enable_cmd_ctrl) {
     AgilexBase::SendLightCommand(cmd.front_mode, cmd.front_custom_value,
                                  LightMode::CONST_OFF, 0);
   }

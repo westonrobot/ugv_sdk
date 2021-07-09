@@ -43,7 +43,7 @@ typedef struct {
 } LightOperation;
 
 typedef struct {
-  bool cmd_ctrl_allowed;
+  bool enable_cmd_ctrl;
   LightOperation front_light;
   LightOperation rear_light;
 } LightCommandMessage;

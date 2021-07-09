@@ -36,7 +36,7 @@ void RangerBase::SetMotionCommand(double linear_vel, double steer_angle,
 }
 
 void RangerBase::SetLightCommand(const RangerLightCmd &cmd) {
-  if (cmd.cmd_ctrl_allowed) {
+  if (cmd.enable_cmd_ctrl) {
     AgilexBase::SendLightCommand(cmd.front_mode, cmd.front_custom_value,
                                  LightMode::CONST_OFF, 0);
   }

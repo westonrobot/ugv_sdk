@@ -40,13 +40,13 @@ struct RangerLightCmd {
   RangerLightCmd() = default;
   RangerLightCmd(LightMode f_mode, uint8_t f_value, LightMode r_mode,
                  uint8_t r_value)
-      : cmd_ctrl_allowed(true),
+      : enable_cmd_ctrl(true),
         front_mode(f_mode),
         front_custom_value(f_value),
         rear_mode(r_mode),
         rear_custom_value(r_value) {}
 
-  bool cmd_ctrl_allowed = false;
+  bool enable_cmd_ctrl = false;
   LightMode front_mode;
   uint8_t front_custom_value;
   LightMode rear_mode;
