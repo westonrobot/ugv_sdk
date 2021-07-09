@@ -13,16 +13,16 @@
 namespace westonrobot {
 bool ProtocolV2Parser::DecodeMessage(const struct can_frame *rx_frame,
                                      AgxMessage *msg) {
-  return DecodeCanFrame(rx_frame, msg);
+  return DecodeCanFrameV2(rx_frame, msg);
 }
 
 void ProtocolV2Parser::EncodeMessage(const AgxMessage *msg,
                                      struct can_frame *tx_frame) {
-  EncodeCanFrame(msg, tx_frame);
+  EncodeCanFrameV2(msg, tx_frame);
 }
 
 uint8_t ProtocolV2Parser::CalculateChecksum(uint16_t id, uint8_t *data,
                                             uint8_t dlc) {
-  return CalcCanFrameChecksum(id, data, dlc);
+  return CalcCanFrameChecksumV2(id, data, dlc);
 }
 }  // namespace westonrobot

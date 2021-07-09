@@ -53,7 +53,7 @@ RangerState RangerBase::GetRangerState() {
 
 void RangerBase::ParseCANFrame(can_frame *rx_frame) {
   AgxMessage status_msg;
-  DecodeCanFrame(rx_frame, &status_msg);
+  DecodeCanFrameV2(rx_frame, &status_msg);
   std::lock_guard<std::mutex> guard(state_mutex_);
   UpdateRangerState(status_msg, ranger_state_);
 }

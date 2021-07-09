@@ -42,7 +42,7 @@ TracerState TracerBaseV2::GetTracerState() {
 
 void TracerBaseV2::ParseCANFrame(can_frame *rx_frame) {
   AgxMessage status_msg;
-  DecodeCanFrame(rx_frame, &status_msg);
+  DecodeCanFrameV2(rx_frame, &status_msg);
   std::lock_guard<std::mutex> guard(state_mutex_);
   UpdateTracerState(status_msg, tracer_state_);
 }
