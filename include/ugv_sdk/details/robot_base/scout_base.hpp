@@ -61,12 +61,13 @@ class ScoutBase : public AgilexBase<Parser>, public ScoutInterface {
 
   void ParseCANFrame(can_frame *rx_frame) override {
     AgxMessage status_msg;
-    AgilexBase<Parser>::parser_.DecodeMessage(rx_frame, &status_msg);
-    std::lock_guard<std::mutex> guard(AgilexBase<Parser>::state_mutex_);
-    UpdateScoutState(status_msg, scout_state_);
+    if (AgilexBase<Parser>::parser_.DecodeMessage(rx_frame, &status_msg)) {
+      UpdateScoutState(status_msg, scout_state_);
+    }
   }
 
   void UpdateScoutState(const AgxMessage &status_msg, ScoutState &state) {
+    std::lock_guard<std::mutex> guard(AgilexBase<Parser>::state_mutex_);
     switch (status_msg.type) {
       case AgxMsgSystemState: {
         //   std::cout << "system status feedback received" << std::endl;
@@ -83,10 +84,10 @@ class ScoutBase : public AgilexBase<Parser>, public ScoutInterface {
         state.light_state = status_msg.body.light_state_msg;
         break;
       }
-      case AgxMsgRcState: {
-        state.rc_state = status_msg.body.rc_state_msg;
-        break;
-      }
+        //   case AgxMsgRcState: {
+        //     state.rc_state = status_msg.body.rc_state_msg;
+        //     break;
+        //   }
       case AgxMsgActuatorHSState: {
         // std::cout << "actuator hs feedback received" << std::endl;
         state
@@ -101,11 +102,11 @@ class ScoutBase : public AgilexBase<Parser>, public ScoutInterface {
             status_msg.body.actuator_ls_state_msg;
         break;
       }
-      /* sensor feedback */
-      case AgxMsgOdometry: {
-        // std::cout << "Odometer msg feedback received" << std::endl;
-        state.odometry = status_msg.body.odometry_msg;
-      }
+        /* sensor feedback */
+        //   case AgxMsgOdometry: {
+        //     // std::cout << "Odometer msg feedback received" << std::endl;
+        //     state.odometry = status_msg.body.odometry_msg;
+        //   }
       default:
         break;
     }

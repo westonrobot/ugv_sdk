@@ -16,18 +16,16 @@
 
 namespace westonrobot {
 struct ScoutState {
-  // system state
   SystemStateMessage system_state;
   MotionStateMessage motion_state;
   LightStateMessage light_state;
 
-  RcStateMessage rc_state;
-
+  // actuator state
+  // - for v2 robots only
   ActuatorHSStateMessage actuator_hs_state[4];
   ActuatorLSStateMessage actuator_ls_state[4];
-
-  // sensor data
-  OdometryMessage odometry;
+  // - for v1 robots only
+  ActuatorStateMessageV1 actuator_state[4];
 };
 
 struct ScoutInterface {

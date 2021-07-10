@@ -13,6 +13,6 @@
 #include "stdio.h"
 #include "string.h"
 
-bool DecodeCanFrameV1(const struct can_frame *rx_frame, AgxMessageV1 *msg) {}
-void EncodeCanFrameV1(const AgxMessageV1 *msg, struct can_frame *tx_frame) {}
+bool DecodeCanFrameV1(const struct can_frame *rx_frame, AgxMessage *msg) {}
+void EncodeCanFrameV1(const AgxMessage *msg, struct can_frame *tx_frame) {}
 uint8_t CalcCanFrameChecksumV1(uint16_t id, uint8_t *data, uint8_t dlc) {}

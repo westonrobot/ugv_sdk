@@ -44,6 +44,18 @@ typedef struct {
   uint8_t motion_mode;
 } MotionModeMessage;
 
+// V1-only messages
+typedef struct {
+  ControlMode control_mode;
+  bool clear_all_error;
+  float linear;
+  float angular;
+} MotionCommandMessageV1;
+
+typedef struct {
+  bool set_neutral;
+} ValueSetCommandMessageV1;
+
 /**************** Feedback messages *****************/
 
 #define SYSTEM_ERROR_MOTOR_DRIVER_MASK ((uint16_t)0x0100)
@@ -64,7 +76,6 @@ typedef struct {
   uint16_t error_code;
 } SystemStateMessage;
 
-// 0x221
 typedef struct {
   float linear_velocity;
   float angular_velocity;  // only valid for differential drivering
@@ -72,7 +83,6 @@ typedef struct {
   float steering_angle;  // only valid for ackermann steering
 } MotionStateMessage;
 
-// 0x231
 typedef LightCommandMessage LightStateMessage;
 
 typedef struct {
@@ -94,12 +104,6 @@ typedef struct {
   int32_t pulse_count;
 } ActuatorHSStateMessage;
 
-typedef struct {
-  uint8_t motion_mode;
-  uint8_t mode_changing;
-} MotionModeFeedbackMessage;
-
-// 0x261 - 0x264
 #define DRIVER_STATE_INPUT_VOLTAGE_LOW_MASK ((uint8_t)0x01)
 #define DRIVER_STATE_MOTOR_OVERHEAT_MASK ((uint8_t)0x02)
 #define DRIVER_STATE_DRIVER_OVERLOAD_MASK ((uint8_t)0x04)
@@ -116,6 +120,18 @@ typedef struct {
   int8_t motor_temperature;
   uint8_t driver_state;
 } ActuatorLSStateMessage;
+
+typedef struct {
+  uint8_t motion_mode;
+  uint8_t mode_changing;
+} MotionModeFeedbackMessage;
+
+// V1-only messages
+typedef struct {
+  float current;
+  int16_t rpm;
+  float temperature;
+} ActuatorStateMessageV1;
 
 /***************** Sensor messages ******************/
 
@@ -167,7 +183,6 @@ typedef struct {
   float temperature;
 } BmsBasicMessage;
 
-// 0x362
 #define BMS_PROT1_CHARGING_CURRENT_NONZERO_MASK ((uint8_t)0x01)
 #define BMS_PROT1_CHARGING_OVERCURRENT_SET_MASK ((uint8_t)0x02)
 #define BMS_PROT1_DISCHARGING_CURRENT_NONZERO_MASK ((uint8_t)0x10)
@@ -273,7 +288,11 @@ typedef enum {
   AgxMsgControlModeConfig,
   AgxMsgSteerNeutralRequest,
   AgxMsgSteerNeutralResponse,
-  AgxMsgStateResetConfig
+  AgxMsgStateResetConfig,
+  // V1-only messages
+  AgxMsgMotionCommandV1,
+  AgxMsgValueSetCommandV1,
+  AgxMsgActuatorStateV1
 } MsgType;
 
 typedef struct {
@@ -309,6 +328,10 @@ typedef struct {
     SteerNeutralRequestMessage steer_neutral_request_msg;
     SteerNeutralResponseMessage steer_neutral_response_msg;
     StateResetConfigMessage state_reset_config_msg;
+    // V1-only messages
+    MotionCommandMessageV1 v1_motion_command_msg;
+    ValueSetCommandMessageV1 v1_value_set_command_msg;
+    ActuatorStateMessageV1 v1_actuator_stage_msg;
   } body;
 } AgxMessage;
 
