@@ -331,7 +331,7 @@ typedef struct {
     // V1-only messages
     MotionCommandMessageV1 v1_motion_command_msg;
     ValueSetCommandMessageV1 v1_value_set_command_msg;
-    ActuatorStateMessageV1 v1_actuator_stage_msg;
+    ActuatorStateMessageV1 v1_actuator_state_msg;
   } body;
 } AgxMessage;
 

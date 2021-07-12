@@ -81,11 +81,10 @@ add_library(${PROJECT_NAME}
     ########################
     ## protocol v2 support
     src/protocol_v2/agilex_msg_parser_v2.c
-    src/protocol_v2/parser_impl/protocol_v2_parser.cpp
+    src/protocol_v2/protocol_v2_parser.cpp
     ########################
     ## legacy protocol v1 support (transparent to user)
     src/protocol_v1/agilex_msg_parser_v1.c
-    src/protocol_v1/parser_impl/scout_protocol_v1_parser.cpp
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
 target_compile_definitions(${PROJECT_NAME} PUBLIC ASIO_ENABLE_OLD_SERVICES)

@@ -84,10 +84,6 @@ class ScoutBase : public AgilexBase<Parser>, public ScoutInterface {
         state.light_state = status_msg.body.light_state_msg;
         break;
       }
-        //   case AgxMsgRcState: {
-        //     state.rc_state = status_msg.body.rc_state_msg;
-        //     break;
-        //   }
       case AgxMsgActuatorHSState: {
         // std::cout << "actuator hs feedback received" << std::endl;
         state
@@ -102,6 +98,10 @@ class ScoutBase : public AgilexBase<Parser>, public ScoutInterface {
             status_msg.body.actuator_ls_state_msg;
         break;
       }
+        //   case AgxMsgRcState: {
+        //     state.rc_state = status_msg.body.rc_state_msg;
+        //     break;
+        //   }
         /* sensor feedback */
         //   case AgxMsgOdometry: {
         //     // std::cout << "Odometer msg feedback received" << std::endl;
@@ -114,7 +114,7 @@ class ScoutBase : public AgilexBase<Parser>, public ScoutInterface {
 };
 }  // namespace westonrobot
 
-#include "ugv_sdk/details/protocol_v1/scout_protocol_v1_parser.hpp"
+#include "ugv_sdk/details/protocol_v1/diffdrive_model_v1_parser.hpp"
 #include "ugv_sdk/details/protocol_v2/protocol_v2_parser.hpp"
 
 namespace westonrobot {
