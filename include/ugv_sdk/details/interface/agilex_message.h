@@ -42,7 +42,7 @@ typedef struct {
 
 typedef struct {
   uint8_t motion_mode;
-} MotionModeMessage;
+} MotionModeCommandMessage;
 
 // V1-only messages
 typedef struct {
@@ -55,6 +55,8 @@ typedef struct {
 typedef struct {
   bool set_neutral;
 } ValueSetCommandMessageV1;
+
+typedef ValueSetCommandMessageV1 ValueSetStateMessageV1;
 
 /**************** Feedback messages *****************/
 
@@ -128,6 +130,7 @@ typedef struct {
 
 // V1-only messages
 typedef struct {
+  uint8_t motor_id;
   float current;
   int16_t rpm;
   float temperature;
@@ -263,7 +266,7 @@ typedef enum {
   AgxMsgMotionCommand,
   AgxMsgLightCommand,
   AgxMsgBrakingCommand,
-  AgxMsgSetMotionMode,
+  AgxMsgSetMotionModeCommand,
   // state feedback
   AgxMsgSystemState,
   AgxMsgMotionState,
@@ -292,6 +295,7 @@ typedef enum {
   // V1-only messages
   AgxMsgMotionCommandV1,
   AgxMsgValueSetCommandV1,
+  AgxMsgValueSetStateV1,
   AgxMsgActuatorStateV1
 } MsgType;
 
@@ -302,7 +306,7 @@ typedef struct {
     MotionCommandMessage motion_command_msg;
     LightCommandMessage light_command_msg;
     BrakingCommandMessage braking_command_msg;
-    MotionModeMessage motion_mode_msg;
+    MotionModeCommandMessage motion_mode_msg;
     // state feedback
     SystemStateMessage system_state_msg;
     MotionStateMessage motion_state_msg;
@@ -331,6 +335,7 @@ typedef struct {
     // V1-only messages
     MotionCommandMessageV1 v1_motion_command_msg;
     ValueSetCommandMessageV1 v1_value_set_command_msg;
+    ValueSetStateMessageV1 v1_value_set_state_msg;
     ActuatorStateMessageV1 v1_actuator_state_msg;
   } body;
 } AgxMessage;

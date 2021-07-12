@@ -114,7 +114,7 @@ class ScoutBase : public AgilexBase<Parser>, public ScoutInterface {
 };
 }  // namespace westonrobot
 
-#include "ugv_sdk/details/protocol_v1/diffdrive_model_v1_parser.hpp"
+#include "ugv_sdk/details/protocol_v1/protocol_v1_parser.hpp"
 #include "ugv_sdk/details/protocol_v2/protocol_v2_parser.hpp"
 
 namespace westonrobot {

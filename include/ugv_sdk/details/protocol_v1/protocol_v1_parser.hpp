@@ -17,7 +17,7 @@
 
 namespace westonrobot {
 template <typename RobotLimitsType>
-class DiffDriveModelV1Parser : public ParserInterface {
+class ProtocolV1Parser : public ParserInterface {
  public:
   bool DecodeMessage(const struct can_frame *rx_frame,
                      AgxMessage *msg) override {
@@ -27,21 +27,22 @@ class DiffDriveModelV1Parser : public ParserInterface {
   void EncodeMessage(const AgxMessage *msg,
                      struct can_frame *tx_frame) override {
     AgxMessage msg_v1 = *msg;
-    if (msg->type == AgxMsgMotionCommand) {
-      float linear = msg->body.motion_command_msg.linear_velocity;
-      float angular = msg->body.motion_command_msg.angular_velocity;
-      if (linear > ScoutV2Limits::max_linear_velocity)
-        linear = ScoutV2Limits::max_linear_velocity;
-      else if (linear < ScoutV2Limits::min_linear_velocity)
-        linear = ScoutV2Limits::min_linear_velocity;
-      if (angular > ScoutV2Limits::max_angular_velocity)
-        angular = ScoutV2Limits::max_angular_velocity;
-      else if (angular < ScoutV2Limits::min_angular_velocity)
-        angular = ScoutV2Limits::min_angular_velocity;
-      msg_v1.body.motion_command_msg.linear_velocity =
-          linear / ScoutV2Limits::max_linear_velocity * 100.0;
-      msg_v1.body.motion_command_msg.angular_velocity = static_cast<int8_t>(
-          angular / ScoutV2Limits::max_angular_velocity * 100.0);
+    if (msg->type == AgxMsgMotionCommandV1) {
+      float linear = msg->body.v1_motion_command_msg.linear;
+      float angular = msg->body.v1_motion_command_msg.angular;
+      if (linear > RobotLimitsType::max_linear)
+        linear = RobotLimitsType::max_linear;
+      else if (linear < RobotLimitsType::min_linear)
+        linear = RobotLimitsType::min_linear;
+      if (angular > RobotLimitsType::max_angular)
+        angular = RobotLimitsType::max_angular;
+      else if (angular < RobotLimitsType::min_angular)
+        angular = RobotLimitsType::min_angular;
+
+      msg_v1.body.v1_motion_command_msg.linear =
+          linear / RobotLimitsType::max_linear * 100.0;
+      msg_v1.body.v1_motion_command_msg.angular =
+          angular / RobotLimitsType::max_angular * 100.0;
     }
     EncodeCanFrameV1(&msg_v1, tx_frame);
   }
@@ -59,8 +60,11 @@ class DiffDriveModelV1Parser : public ParserInterface {
   uint8_t CalculateChecksum(uint8_t *buf, uint8_t len) override {}
 };
 
-using ScoutProtocolV1Parser = DiffDriveModelV1Parser<ScoutV2Limits>;
-using ScoutMiniProtocolV1Parser = DiffDriveModelV1Parser<ScoutV2Limits>;
+using ScoutProtocolV1Parser = ProtocolV1Parser<ScoutV2Limits>;
+using ScoutMiniProtocolV1Parser = ProtocolV1Parser<ScoutV2Limits>;
+
+using HunterProtocolV1Parser = ProtocolV1Parser<HunterV1Limits>;
+
 }  // namespace westonrobot
 
 #endif /* SCOUT_PROTOCOL_V1_PARSER_HPP */

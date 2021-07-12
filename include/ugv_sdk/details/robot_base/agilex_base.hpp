@@ -106,7 +106,7 @@ class AgilexBase : public RobotInterface {
   void SetMotionMode(uint8_t mode) {
     if (can_connected_) {
       AgxMessage msg;
-      msg.type = AgxMsgSetMotionMode;
+      msg.type = AgxMsgSetMotionModeCommand;
       msg.body.motion_mode_msg.motion_mode = mode;
 
       // send to can bus

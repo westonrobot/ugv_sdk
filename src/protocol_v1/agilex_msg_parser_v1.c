@@ -7,26 +7,40 @@
  * Copyright (c) 2021 Ruixiang Du (rdu)
  */
 
-#include "ugv_sdk/details/protocol_v1/agilex_protocol_v1.h"
 #include "ugv_sdk/details/protocol_v1//agilex_msg_parser_v1.h"
+
+#include "protocol_v1/agilex_protocol_v1.h"
 
 #include "stdio.h"
 #include "string.h"
 
 bool DecodeCanFrameV1(const struct can_frame *rx_frame, AgxMessage *msg) {
+  // if checksum not correct
+  if (!CalcCanFrameChecksumV1(rx_frame->can_id, (uint8_t *)rx_frame->data,
+                              rx_frame->can_dlc)) {
+    return false;
+  }
+
   switch (rx_frame->can_id) {
     case CAN_MSG_SYSTEM_STATE_ID: {
       msg->type = AgxMsgSystemState;
-      // msg->system_status_msg.id = CAN_MSG_SYSTEM_STATUS_STATUS_ID;
-      //   memcpy(msg->body.system_state_msg.data.raw, rx_frame->data,
-      //          rx_frame->can_dlc * sizeof(uint8_t));
+      msg->body.system_state_msg.vehicle_state = rx_frame->data[0];
+      msg->body.system_state_msg.control_mode = rx_frame->data[1];
+      msg->body.system_state_msg.battery_voltage =
+          ((((uint16_t)rx_frame->data[2]) << 8) | (uint16_t)rx_frame->data[3]) /
+          10.0f;
+      msg->body.system_state_msg.error_code =
+          ((((uint16_t)rx_frame->data[4]) << 8) | (uint16_t)rx_frame->data[5]);
       break;
     }
     case CAN_MSG_MOTION_STATE_ID: {
       msg->type = AgxMsgMotionState;
-      // msg->motion_status_msg.id = CAN_MSG_MOTION_CONTROL_STATUS_ID;
-      //   memcpy(msg->body.motion_state_msg.data.raw, rx_frame->data,
-      //          rx_frame->can_dlc * sizeof(uint8_t));
+      msg->body.motion_state_msg.linear_velocity =
+          ((((uint16_t)rx_frame->data[0]) << 8) | (uint16_t)rx_frame->data[1]) /
+          1000.0f;
+      msg->body.motion_state_msg.angular_velocity =
+          ((((uint16_t)rx_frame->data[2]) << 8) | (uint16_t)rx_frame->data[3]) /
+          1000.0f;
       break;
     }
     case CAN_MSG_LIGHT_STATE_ID: {
@@ -36,33 +50,21 @@ bool DecodeCanFrameV1(const struct can_frame *rx_frame, AgxMessage *msg) {
       //          rx_frame->can_dlc * sizeof(uint8_t));
       break;
     }
-    case CAN_MSG_ACTUATOR1_STATE_ID: {
-      msg->type = AgxMsgActuatorStateV1;
-      // msg->motor_driver_status_msg.id = CAN_MSG_MOTOR1_DRIVER_STATUS_ID;
-      //   msg->body.v1_actuator_state_msg.motor_id = SCOUT_MOTOR1_ID;
-      //   memcpy(msg->body.motor_driver_status_msg.data.raw, rx_frame->data,
-      //          rx_frame->can_dlc * sizeof(uint8_t));
+    case CAN_MSG_VALUE_SET_STATE_ID: {
+      msg->type = AgxMsgValueSetStateV1;
+      if (rx_frame->data[0] == 0xaa)
+        msg->body.v1_value_set_state_msg.set_neutral = true;
+      else
+        msg->body.v1_value_set_state_msg.set_neutral = false;
       break;
     }
-    case CAN_MSG_ACTUATOR2_STATE_ID: {
-      msg->type = AgxMsgActuatorStateV1;
-      // msg->motor_driver_status_msg.id = CAN_MSG_MOTOR2_DRIVER_STATUS_ID;
-      //   msg->body.v1_actuator_state_msg.motor_id = SCOUT_MOTOR2_ID;
-      //   memcpy(msg->body.motor_driver_status_msg.data.raw, rx_frame->data,
-      //          rx_frame->can_dlc * sizeof(uint8_t));
-      break;
-    }
-    case CAN_MSG_ACTUATOR3_STATE_ID: {
-      msg->type = AgxMsgActuatorStateV1;
-      // msg->motor_driver_status_msg.id = CAN_MSG_MOTOR3_DRIVER_STATUS_ID;
-      //   msg->body.v1_actuator_state_msg.motor_id = SCOUT_MOTOR3_ID;
-      //   memcpy(msg->body.motor_driver_status_msg.data.raw, rx_frame->data,
-      //          rx_frame->can_dlc * sizeof(uint8_t));
-      break;
-    }
+    case CAN_MSG_ACTUATOR1_STATE_ID:
+    case CAN_MSG_ACTUATOR2_STATE_ID:
+    case CAN_MSG_ACTUATOR3_STATE_ID:
     case CAN_MSG_ACTUATOR4_STATE_ID: {
       msg->type = AgxMsgActuatorStateV1;
-      // msg->motor_driver_status_msg.id = CAN_MSG_MOTOR4_DRIVER_STATUS_ID;
+      msg->body.v1_actuator_state_msg.motor_id =
+          rx_frame->can_id - CAN_MSG_ACTUATOR1_STATE_ID;
       //   msg->body.v1_actuator_state_msg.motor_id = SCOUT_MOTOR4_ID;
       //   memcpy(msg->body.motor_driver_status_msg.data.raw, rx_frame->data,
       //          rx_frame->can_dlc * sizeof(uint8_t));
@@ -83,10 +85,8 @@ void EncodeCanFrameV1(const AgxMessage *msg, struct can_frame *tx_frame) {
       tx_frame->can_dlc = 8;
       tx_frame->data[0] = CTRL_MODE_CMD_CAN;
       tx_frame->data[1] = ERROR_CLR_NONE;
-      tx_frame->data[2] =
-          (int8_t)(msg->body.motion_command_msg.linear_velocity * 100);
-      tx_frame->data[3] =
-          (int8_t)(msg->body.motion_command_msg.angular_velocity * 100);
+      tx_frame->data[2] = (int8_t)(msg->body.v1_motion_command_msg.linear);
+      tx_frame->data[3] = (int8_t)(msg->body.v1_motion_command_msg.angular);
       tx_frame->data[4] = 0;
       tx_frame->data[5] = 0;
       tx_frame->data[6] = count++;
@@ -95,6 +95,22 @@ void EncodeCanFrameV1(const AgxMessage *msg, struct can_frame *tx_frame) {
       break;
     }
     case AgxMsgValueSetCommandV1: {
+      static uint8_t count = 0;
+      tx_frame->can_id = CAN_MSG_VALUE_SET_COMMAND_ID;
+      tx_frame->can_dlc = 8;
+      tx_frame->data[0] =
+          msg->body.v1_value_set_command_msg.set_neutral ? 0xaa : 0x00;
+      tx_frame->data[1] = 0x00;
+      tx_frame->data[2] = 0x00;
+      tx_frame->data[3] = 0x00;
+      tx_frame->data[4] = 0x00;
+      tx_frame->data[5] = 0x00;
+      tx_frame->data[6] = 0x00;
+      tx_frame->data[7] = CalcCanFrameChecksumV1(
+          tx_frame->can_id, tx_frame->data, tx_frame->can_dlc);
+      break;
+    }
+    case AgxMsgLightCommand: {
       static uint8_t count = 0;
       tx_frame->can_id = CAN_MSG_LIGHT_COMMAND_ID;
       tx_frame->can_dlc = 8;
@@ -118,9 +134,6 @@ void EncodeCanFrameV1(const AgxMessage *msg, struct can_frame *tx_frame) {
       memcpy(tx_frame->data, (uint8_t *)(&frame), tx_frame->can_dlc);
       tx_frame->data[7] = CalcCanFrameChecksumV1(
           tx_frame->can_id, tx_frame->data, tx_frame->can_dlc);
-      break;
-    }
-    case AgxMsgLightCommand: {
       break;
     }
     default:

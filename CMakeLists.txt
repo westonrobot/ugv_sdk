@@ -8,8 +8,8 @@ if(CCACHE_PROGRAM)
 endif()
 
 ## Project Options
-option(BUILD_TESTS ON)
-option(STATIC_CHECK OFF)
+option(BUILD_TESTING "Build tests" OFF)
+option(STATIC_CHECK "Run static check" OFF)
 # set(CMAKE_BUILD_TYPE Release)
 # set(CMAKE_BUILD_TYPE Debug)
 
@@ -56,9 +56,19 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif()
 
 if(BUILD_WITHOUT_ROS)
+    # check whether to build tests
+    if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME AND BUILD_TESTING)
+        enable_testing()
+        include(GoogleTest)
+        set(BUILD_TESTS ON)
+        message(STATUS "Tests will be built")
+    else()
+        set(BUILD_TESTS OFF)
+        message(STATUS "Tests will not be built")
+    endif()
+
     ## Use GNUInstallDirs to install libraries into correct locations on all platforms.
     include(GNUInstallDirs)
-    message(STATUS "Project will be installed to ${CMAKE_INSTALL_PREFIX} with 'make install'")
 
     ## Put all binary files into /bin and libraries into /lib
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
@@ -94,34 +104,19 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
     
-# Build apps
+# Build demo
 if(BUILD_WITHOUT_ROS)
-    # Check wether to build monitor tool
-    set(BUILD_MONITOR ON)
-    # Disable monitor if ncurses library is not found
-    set(CURSES_NEED_NCURSES TRUE)
-    find_package(Curses QUIET)
-    if(BUILD_MONITOR AND NOT CURSES_FOUND)
-        set(BUILD_MONITOR OFF)
-        message(STATUS "Monitor app will not be built due to missing ncurses library, try: sudo apt install libncurses5-dev")
-    endif()
-
-    # add app source directory
     add_subdirectory(demo)
 endif()
 
 # Build tests
-# if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME AND BUILD_TESTS)
-#     message(STATUS "Tests will be built")
-#     enable_testing()
-#     include(GoogleTest)
-#     add_subdirectory(tests)
-# else()
-#     message(STATUS "Tests will not be built")
-# endif()
+if(BUILD_TESTS)
+    add_subdirectory(test)
+endif()
 
 ## Installation configuration
 if(BUILD_WITHOUT_ROS) # BUILD_WITHOUT_ROS
+    message(STATUS "Project will be installed to ${CMAKE_INSTALL_PREFIX} with 'make install'")
 
     # Offer the user the choice of overriding the installation directories
     set(INSTALL_LIBDIR ${CMAKE_INSTALL_LIBDIR} CACHE PATH "Installation directory for libraries")

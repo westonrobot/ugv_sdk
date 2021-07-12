@@ -37,12 +37,14 @@ extern "C" {
 // CAN: control group
 #define CAN_MSG_MOTION_COMMAND_ID ((uint32_t)0x130)
 #define CAN_MSG_LIGHT_COMMAND_ID ((uint32_t)0x140)
-#define CAN_MSG_VALUE_SET_COMMAND_ID ((uint32_t)0x211)
+#define CAN_MSG_VALUE_SET_COMMAND_ID ((uint32_t)0x210)
 
 // CAN: state feedback group
 #define CAN_MSG_MOTION_STATE_ID ((uint32_t)0x131)
 #define CAN_MSG_LIGHT_STATE_ID ((uint32_t)0x141)
 #define CAN_MSG_SYSTEM_STATE_ID ((uint32_t)0x151)
+
+#define CAN_MSG_VALUE_SET_STATE_ID ((uint32_t)0x211)
 
 #define CAN_MSG_ACTUATOR1_STATE_ID ((uint32_t)0x200)
 #define CAN_MSG_ACTUATOR2_STATE_ID ((uint32_t)0x201)

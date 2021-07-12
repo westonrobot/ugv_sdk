@@ -12,17 +12,24 @@
 
 namespace westonrobot {
 struct ScoutV2Limits {
-  static constexpr double max_linear_velocity = 1.5;  // 1.5 m/s
-  static constexpr double min_linear_velocity = -max_linear_velocity;
-  static constexpr double max_angular_velocity = 0.5235;  // 0.5235 rad/s
-  static constexpr double min_angular_velocity = -max_angular_velocity;
+  static constexpr double max_linear = 1.5;  // m/s
+  static constexpr double min_linear = -max_linear;
+  static constexpr double max_angular = 0.5235;  // rad/s
+  static constexpr double min_angular = -max_angular;
 };
 
 struct ScoutMiniLimits {
-  static constexpr double max_linear_velocity = 3.0;  // 3.0 m/s
-  static constexpr double min_linear_velocity = -max_linear_velocity;
-  static constexpr double max_angular_velocity = 2.5235;  // 2.5235 rad/s
-  static constexpr double min_angular_velocity = -max_angular_velocity;
+  static constexpr double max_linear = 3.0;  // m/s
+  static constexpr double min_linear = -max_linear;
+  static constexpr double max_angular = 2.5235;  // rad/s
+  static constexpr double min_angular = -max_angular;
+};
+
+struct HunterV1Limits {
+  static constexpr double max_linear = 1.5;  // m/s
+  static constexpr double min_linear = -max_linear;
+  static constexpr double max_angular = 25.5;  // degree
+  static constexpr double min_angular = -max_angular;
 };
 }  // namespace westonrobot
 

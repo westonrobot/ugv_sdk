@@ -369,7 +369,7 @@ void EncodeCanFrameV2(const AgxMessage *msg, struct can_frame *tx_frame) {
       memcpy(tx_frame->data, (uint8_t *)(&frame), tx_frame->can_dlc);
       break;
     }
-    case AgxMsgSetMotionMode: {
+    case AgxMsgSetMotionModeCommand: {
       tx_frame->can_id = CAN_MSG_SET_MOTION_MODE_ID;
       tx_frame->can_dlc = 8;
       SetMotionModeFrame frame;
