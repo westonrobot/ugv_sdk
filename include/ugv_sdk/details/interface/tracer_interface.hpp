@@ -12,7 +12,7 @@
 
 #include <string>
 
-#include "ugv_sdk/interface/agilex_message.h"
+#include "ugv_sdk/details/interface/agilex_message.h"
 
 namespace westonrobot {
 struct TracerState {
@@ -21,6 +21,7 @@ struct TracerState {
   MotionStateMessage motion_state;
   LightStateMessage light_state;
 
+  // Is this still needed?
   RcStateMessage rc_state;
 
   ActuatorHSStateMessage actuator_hs_state[2];
@@ -30,36 +31,14 @@ struct TracerState {
   OdometryMessage odometry;
 };
 
-struct TracerMotionCmd {
-  double linear_velocity;
-  double angular_velocity;
-};
-
-struct TracerLightCmd {
-  TracerLightCmd() = default;
-  TracerLightCmd(LightMode f_mode, uint8_t f_value)
-      : enable_cmd_ctrl(true),
-        front_mode(f_mode),
-        front_custom_value(f_value) {}
-
-  bool enable_cmd_ctrl = false;
-  LightMode front_mode;
-  uint8_t front_custom_value;
-};
-
-/////////////////////////////////////////////////////////////////////////
-
 struct TracerInterface {
-  // set up connection
-  virtual void Connect(std::string can_name) = 0;
-  virtual void Connect(std::string uart_name, uint32_t baudrate) = 0;
+  virtual ~TracerInterface() = default;
 
-  // robot control
   virtual void SetMotionCommand(double linear_vel, double angular_vel) = 0;
-  virtual void SetLightCommand(const TracerLightCmd &cmd) = 0;
+  virtual void SetLightCommand(LightMode f_mode, uint8_t f_value) = 0;
 
   // get robot state
-  virtual TracerState GetTracerState() = 0;
+  virtual TracerState GetRobotState() = 0;
 };
 }  // namespace westonrobot
 
