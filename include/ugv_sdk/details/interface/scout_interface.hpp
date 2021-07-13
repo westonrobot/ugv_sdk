@@ -29,7 +29,7 @@ struct ScoutState {
 };
 
 struct ScoutInterface {
-  ~ScoutInterface() = default;
+  virtual ~ScoutInterface() = default;
 
   virtual void SetMotionCommand(double linear_vel, double angular_vel) = 0;
   virtual void SetLightCommand(LightMode f_mode, uint8_t f_value,

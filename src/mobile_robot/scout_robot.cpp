@@ -11,10 +11,10 @@
 #include "ugv_sdk/details/robot_base/scout_base.hpp"
 
 namespace westonrobot {
-ScoutRobot::ScoutRobot(ProtocolType protocol) {
-  if (protocol == ProtocolType::AGX_V1) {
+ScoutRobot::ScoutRobot(ProtocolVersion protocol) {
+  if (protocol == ProtocolVersion::AGX_V1) {
     robot_ = new ScoutBaseV1();
-  } else if (protocol == ProtocolType::AGX_V2) {
+  } else if (protocol == ProtocolVersion::AGX_V2) {
     robot_ = new ScoutBaseV2();
   }
 }
@@ -32,6 +32,10 @@ void ScoutRobot::Connect(std::string uart_name, uint32_t baudrate) {
 }
 
 void ScoutRobot::ResetRobotState() { robot_->ResetRobotState(); }
+
+ProtocolVersion ScoutRobot::GetProtocolVersion() {
+  return robot_->GetProtocolVersion();
+}
 
 void ScoutRobot::SetMotionCommand(double linear_vel, double angular_vel) {
   auto scout = dynamic_cast<ScoutInterface*>(robot_);

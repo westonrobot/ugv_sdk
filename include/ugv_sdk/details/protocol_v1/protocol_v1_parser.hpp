@@ -17,14 +17,14 @@
 
 namespace westonrobot {
 template <typename RobotLimitsType>
-class ProtocolV1Parser : public ParserInterface {
+class ProtocolV1Parser : public ParserInterface<ProtocolVersion::AGX_V1> {
  public:
   bool DecodeMessage(const struct can_frame *rx_frame,
                      AgxMessage *msg) override {
     return DecodeCanFrameV1(rx_frame, msg);
   }
 
-  void EncodeMessage(const AgxMessage *msg,
+  bool EncodeMessage(const AgxMessage *msg,
                      struct can_frame *tx_frame) override {
     AgxMessage msg_v1 = *msg;
     if (msg->type == AgxMsgMotionCommandV1) {
@@ -44,7 +44,7 @@ class ProtocolV1Parser : public ParserInterface {
       msg_v1.body.v1_motion_command_msg.angular =
           angular / RobotLimitsType::max_angular * 100.0;
     }
-    EncodeCanFrameV1(&msg_v1, tx_frame);
+    return EncodeCanFrameV1(&msg_v1, tx_frame);
   }
 
   uint8_t CalculateChecksum(uint16_t id, uint8_t *data, uint8_t dlc) override {

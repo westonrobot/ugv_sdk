@@ -18,6 +18,7 @@ bool DecodeCanFrameV1(const struct can_frame *rx_frame, AgxMessage *msg) {
   // if checksum not correct
   if (!CalcCanFrameChecksumV1(rx_frame->can_id, (uint8_t *)rx_frame->data,
                               rx_frame->can_dlc)) {
+    printf("wrong checksum for id: %x-------------->\n", rx_frame->can_id);
     return false;
   }
 
@@ -36,13 +37,16 @@ bool DecodeCanFrameV1(const struct can_frame *rx_frame, AgxMessage *msg) {
     case CAN_MSG_MOTION_STATE_ID: {
       msg->type = AgxMsgMotionState;
       msg->body.motion_state_msg.linear_velocity =
-          ((((uint16_t)rx_frame->data[0]) << 8) | (uint16_t)rx_frame->data[1]) /
+          ((int16_t)((((uint16_t)rx_frame->data[0]) << 8) |
+                     (uint16_t)rx_frame->data[1])) /
           1000.0f;
       msg->body.motion_state_msg.angular_velocity =
-          ((((uint16_t)rx_frame->data[2]) << 8) | (uint16_t)rx_frame->data[3]) /
+          ((int16_t)((((uint16_t)rx_frame->data[2]) << 8) |
+                     (uint16_t)rx_frame->data[3])) /
           1000.0f;
       msg->body.motion_state_msg.lateral_velocity =
-          ((((uint16_t)rx_frame->data[4]) << 8) | (uint16_t)rx_frame->data[5]) /
+          ((int16_t)((((uint16_t)rx_frame->data[4]) << 8) |
+                     (uint16_t)rx_frame->data[5])) /
           1000.0f;
       break;
     }
@@ -89,7 +93,8 @@ bool DecodeCanFrameV1(const struct can_frame *rx_frame, AgxMessage *msg) {
   return true;
 }
 
-void EncodeCanFrameV1(const AgxMessage *msg, struct can_frame *tx_frame) {
+bool EncodeCanFrameV1(const AgxMessage *msg, struct can_frame *tx_frame) {
+  bool ret = true;
   switch (msg->type) {
     case AgxMsgMotionCommandV1: {
       static uint8_t count = 0;
@@ -155,9 +160,12 @@ void EncodeCanFrameV1(const AgxMessage *msg, struct can_frame *tx_frame) {
           tx_frame->can_id, tx_frame->data, tx_frame->can_dlc);
       break;
     }
-    default:
+    default: {
+      ret = false;
       break;
+    }
   }
+  return ret;
 }
 
 uint8_t CalcCanFrameChecksumV1(uint16_t id, uint8_t *data, uint8_t dlc) {

@@ -18,7 +18,7 @@
 namespace westonrobot {
 class ScoutRobot : public RobotInterface, public ScoutInterface {
  public:
-  ScoutRobot(ProtocolType protocol = ProtocolType::AGX_V2);
+  ScoutRobot(ProtocolVersion protocol = ProtocolVersion::AGX_V2);
   ~ScoutRobot();
 
   void Connect(std::string can_name) override;
@@ -32,6 +32,8 @@ class ScoutRobot : public RobotInterface, public ScoutInterface {
   void DisableLightControl() override;
 
   void ResetRobotState() override;
+
+  ProtocolVersion GetProtocolVersion() override;
 
   // get robot state
   ScoutState GetRobotState() override;

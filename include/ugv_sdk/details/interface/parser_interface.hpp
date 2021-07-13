@@ -26,11 +26,17 @@ struct can_frame {
 
 #include "ugv_sdk/details/interface/agilex_message.h"
 
-struct ParserInterface {
+enum class ProtocolVersion { AGX_V1, AGX_V2 };
+
+template <ProtocolVersion VersionNumber = ProtocolVersion::AGX_V2>
+class ParserInterface {
+ public:
+  virtual ~ParserInterface() = default;
+
   // CAN support
   virtual bool DecodeMessage(const struct can_frame *rx_frame,
                              AgxMessage *msg) = 0;
-  virtual void EncodeMessage(const AgxMessage *msg,
+  virtual bool EncodeMessage(const AgxMessage *msg,
                              struct can_frame *tx_frame) = 0;
   virtual uint8_t CalculateChecksum(uint16_t id, uint8_t *data,
                                     uint8_t dlc) = 0;
@@ -47,6 +53,8 @@ struct ParserInterface {
     // throw exception
     return 0;
   };
+
+  ProtocolVersion GetProtocolVersion() { return VersionNumber; }
 };
 
 #endif /* PASER_INTERFACE_HPP */

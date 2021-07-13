@@ -50,8 +50,7 @@ bool DecodeCanFrameV2(const struct can_frame *rx_frame, AgxMessage *msg) {
       msg->body.light_command_msg.front_light.custom_value =
           frame->front_custom;
       msg->body.light_command_msg.rear_light.mode = frame->rear_mode;
-      msg->body.light_command_msg.rear_light.custom_value =
-          frame->rear_custom;
+      msg->body.light_command_msg.rear_light.custom_value = frame->rear_custom;
       break;
     }
     case CAN_MSG_BRAKING_COMMAND_ID: {
@@ -104,8 +103,7 @@ bool DecodeCanFrameV2(const struct can_frame *rx_frame, AgxMessage *msg) {
       msg->body.light_command_msg.front_light.custom_value =
           frame->front_custom;
       msg->body.light_command_msg.rear_light.mode = frame->rear_mode;
-      msg->body.light_command_msg.rear_light.custom_value =
-          frame->rear_custom;
+      msg->body.light_command_msg.rear_light.custom_value = frame->rear_custom;
       break;
     }
     case CAN_MSG_RC_STATE_ID: {
@@ -192,10 +190,9 @@ bool DecodeCanFrameV2(const struct can_frame *rx_frame, AgxMessage *msg) {
       msg->body.actuator_ls_state_msg.driver_state = frame->driver_state;
       break;
     }
-    case CAN_MSG_CURRENT_CTRL_MODE:
-    {
-      msg->type=AgxMsgMotionModeState;
-      MotionModeStateFrame *frame = (MotionModeStateFrame*)(rx_frame->data);
+    case CAN_MSG_CURRENT_CTRL_MODE: {
+      msg->type = AgxMsgMotionModeState;
+      MotionModeStateFrame *frame = (MotionModeStateFrame *)(rx_frame->data);
 
       msg->body.motion_mode_feedback_msg.motion_mode = frame->motion_mode;
       msg->body.motion_mode_feedback_msg.mode_changing = frame->mode_changing;
@@ -309,7 +306,8 @@ bool DecodeCanFrameV2(const struct can_frame *rx_frame, AgxMessage *msg) {
   return true;
 }
 
-void EncodeCanFrameV2(const AgxMessage *msg, struct can_frame *tx_frame) {
+bool EncodeCanFrameV2(const AgxMessage *msg, struct can_frame *tx_frame) {
+  bool ret = true;
   switch (msg->type) {
     /***************** command frame *****************/
     case AgxMsgMotionCommand: {
@@ -346,8 +344,7 @@ void EncodeCanFrameV2(const AgxMessage *msg, struct can_frame *tx_frame) {
         frame.front_custom =
             msg->body.light_command_msg.front_light.custom_value;
         frame.rear_mode = msg->body.light_command_msg.rear_light.mode;
-        frame.rear_custom =
-            msg->body.light_command_msg.rear_light.custom_value;
+        frame.rear_custom = msg->body.light_command_msg.rear_light.custom_value;
       } else {
         frame.enable_cmd_ctrl = LIGHT_DISABLE_CMD_CTRL;
         frame.front_mode = 0;
@@ -590,9 +587,12 @@ void EncodeCanFrameV2(const AgxMessage *msg, struct can_frame *tx_frame) {
       memcpy(tx_frame->data, (uint8_t *)(&frame), tx_frame->can_dlc);
       break;
     }
-    default:
+    default: {
+      ret = false;
       break;
+    }
   }
+  return ret;
 }
 
 uint8_t CalcCanFrameChecksumV2(uint16_t id, uint8_t *data, uint8_t dlc) {

@@ -16,9 +16,9 @@ bool ProtocolV2Parser::DecodeMessage(const struct can_frame *rx_frame,
   return DecodeCanFrameV2(rx_frame, msg);
 }
 
-void ProtocolV2Parser::EncodeMessage(const AgxMessage *msg,
+bool ProtocolV2Parser::EncodeMessage(const AgxMessage *msg,
                                      struct can_frame *tx_frame) {
-  EncodeCanFrameV2(msg, tx_frame);
+  return EncodeCanFrameV2(msg, tx_frame);
 }
 
 uint8_t ProtocolV2Parser::CalculateChecksum(uint16_t id, uint8_t *data,

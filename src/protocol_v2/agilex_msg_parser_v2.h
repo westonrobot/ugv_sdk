@@ -31,7 +31,7 @@ struct can_frame {
 #include "ugv_sdk/details/interface/agilex_message.h"
 
 bool DecodeCanFrameV2(const struct can_frame *rx_frame, AgxMessage *msg);
-void EncodeCanFrameV2(const AgxMessage *msg, struct can_frame *tx_frame);
+bool EncodeCanFrameV2(const AgxMessage *msg, struct can_frame *tx_frame);
 uint8_t CalcCanFrameChecksumV2(uint16_t id, uint8_t *data, uint8_t dlc);
 
 #ifdef __cplusplus

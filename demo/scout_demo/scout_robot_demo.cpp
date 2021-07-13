@@ -34,9 +34,11 @@ int main(int argc, char **argv) {
 
   std::unique_ptr<ScoutRobot> scout;
   if (protocol_version == "v1") {
-    scout = std::unique_ptr<ScoutRobot>(new ScoutRobot(ProtocolType::AGX_V1));
+    scout =
+        std::unique_ptr<ScoutRobot>(new ScoutRobot(ProtocolVersion::AGX_V1));
   } else if (protocol_version == "v2") {
-    scout = std::unique_ptr<ScoutRobot>(new ScoutRobot(ProtocolType::AGX_V2));
+    scout =
+        std::unique_ptr<ScoutRobot>(new ScoutRobot(ProtocolVersion::AGX_V2));
   } else {
     std::cout << "Error: invalid protocol version string" << std::endl;
     return -1;
@@ -46,7 +48,13 @@ int main(int argc, char **argv) {
     std::cout << "Failed to create robot object" << std::endl;
 
   scout->Connect(device_name);
-  scout->EnableCommandedMode();
+
+  if (scout->GetProtocolVersion() == ProtocolVersion::AGX_V2) {
+    scout->EnableCommandedMode();
+    std::cout << "Protocol version 2" << std::endl;
+  } else {
+    std::cout << "Protocol version 1" << std::endl;
+  }
 
   // light control
   std::cout << "Light: const off" << std::endl;
@@ -67,10 +75,10 @@ int main(int argc, char **argv) {
   int count = 0;
   while (true) {
     // motion control
-    if (count < 100) {
-      std::cout << "Motor: 0.2, 0" << std::endl;
-      scout->SetMotionCommand(0.2, 0.0);
-    }
+    // if (count < 100) {
+    //   std::cout << "Motor: 0.2, 0" << std::endl;
+    //   scout->SetMotionCommand(0.2, 0.0);
+    // }
 
     // get robot state
     auto state = scout->GetRobotState();
@@ -80,12 +88,23 @@ int main(int argc, char **argv) {
               << static_cast<int>(state.system_state.control_mode)
               << " , vehicle state: "
               << static_cast<int>(state.system_state.vehicle_state)
-              << std::endl;
-    std::cout << "battery voltage: " << state.system_state.battery_voltage
+              << " , error code: " << std::hex << state.system_state.error_code
+              << ", battery voltage: " << state.system_state.battery_voltage
               << std::endl;
     std::cout << "velocity (linear, angular): "
               << state.motion_state.linear_velocity << ", "
               << state.motion_state.angular_velocity << std::endl;
+
+    if (scout->GetProtocolVersion() == ProtocolVersion::AGX_V1) {
+      for (int i = 0; i < 4; ++i) {
+        printf("motor %d: current %f, rpm %d, driver temp %f, motor temp %f\n",
+               state.actuator_state[i].motor_id,
+               state.actuator_state[i].current, state.actuator_state[i].rpm,
+               state.actuator_state[i].driver_temp,
+               state.actuator_state[i].motor_temp);
+      }
+    } else {
+    }
     std::cout << "-------------------------------" << std::endl;
 
     usleep(20000);

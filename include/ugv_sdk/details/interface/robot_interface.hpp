@@ -13,10 +13,9 @@
 #include <string>
 
 #include "ugv_sdk/details/interface/agilex_message.h"
+#include "ugv_sdk/details/interface/parser_interface.hpp"
 
 namespace westonrobot {
-enum class ProtocolType { AGX_V1, AGX_V2 };
-
 class RobotInterface {
  public:
   ~RobotInterface() = default;
@@ -33,12 +32,14 @@ class RobotInterface {
   };
   virtual void ResetRobotState() = 0;
 
+  virtual ProtocolVersion GetProtocolVersion() = 0;
+
  protected:
   /****** functions not available/valid to all robots ******/
   // functions to be implemented by class AgilexBase
   virtual void SetMotionMode(uint8_t mode){};
 
-    // any specific robot will use a specialized version of the two functions
+  // any specific robot will use a specialized version of the two functions
   virtual void SendMotionCommand(double linear_vel, double angular_vel,
                                  double lateral_velocity,
                                  double steering_angle){

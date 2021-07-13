@@ -46,8 +46,7 @@ class AgilexBase : public RobotInterface {
 
     // encode msg to can frame and send to bus
     can_frame frame;
-    parser_.EncodeMessage(&msg, &frame);
-    can_->SendFrame(frame);
+    if (parser_.EncodeMessage(&msg, &frame)) can_->SendFrame(frame);
   }
 
   // must be called at a frequency >= 50Hz
@@ -64,8 +63,7 @@ class AgilexBase : public RobotInterface {
 
       // send to can bus
       can_frame frame;
-      parser_.EncodeMessage(&msg, &frame);
-      can_->SendFrame(frame);
+      if (parser_.EncodeMessage(&msg, &frame)) can_->SendFrame(frame);
     }
   }
 
@@ -83,8 +81,7 @@ class AgilexBase : public RobotInterface {
 
       // send to can bus
       can_frame frame;
-      parser_.EncodeMessage(&msg, &frame);
-      can_->SendFrame(frame);
+      if (parser_.EncodeMessage(&msg, &frame)) can_->SendFrame(frame);
     }
   }
 
@@ -97,8 +94,7 @@ class AgilexBase : public RobotInterface {
 
       // send to can bus
       can_frame frame;
-      parser_.EncodeMessage(&msg, &frame);
-      can_->SendFrame(frame);
+      if (parser_.EncodeMessage(&msg, &frame)) can_->SendFrame(frame);
     }
   }
 
@@ -111,9 +107,12 @@ class AgilexBase : public RobotInterface {
 
       // send to can bus
       can_frame frame;
-      parser_.EncodeMessage(&msg, &frame);
-      can_->SendFrame(frame);
+      if (parser_.EncodeMessage(&msg, &frame)) can_->SendFrame(frame);
     }
+  }
+
+  ProtocolVersion GetProtocolVersion() override {
+    return parser_.GetProtocolVersion();
   }
 
  protected:
