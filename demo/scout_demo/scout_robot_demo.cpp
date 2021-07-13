@@ -76,8 +76,8 @@ int main(int argc, char **argv) {
   while (true) {
     // motion control
     // if (count < 100) {
-    //   std::cout << "Motor: 0.2, 0" << std::endl;
-    //   scout->SetMotionCommand(0.2, 0.0);
+    std::cout << "Motor: 0.2, 0" << std::endl;
+    scout->SetMotionCommand(0.2, 0.0);
     // }
 
     // get robot state

@@ -55,12 +55,24 @@ class AgilexBase : public RobotInterface {
     if (can_connected_) {
       // motion control message
       AgxMessage msg;
-      msg.type = AgxMsgMotionCommand;
-      msg.body.motion_command_msg.linear_velocity = linear_vel;
-      msg.body.motion_command_msg.angular_velocity = angular_vel;
-      msg.body.motion_command_msg.lateral_velocity = lateral_velocity;
-      msg.body.motion_command_msg.steering_angle = steering_angle;
+      if (parser_.GetProtocolVersion() == ProtocolVersion::AGX_V1) {
+        msg.type = AgxMsgMotionCommandV1;
+        msg.body.v1_motion_command_msg.control_mode = CONTROL_MODE_CAN;
+        msg.body.v1_motion_command_msg.clear_all_error = false;
+        msg.body.v1_motion_command_msg.linear = linear_vel;
+        msg.body.v1_motion_command_msg.angular = angular_vel;
+        msg.body.v1_motion_command_msg.lateral = lateral_velocity;
+      } else if (parser_.GetProtocolVersion() == ProtocolVersion::AGX_V2) {
+        msg.type = AgxMsgMotionCommand;
+        msg.body.motion_command_msg.linear_velocity = linear_vel;
+        msg.body.motion_command_msg.angular_velocity = angular_vel;
+        msg.body.motion_command_msg.lateral_velocity = lateral_velocity;
+        msg.body.motion_command_msg.steering_angle = steering_angle;
+      }
 
+      std::cout << "sending motion cmd: " << linear_vel << "," << angular_vel
+                << std::endl;
+                
       // send to can bus
       can_frame frame;
       if (parser_.EncodeMessage(&msg, &frame)) can_->SendFrame(frame);
