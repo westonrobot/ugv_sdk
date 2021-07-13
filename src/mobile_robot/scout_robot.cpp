@@ -11,11 +11,19 @@
 #include "ugv_sdk/details/robot_base/scout_base.hpp"
 
 namespace westonrobot {
-ScoutRobot::ScoutRobot(ProtocolVersion protocol) {
-  if (protocol == ProtocolVersion::AGX_V1) {
-    robot_ = new ScoutBaseV1();
-  } else if (protocol == ProtocolVersion::AGX_V2) {
-    robot_ = new ScoutBaseV2();
+ScoutRobot::ScoutRobot(ProtocolVersion protocol, bool is_mini_model) {
+  if (!is_mini_model) {
+    if (protocol == ProtocolVersion::AGX_V1) {
+      robot_ = new ScoutBaseV1();
+    } else if (protocol == ProtocolVersion::AGX_V2) {
+      robot_ = new ScoutBaseV2();
+    }
+  } else {
+    if (protocol == ProtocolVersion::AGX_V1) {
+      robot_ = new ScoutMiniBaseV1();
+    } else if (protocol == ProtocolVersion::AGX_V2) {
+      robot_ = new ScoutMiniBaseV2();
+    }
   }
 }
 

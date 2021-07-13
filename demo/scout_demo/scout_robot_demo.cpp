@@ -34,11 +34,11 @@ int main(int argc, char **argv) {
 
   std::unique_ptr<ScoutRobot> scout;
   if (protocol_version == "v1") {
-    scout =
-        std::unique_ptr<ScoutRobot>(new ScoutRobot(ProtocolVersion::AGX_V1));
+    scout = std::unique_ptr<ScoutRobot>(
+        new ScoutRobot(ProtocolVersion::AGX_V1, true));
   } else if (protocol_version == "v2") {
-    scout =
-        std::unique_ptr<ScoutRobot>(new ScoutRobot(ProtocolVersion::AGX_V2));
+    scout = std::unique_ptr<ScoutRobot>(
+        new ScoutRobot(ProtocolVersion::AGX_V2, true));
   } else {
     std::cout << "Error: invalid protocol version string" << std::endl;
     return -1;
@@ -66,19 +66,18 @@ int main(int argc, char **argv) {
   std::cout << "Light: breath" << std::endl;
   scout->SetLightCommand(BREATH, 0, BREATH, 0);
   sleep(3);
-  std::cout << "Light: custom 90-80" << std::endl;
-  scout->SetLightCommand(CUSTOM, 90, CUSTOM, 80);
+  std::cout << "Light: custom 30-80" << std::endl;
+  scout->SetLightCommand(CUSTOM, 30, CUSTOM, 80);
   sleep(3);
-  std::cout << "Light: diabled cmd control" << std::endl;
-  scout->DisableLightControl();
+  //   std::cout << "Light: diabled cmd control" << std::endl;
+  //   scout->DisableLightControl();
+  scout->SetLightCommand(CONST_OFF, 0, CONST_OFF, 0);
 
   int count = 0;
   while (true) {
     // motion control
-    // if (count < 100) {
-    std::cout << "Motor: 0.2, 0" << std::endl;
-    scout->SetMotionCommand(0.2, 0.0);
-    // }
+    std::cout << "Motor: 1.0, 0" << std::endl;
+    scout->SetMotionCommand(1.0, 0.0);
 
     // get robot state
     auto state = scout->GetRobotState();

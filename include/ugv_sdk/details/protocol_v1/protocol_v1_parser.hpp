@@ -61,7 +61,7 @@ class ProtocolV1Parser : public ParserInterface<ProtocolVersion::AGX_V1> {
 };
 
 using ScoutProtocolV1Parser = ProtocolV1Parser<ScoutV2Limits>;
-using ScoutMiniProtocolV1Parser = ProtocolV1Parser<ScoutV2Limits>;
+using ScoutMiniProtocolV1Parser = ProtocolV1Parser<ScoutMiniLimits>;
 
 using HunterProtocolV1Parser = ProtocolV1Parser<HunterV1Limits>;
 

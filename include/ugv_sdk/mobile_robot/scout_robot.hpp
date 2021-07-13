@@ -18,7 +18,8 @@
 namespace westonrobot {
 class ScoutRobot : public RobotInterface, public ScoutInterface {
  public:
-  ScoutRobot(ProtocolVersion protocol = ProtocolVersion::AGX_V2);
+  ScoutRobot(ProtocolVersion protocol = ProtocolVersion::AGX_V2,
+             bool is_mini_model = false);
   ~ScoutRobot();
 
   void Connect(std::string can_name) override;

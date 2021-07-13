@@ -125,7 +125,10 @@ class ScoutBase : public AgilexBase<Parser>, public ScoutInterface {
 
 namespace westonrobot {
 using ScoutBaseV1 = ScoutBase<ScoutProtocolV1Parser>;
+using ScoutMiniBaseV1 = ScoutBase<ScoutMiniProtocolV1Parser>;
+
 using ScoutBaseV2 = ScoutBase<ProtocolV2Parser>;
+using ScoutMiniBaseV2 = ScoutBase<ProtocolV2Parser>;
 }  // namespace westonrobot
 
 #endif /* SCOUT_BASE_HPP */
