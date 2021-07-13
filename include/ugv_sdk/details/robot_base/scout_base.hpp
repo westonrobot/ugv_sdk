@@ -98,6 +98,12 @@ class ScoutBase : public AgilexBase<Parser>, public ScoutInterface {
             status_msg.body.actuator_ls_state_msg;
         break;
       }
+      case AgxMsgActuatorStateV1: {
+        // std::cout << "actuator v1 feedback received" << std::endl;
+        state.actuator_state[status_msg.body.v1_actuator_state_msg.motor_id] =
+            status_msg.body.v1_actuator_state_msg;
+        break;
+      }
         //   case AgxMsgRcState: {
         //     state.rc_state = status_msg.body.rc_state_msg;
         //     break;

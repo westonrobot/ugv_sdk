@@ -102,8 +102,8 @@ typedef struct {
   uint8_t error_clear_byte;
   int8_t linear_percentage;
   int8_t angular_percentage;
+  int8_t lateral_percentage;
   uint8_t reserved0;
-  uint8_t reserved1;
   uint8_t count;
   uint8_t checksum;
 } MotionCommandFrame;

@@ -50,6 +50,7 @@ typedef struct {
   bool clear_all_error;
   float linear;
   float angular;
+  float lateral;
 } MotionCommandMessageV1;
 
 typedef struct {
@@ -133,7 +134,8 @@ typedef struct {
   uint8_t motor_id;
   float current;
   int16_t rpm;
-  float temperature;
+  float driver_temp;
+  float motor_temp;
 } ActuatorStateMessageV1;
 
 /***************** Sensor messages ******************/
