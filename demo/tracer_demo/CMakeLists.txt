@@ -1,0 +1,2 @@
+add_executable(demo_tracer_robot tracer_robot_demo.cpp)
+target_link_libraries(demo_tracer_robot ugv_sdk)
