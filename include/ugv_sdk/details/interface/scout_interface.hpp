@@ -37,6 +37,9 @@ struct ScoutInterface {
 
   // get robot state
   virtual ScoutState GetRobotState() = 0;
+  virtual RcStateMessage GetRcState(){
+      // TODO
+  };
 };
 }  // namespace westonrobot
 

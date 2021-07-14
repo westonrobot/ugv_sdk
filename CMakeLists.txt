@@ -88,7 +88,7 @@ add_library(${PROJECT_NAME}
     ########################
     ## public interface to access robot
     src/mobile_robot/scout_robot.cpp
-    src/mobile_robot/tracer_robot.cpp
+    # src/mobile_robot/tracer_robot.cpp
     ########################
     ## protocol v2 support
     src/protocol_v2/agilex_msg_parser_v2.c
