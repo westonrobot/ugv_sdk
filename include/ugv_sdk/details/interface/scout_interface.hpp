@@ -34,6 +34,10 @@ struct ScoutActuatorState {
 struct ScoutInterface {
   virtual ~ScoutInterface() = default;
 
+  virtual void Connect(std::string uart_name, uint32_t baudrate){
+      // use derived version
+  };
+
   virtual void SetMotionCommand(double linear_vel, double angular_vel) = 0;
   virtual void SetLightCommand(LightMode f_mode, uint8_t f_value,
                                LightMode r_mode, uint8_t r_value) = 0;

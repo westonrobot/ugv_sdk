@@ -43,14 +43,11 @@ class RobotCommonInterface {
 
   // functions to be implemented by each robot class
   virtual void Connect(std::string can_name) = 0;
-  // functions to be implemented by each robot class
-  virtual void Connect(std::string uart_name, uint32_t baudrate){
-      // use derived version
-  };
+
   virtual void ResetRobotState() = 0;
 
   virtual void DisableLightControl() {
-    // use derived version
+    // do nothing if no light on robot
   }
 
   virtual ProtocolVersion GetProtocolVersion() = 0;

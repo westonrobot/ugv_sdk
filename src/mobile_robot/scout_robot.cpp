@@ -36,7 +36,7 @@ void ScoutRobot::EnableCommandedMode() { robot_->EnableCommandedMode(); }
 void ScoutRobot::Connect(std::string can_name) { robot_->Connect(can_name); }
 
 void ScoutRobot::Connect(std::string uart_name, uint32_t baudrate) {
-  robot_->Connect(uart_name, baudrate);
+//   robot_->Connect(uart_name, baudrate);
 }
 
 void ScoutRobot::ResetRobotState() { robot_->ResetRobotState(); }
