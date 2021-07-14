@@ -94,13 +94,15 @@ int main(int argc, char **argv) {
               << state.motion_state.linear_velocity << ", "
               << state.motion_state.angular_velocity << std::endl;
 
+    auto actuator = scout->GetActuatorState();
     if (scout->GetProtocolVersion() == ProtocolVersion::AGX_V1) {
       for (int i = 0; i < 4; ++i) {
         printf("motor %d: current %f, rpm %d, driver temp %f, motor temp %f\n",
-               state.actuator_state[i].motor_id,
-               state.actuator_state[i].current, state.actuator_state[i].rpm,
-               state.actuator_state[i].driver_temp,
-               state.actuator_state[i].motor_temp);
+               actuator.actuator_state[i].motor_id,
+               actuator.actuator_state[i].current,
+               actuator.actuator_state[i].rpm,
+               actuator.actuator_state[i].driver_temp,
+               actuator.actuator_state[i].motor_temp);
       }
     } else {
     }

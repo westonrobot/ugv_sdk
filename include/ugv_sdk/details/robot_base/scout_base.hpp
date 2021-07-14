@@ -19,17 +19,15 @@
 #include "ugv_sdk/details/robot_base/agilex_base.hpp"
 
 namespace westonrobot {
-template <typename Parser>
-class ScoutBase : public AgilexBase<Parser>, public ScoutInterface {
+template <typename ParserType>
+class ScoutBase : public AgilexBase<ParserType>, public ScoutInterface {
  public:
-  ScoutBase() : AgilexBase<Parser>(){};
+  ScoutBase() : AgilexBase<ParserType>(){};
   ~ScoutBase() = default;
 
   // set up connection
   void Connect(std::string can_name) override {
-    AgilexBase<Parser>::ConnectPort(
-        can_name, std::bind(&ScoutBase<Parser>::ParseCANFrame, this,
-                            std::placeholders::_1));
+    AgilexBase<ParserType>::Connect(can_name);
   }
 
   void Connect(std::string uart_name, uint32_t baudrate) override {
@@ -38,92 +36,37 @@ class ScoutBase : public AgilexBase<Parser>, public ScoutInterface {
 
   // robot control
   void SetMotionCommand(double linear_vel, double angular_vel) override {
-    AgilexBase<Parser>::SendMotionCommand(linear_vel, angular_vel, 0.0, 0.0);
+    AgilexBase<ParserType>::SendMotionCommand(linear_vel, angular_vel, 0.0,
+                                              0.0);
   }
 
   void SetLightCommand(LightMode f_mode, uint8_t f_value, LightMode r_mode,
                        uint8_t r_value) override {
-    AgilexBase<Parser>::SendLightCommand(f_mode, f_value, r_mode, r_value);
+    AgilexBase<ParserType>::SendLightCommand(f_mode, f_value, r_mode, r_value);
   }
 
   // get robot state
-  ScoutState GetRobotState() override {
-    std::lock_guard<std::mutex> guard(AgilexBase<Parser>::state_mutex_);
-    return scout_state_;
+  ScoutCoreState GetRobotState() override {
+    auto state = AgilexBase<ParserType>::GetRobotCoreStateMsgGroup();
+
+    ScoutCoreState scout_state;
+    scout_state.system_state = state.system_state;
+    scout_state.motion_state = state.motion_state;
+    scout_state.light_state = state.light_state;
+    scout_state.rc_state = state.rc_state;
+    return scout_state;
   }
 
-  RcStateMessage GetRcState() override {}
+  ScoutActuatorState GetActuatorState() override {
+    auto actuator = AgilexBase<ParserType>::GetActuatorStateMsgGroup();
 
-  void ResetRobotState() override {
-    std::lock_guard<std::mutex> guard(rc_state_mutex_);
-  }
-
- private:
-  ScoutState scout_state_;
-  RcStateMessage rc_state_;
-  std::mutex rc_state_mutex_;
-
-  void ParseCANFrame(can_frame *rx_frame) override {
-    AgxMessage status_msg;
-    if (AgilexBase<Parser>::parser_.DecodeMessage(rx_frame, &status_msg)) {
-      if (status_msg.type == AgxMsgRcState)
-        UpdateRcState(status_msg);
-      else
-        UpdateScoutState(status_msg, scout_state_);
+    ScoutActuatorState scout_actuator;
+    for (int i = 0; i < 4; ++i) {
+      scout_actuator.actuator_hs_state[i] = actuator.actuator_hs_state[i];
+      scout_actuator.actuator_ls_state[i] = actuator.actuator_ls_state[i];
+      scout_actuator.actuator_state[i] = actuator.actuator_state[i];
     }
-  }
-
-  void UpdateRcState(const AgxMessage &status_msg) {
-    std::lock_guard<std::mutex> guard(rc_state_mutex_);
-    rc_state_ = status_msg.body.rc_state_msg;
-  }
-
-  void UpdateScoutState(const AgxMessage &status_msg, ScoutState &state) {
-    std::lock_guard<std::mutex> guard(AgilexBase<Parser>::state_mutex_);
-    switch (status_msg.type) {
-      case AgxMsgSystemState: {
-        //   std::cout << "system status feedback received" << std::endl;
-        state.system_state = status_msg.body.system_state_msg;
-        break;
-      }
-      case AgxMsgMotionState: {
-        // std::cout << "motion control feedback received" << std::endl;
-        state.motion_state = status_msg.body.motion_state_msg;
-        break;
-      }
-      case AgxMsgLightState: {
-        // std::cout << "light control feedback received" << std::endl;
-        state.light_state = status_msg.body.light_state_msg;
-        break;
-      }
-      case AgxMsgActuatorHSState: {
-        // std::cout << "actuator hs feedback received" << std::endl;
-        state
-            .actuator_hs_state[status_msg.body.actuator_hs_state_msg.motor_id] =
-            status_msg.body.actuator_hs_state_msg;
-        break;
-      }
-      case AgxMsgActuatorLSState: {
-        // std::cout << "actuator ls feedback received" << std::endl;
-        state
-            .actuator_ls_state[status_msg.body.actuator_ls_state_msg.motor_id] =
-            status_msg.body.actuator_ls_state_msg;
-        break;
-      }
-      case AgxMsgActuatorStateV1: {
-        // std::cout << "actuator v1 feedback received" << std::endl;
-        state.actuator_state[status_msg.body.v1_actuator_state_msg.motor_id] =
-            status_msg.body.v1_actuator_state_msg;
-        break;
-      }
-        /* sensor feedback */
-        //   case AgxMsgOdometry: {
-        //     // std::cout << "Odometer msg feedback received" << std::endl;
-        //     state.odometry = status_msg.body.odometry_msg;
-        //   }
-      default:
-        break;
-    }
+    return scout_actuator;
   }
 };
 }  // namespace westonrobot

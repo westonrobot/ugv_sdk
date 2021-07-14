@@ -127,7 +127,7 @@ typedef struct {
 typedef struct {
   uint8_t motion_mode;
   uint8_t mode_changing;
-} MotionModeFeedbackMessage;
+} MotionModeStateMessage;
 
 // V1-only messages
 typedef struct {
@@ -273,10 +273,11 @@ typedef enum {
   AgxMsgSystemState,
   AgxMsgMotionState,
   AgxMsgLightState,
+  AgxMsgMotionModeState,
   AgxMsgRcState,
+  // actuator feedback
   AgxMsgActuatorHSState,
   AgxMsgActuatorLSState,
-  AgxMsgMotionModeState,
   // sensor
   AgxMsgOdometry,
   AgxMsgImuAccel,
@@ -309,14 +310,15 @@ typedef struct {
     LightCommandMessage light_command_msg;
     BrakingCommandMessage braking_command_msg;
     MotionModeCommandMessage motion_mode_msg;
-    // state feedback
+    // core state feedback
     SystemStateMessage system_state_msg;
     MotionStateMessage motion_state_msg;
     LightStateMessage light_state_msg;
+    MotionModeStateMessage motion_mode_state_msg;
     RcStateMessage rc_state_msg;
+    // actuator feedback
     ActuatorHSStateMessage actuator_hs_state_msg;
     ActuatorLSStateMessage actuator_ls_state_msg;
-    MotionModeFeedbackMessage motion_mode_feedback_msg;
     // sensor
     OdometryMessage odometry_msg;
     ImuAccelMessage imu_accel_msg;

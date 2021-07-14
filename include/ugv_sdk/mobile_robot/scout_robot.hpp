@@ -37,7 +37,8 @@ class ScoutRobot : public RobotInterface, public ScoutInterface {
   ProtocolVersion GetProtocolVersion() override;
 
   // get robot state
-  ScoutState GetRobotState() override;
+  ScoutCoreState GetRobotState() override;
+  ScoutActuatorState GetActuatorState() override;
 
  private:
   RobotInterface* robot_;

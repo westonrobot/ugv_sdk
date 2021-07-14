@@ -25,7 +25,7 @@ struct RangerState {
 
   ActuatorHSStateMessage actuator_hs_state[8];
   ActuatorLSStateMessage actuator_ls_state[8];
-  MotionModeFeedbackMessage current_motion_mode;
+  MotionModeStateMessage current_motion_mode;
 
   // sensor data
   OdometryMessage odometry;

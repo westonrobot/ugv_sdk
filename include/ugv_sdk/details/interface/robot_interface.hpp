@@ -15,7 +15,25 @@
 #include "ugv_sdk/details/interface/agilex_message.h"
 #include "ugv_sdk/details/interface/parser_interface.hpp"
 
+#define AGX_MAX_ACTUATOR_NUM 8
+
 namespace westonrobot {
+struct CoreStateMsgGroup {
+  SystemStateMessage system_state;
+  MotionStateMessage motion_state;
+  LightStateMessage light_state;
+  MotionModeStateMessage motion_mode_state;
+  RcStateMessage rc_state;
+};
+
+struct ActuatorStateMsgGroup {
+  ActuatorHSStateMessage actuator_hs_state[AGX_MAX_ACTUATOR_NUM];  // v2 only
+  ActuatorLSStateMessage actuator_ls_state[AGX_MAX_ACTUATOR_NUM];  // v2 only
+  ActuatorStateMessageV1 actuator_state[AGX_MAX_ACTUATOR_NUM];     // v1 only
+};
+
+struct CommonSensorStateMsgGroup {};
+
 class RobotInterface {
  public:
   ~RobotInterface() = default;
@@ -38,6 +56,8 @@ class RobotInterface {
   /****** functions not available/valid to all robots ******/
   // functions to be implemented by class AgilexBase
   virtual void SetMotionMode(uint8_t mode){};
+  virtual CoreStateMsgGroup GetRobotCoreStateMsgGroup(){};
+  virtual ActuatorStateMsgGroup GetActuatorStateMsgGroup(){};
 
   // any specific robot will use a specialized version of the two functions
   virtual void SendMotionCommand(double linear_vel, double angular_vel,

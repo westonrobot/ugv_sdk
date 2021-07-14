@@ -58,8 +58,13 @@ void ScoutRobot::SetLightCommand(LightMode f_mode, uint8_t f_value,
   scout->SetLightCommand(f_mode, f_value, r_mode, r_value);
 }
 
-ScoutState ScoutRobot::GetRobotState() {
+ScoutCoreState ScoutRobot::GetRobotState() {
   auto scout = dynamic_cast<ScoutInterface*>(robot_);
   return scout->GetRobotState();
+}
+
+ScoutActuatorState ScoutRobot::GetActuatorState() {
+  auto scout = dynamic_cast<ScoutInterface*>(robot_);
+  return scout->GetActuatorState();
 }
 }  // namespace westonrobot

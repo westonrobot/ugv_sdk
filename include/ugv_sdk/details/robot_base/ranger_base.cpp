@@ -96,7 +96,7 @@ void RangerBase::UpdateRangerState(const AgxMessage &status_msg,
       break;
     }
     case AgxMsgMotionModeState: {
-      state.current_motion_mode = status_msg.body.motion_mode_feedback_msg;
+      state.current_motion_mode = status_msg.body.motion_mode_state_msg;
       break;
     }
     /* sensor feedback */

@@ -37,6 +37,11 @@ class AgilexBase : public RobotInterface {
   AgilexBase(const AgilexBase &hunter) = delete;
   AgilexBase &operator=(const AgilexBase &hunter) = delete;
 
+  void Connect(std::string can_name) override {
+    ConnectPort(can_name, std::bind(&AgilexBase<ParserType>::ParseCANFrame,
+                                    this, std::placeholders::_1));
+  }
+
   // switch to commanded mode
   void EnableCommandedMode() {
     // construct message
@@ -72,7 +77,7 @@ class AgilexBase : public RobotInterface {
 
       std::cout << "sending motion cmd: " << linear_vel << "," << angular_vel
                 << std::endl;
-                
+
       // send to can bus
       can_frame frame;
       if (parser_.EncodeMessage(&msg, &frame)) can_->SendFrame(frame);
@@ -123,13 +128,38 @@ class AgilexBase : public RobotInterface {
     }
   }
 
+  void ResetRobotState() override {}
+
   ProtocolVersion GetProtocolVersion() override {
     return parser_.GetProtocolVersion();
   }
 
+  CoreStateMsgGroup GetRobotCoreStateMsgGroup() override {
+    std::lock_guard<std::mutex> guard(core_state_mtx_);
+    return core_state_msgs_;
+  }
+
+  ActuatorStateMsgGroup GetActuatorStateMsgGroup() override {
+    std::lock_guard<std::mutex> guard(actuator_state_mtx_);
+    return actuator_state_msgs_;
+  }
+
  protected:
   ParserType parser_;
-  std::mutex state_mutex_;
+
+  // divide feedback messages into smaller groups to avoid the
+  // state mutex being locked for too often such that accessing
+  // the data become difficult
+
+  /* feedback group 1: core state */
+  std::mutex core_state_mtx_;
+  CoreStateMsgGroup core_state_msgs_;
+
+  /* feedback group 2: actuator state */
+  std::mutex actuator_state_mtx_;
+  ActuatorStateMsgGroup actuator_state_msgs_;
+
+  /* feedback group 3: common sensor */
 
   // communication interface
   bool can_connected_ = false;
@@ -148,7 +178,66 @@ class AgilexBase : public RobotInterface {
     if (can_connected_) can_->StopService();
   }
 
-  virtual void ParseCANFrame(can_frame *rx_frame) = 0;
+  virtual void ParseCANFrame(can_frame *rx_frame) {
+    AgxMessage status_msg;
+    if (parser_.DecodeMessage(rx_frame, &status_msg)) {
+      UpdateRobotCoreState(status_msg);
+      UpdateActuatorState(status_msg);
+    }
+  }
+
+  void UpdateRobotCoreState(const AgxMessage &status_msg) {
+    std::lock_guard<std::mutex> guard(core_state_mtx_);
+    switch (status_msg.type) {
+      case AgxMsgSystemState: {
+        //   std::cout << "system status feedback received" << std::endl;
+        core_state_msgs_.system_state = status_msg.body.system_state_msg;
+        break;
+      }
+      case AgxMsgMotionState: {
+        // std::cout << "motion control feedback received" << std::endl;
+        core_state_msgs_.motion_state = status_msg.body.motion_state_msg;
+        break;
+      }
+      case AgxMsgLightState: {
+        // std::cout << "light control feedback received" << std::endl;
+        core_state_msgs_.light_state = status_msg.body.light_state_msg;
+        break;
+      }
+      default:
+        break;
+    }
+  }
+
+  void UpdateActuatorState(const AgxMessage &status_msg) {
+    std::lock_guard<std::mutex> guard(actuator_state_mtx_);
+    switch (status_msg.type) {
+      case AgxMsgActuatorHSState: {
+        // std::cout << "actuator hs feedback received" << std::endl;
+        actuator_state_msgs_
+            .actuator_hs_state[status_msg.body.actuator_hs_state_msg.motor_id] =
+            status_msg.body.actuator_hs_state_msg;
+        break;
+      }
+      case AgxMsgActuatorLSState: {
+        // std::cout << "actuator ls feedback received" << std::endl;
+
+        actuator_state_msgs_
+            .actuator_ls_state[status_msg.body.actuator_ls_state_msg.motor_id] =
+            status_msg.body.actuator_ls_state_msg;
+        break;
+      }
+      case AgxMsgActuatorStateV1: {
+        // std::cout << "actuator v1 feedback received" << std::endl;
+        actuator_state_msgs_
+            .actuator_state[status_msg.body.v1_actuator_state_msg.motor_id] =
+            status_msg.body.v1_actuator_state_msg;
+        break;
+      }
+      default:
+        break;
+    }
+  }
 };
 }  // namespace westonrobot
 

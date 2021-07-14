@@ -15,11 +15,14 @@
 #include "ugv_sdk/details/interface/agilex_message.h"
 
 namespace westonrobot {
-struct ScoutState {
+struct ScoutCoreState {
   SystemStateMessage system_state;
   MotionStateMessage motion_state;
   LightStateMessage light_state;
+  RcStateMessage rc_state;
+};
 
+struct ScoutActuatorState {
   // actuator state
   // - for v2 robots only
   ActuatorHSStateMessage actuator_hs_state[4];
@@ -36,10 +39,8 @@ struct ScoutInterface {
                                LightMode r_mode, uint8_t r_value) = 0;
 
   // get robot state
-  virtual ScoutState GetRobotState() = 0;
-  virtual RcStateMessage GetRcState(){
-      // TODO
-  };
+  virtual ScoutCoreState GetRobotState() = 0;
+  virtual ScoutActuatorState GetActuatorState() = 0;
 };
 }  // namespace westonrobot
 
