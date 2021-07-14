@@ -12,11 +12,11 @@
 
 #include <memory>
 
-#include "ugv_sdk/details/interface/robot_interface.hpp"
+#include "ugv_sdk/details/interface/robot_common_interface.hpp"
 #include "ugv_sdk/details/interface/scout_interface.hpp"
 
 namespace westonrobot {
-class ScoutRobot : public RobotInterface, public ScoutInterface {
+class ScoutRobot : public RobotCommonInterface, public ScoutInterface {
  public:
   ScoutRobot(ProtocolVersion protocol = ProtocolVersion::AGX_V2,
              bool is_mini_model = false);
@@ -41,7 +41,7 @@ class ScoutRobot : public RobotInterface, public ScoutInterface {
   ScoutActuatorState GetActuatorState() override;
 
  private:
-  RobotInterface* robot_;
+  RobotCommonInterface* robot_;
 };
 }  // namespace westonrobot
 

@@ -34,9 +34,9 @@ struct ActuatorStateMsgGroup {
 
 struct CommonSensorStateMsgGroup {};
 
-class RobotInterface {
+class RobotCommonInterface {
  public:
-  ~RobotInterface() = default;
+  ~RobotCommonInterface() = default;
 
   // functions to be implemented by class AgilexBase
   virtual void EnableCommandedMode() = 0;
