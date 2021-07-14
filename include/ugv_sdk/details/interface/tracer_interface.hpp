@@ -15,18 +15,17 @@
 #include "ugv_sdk/details/interface/agilex_message.h"
 
 namespace westonrobot {
-struct TracerState {
-  // system state
+struct TracerCoreState {
   SystemStateMessage system_state;
   MotionStateMessage motion_state;
   LightStateMessage light_state;
+  RcStateMessage rc_state;
+};
 
+struct TracerActuatorState {
   // actuator state
-  // - for v2 robots only
-  ActuatorHSStateMessage actuator_hs_state[4];
-  ActuatorLSStateMessage actuator_ls_state[4];
-  // - for v1 robots only
-  ActuatorStateMessageV1 actuator_state[4];
+  ActuatorHSStateMessage actuator_hs_state[2];
+  ActuatorLSStateMessage actuator_ls_state[2];
 };
 
 struct TracerInterface {
@@ -36,7 +35,8 @@ struct TracerInterface {
   virtual void SetLightCommand(LightMode f_mode, uint8_t f_value) = 0;
 
   // get robot state
-  virtual TracerState GetRobotState() = 0;
+  virtual TracerCoreState GetRobotState() = 0;
+  virtual TracerActuatorState GetActuatorState() = 0;
 };
 }  // namespace westonrobot
 

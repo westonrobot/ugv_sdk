@@ -29,10 +29,9 @@ class TracerBaseV2 : public AgilexBase<ProtocolV2Parser>,
 
   // set up connection
   void Connect(std::string can_name) override {
-    AgilexBase<ProtocolV2Parser>::ConnectPort(
-        can_name,
-        std::bind(&TracerBaseV2::ParseCANFrame, this, std::placeholders::_1));
+    AgilexBase<ProtocolV2Parser>::Connect(can_name);
   }
+  
   void Connect(std::string uart_name, uint32_t baudrate) override {
     // TODO
   }
@@ -49,9 +48,26 @@ class TracerBaseV2 : public AgilexBase<ProtocolV2Parser>,
   }
 
   // get robot state
-  TracerState GetRobotState() override {
-    // std::lock_guard<std::mutex>
-    // guard(AgilexBase<ProtocolV2Parser>::state_mutex_); return tracer_state_;
+  TracerCoreState GetRobotState() override {
+    auto state = AgilexBase<ProtocolV2Parser>::GetRobotCoreStateMsgGroup();
+
+    TracerCoreState tracer_state;
+    tracer_state.system_state = state.system_state;
+    tracer_state.motion_state = state.motion_state;
+    tracer_state.light_state = state.light_state;
+    tracer_state.rc_state = state.rc_state;
+    return tracer_state;
+  }
+
+  TracerActuatorState GetActuatorState() override {
+    auto actuator = AgilexBase<ProtocolV2Parser>::GetActuatorStateMsgGroup();
+
+    TracerActuatorState tracer_actuator;
+    for (int i = 0; i < 2; ++i) {
+      tracer_actuator.actuator_hs_state[i] = actuator.actuator_hs_state[i];
+      tracer_actuator.actuator_ls_state[i] = actuator.actuator_ls_state[i];
+    }
+    return tracer_actuator;
   }
 
   void ResetRobotState() override {
