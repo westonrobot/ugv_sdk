@@ -21,14 +21,12 @@ struct TracerState {
   MotionStateMessage motion_state;
   LightStateMessage light_state;
 
-  // Is this still needed?
-  RcStateMessage rc_state;
-
-  ActuatorHSStateMessage actuator_hs_state[2];
-  ActuatorLSStateMessage actuator_ls_state[2];
-
-  // sensor data
-  OdometryMessage odometry;
+  // actuator state
+  // - for v2 robots only
+  ActuatorHSStateMessage actuator_hs_state[4];
+  ActuatorLSStateMessage actuator_ls_state[4];
+  // - for v1 robots only
+  ActuatorStateMessageV1 actuator_state[4];
 };
 
 struct TracerInterface {
