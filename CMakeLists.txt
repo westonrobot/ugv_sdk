@@ -88,6 +88,7 @@ add_library(${PROJECT_NAME}
     ########################
     ## public interface to access robot
     src/mobile_robot/scout_robot.cpp
+    src/mobile_robot/hunter_robot.cpp
     src/mobile_robot/bunker_robot.cpp
     ########################
     ## protocol v2 support
