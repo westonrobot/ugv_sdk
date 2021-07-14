@@ -1,0 +1,3 @@
+# tests
+add_executable(demo_bunker_robot bunker_robot_demo.cpp)
+target_link_libraries(demo_bunker_robot ugv_sdk)

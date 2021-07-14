@@ -40,7 +40,6 @@ class RobotInterface {
 
   // functions to be implemented by class AgilexBase
   virtual void EnableCommandedMode() = 0;
-  virtual void DisableLightControl() = 0;
 
   // functions to be implemented by each robot class
   virtual void Connect(std::string can_name) = 0;
@@ -49,6 +48,10 @@ class RobotInterface {
       // use derived version
   };
   virtual void ResetRobotState() = 0;
+
+  virtual void DisableLightControl() {
+    // use derived version
+  }
 
   virtual ProtocolVersion GetProtocolVersion() = 0;
 
@@ -72,9 +75,7 @@ class RobotInterface {
 
   virtual void SendLightCommand(LightMode front_mode,
                                 uint8_t front_custom_value, LightMode rear_mode,
-                                uint8_t rear_custom_value){
-      // use derived version
-  };
+                                uint8_t rear_custom_value){};
 };
 }  // namespace westonrobot
 

@@ -1,0 +1,60 @@
+/*
+ * bunker_base.hpp
+ *
+ * Created on: Jul 14, 2021 23:05
+ * Description:
+ *
+ * Copyright (c) 2021 Ruixiang Du (rdu)
+ */
+
+#ifndef BUNKER_BASE_HPP
+#define BUNKER_BASE_HPP
+
+#include <string>
+#include <cstdint>
+#include <thread>
+#include <mutex>
+
+#include "ugv_sdk/details/interface/bunker_interface.hpp"
+#include "ugv_sdk/details/robot_base/agilex_base.hpp"
+
+namespace westonrobot {
+template <typename ParserType>
+class BunkerBase : public AgilexBase<ParserType>, public BunkerInterface {
+ public:
+  BunkerBase() : AgilexBase<ParserType>(){};
+  ~BunkerBase() = default;
+
+  // set up connection
+  void Connect(std::string can_name) override {
+    AgilexBase<ParserType>::Connect(can_name);
+  }
+
+  // robot control
+  void SetMotionCommand(double linear_vel, double angular_vel) override {
+    AgilexBase<ParserType>::SendMotionCommand(linear_vel, angular_vel, 0.0,
+                                              0.0);
+  }
+
+  // get robot state
+  BunkerCoreState GetRobotState() override {
+    auto state = AgilexBase<ParserType>::GetRobotCoreStateMsgGroup();
+
+    BunkerCoreState bunker_state;
+    bunker_state.system_state = state.system_state;
+    bunker_state.motion_state = state.motion_state;
+    bunker_state.rc_state = state.rc_state;
+    return bunker_state;
+  }
+};
+}  // namespace westonrobot
+
+#include "ugv_sdk/details/protocol_v1/protocol_v1_parser.hpp"
+#include "ugv_sdk/details/protocol_v2/protocol_v2_parser.hpp"
+
+namespace westonrobot {
+using BunkerBaseV1 = BunkerBase<BunkerProtocolV1Parser>;
+using BunkerBaseV2 = BunkerBase<ProtocolV2Parser>;
+}  // namespace westonrobot
+
+#endif /* BUNKER_BASE_HPP */

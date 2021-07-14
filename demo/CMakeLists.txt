@@ -2,6 +2,7 @@
 add_subdirectory(scout_demo)
 add_subdirectory(tracer_demo)
 add_subdirectory(ranger_demo)
+add_subdirectory(bunker_demo)
 
 # add_executable(app_hunter_demo hunter_demo/hunter_demo.cpp)
 # target_link_libraries(app_hunter_demo ugv_sdk)

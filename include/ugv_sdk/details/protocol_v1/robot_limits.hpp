@@ -25,6 +25,13 @@ struct ScoutMiniLimits {
   static constexpr double min_angular = -max_angular;
 };
 
+struct BunkerLimits {
+  static constexpr double max_linear = 3.0;  // m/s
+  static constexpr double min_linear = -max_linear;
+  static constexpr double max_angular = 2.5235;  // rad/s
+  static constexpr double min_angular = -max_angular;
+};
+
 struct HunterV1Limits {
   static constexpr double max_linear = 1.5;  // m/s
   static constexpr double min_linear = -max_linear;
