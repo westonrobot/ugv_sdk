@@ -178,7 +178,7 @@ class AgilexBase : public RobotInterface {
     if (can_connected_) can_->StopService();
   }
 
-  virtual void ParseCANFrame(can_frame *rx_frame) {
+  void ParseCANFrame(can_frame *rx_frame) {
     AgxMessage status_msg;
     if (parser_.DecodeMessage(rx_frame, &status_msg)) {
       UpdateRobotCoreState(status_msg);
@@ -202,6 +202,16 @@ class AgilexBase : public RobotInterface {
       case AgxMsgLightState: {
         // std::cout << "light control feedback received" << std::endl;
         core_state_msgs_.light_state = status_msg.body.light_state_msg;
+        break;
+      }
+      case AgxMsgMotionModeState: {
+        // std::cout << "motion mode feedback received" << std::endl;
+        core_state_msgs_.motion_mode_state = status_msg.body.motion_mode_state_msg;
+        break;
+      }
+      case AgxMsgRcState: {
+        // std::cout << "rc feedback received" << std::endl;
+        core_state_msgs_.rc_state = status_msg.body.rc_state_msg;
         break;
       }
       default:
