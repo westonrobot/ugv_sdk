@@ -56,8 +56,12 @@ class RobotInterface {
   /****** functions not available/valid to all robots ******/
   // functions to be implemented by class AgilexBase
   virtual void SetMotionMode(uint8_t mode){};
-  virtual CoreStateMsgGroup GetRobotCoreStateMsgGroup(){};
-  virtual ActuatorStateMsgGroup GetActuatorStateMsgGroup(){};
+  virtual CoreStateMsgGroup GetRobotCoreStateMsgGroup() {
+    return CoreStateMsgGroup{};
+  };
+  virtual ActuatorStateMsgGroup GetActuatorStateMsgGroup() {
+    return ActuatorStateMsgGroup{};
+  };
 
   // any specific robot will use a specialized version of the two functions
   virtual void SendMotionCommand(double linear_vel, double angular_vel,

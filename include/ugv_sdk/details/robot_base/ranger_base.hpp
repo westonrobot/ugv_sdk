@@ -15,32 +15,65 @@
 #include <string>
 #include <thread>
 
-#include "ugv_sdk/interface/ranger_interface.hpp"
-#include "ugv_sdk/protocol_v2/agilex_base.hpp"
+#include "ugv_sdk/details/interface/ranger_interface.hpp"
+#include "ugv_sdk/details/robot_base/agilex_base.hpp"
+
+#include "ugv_sdk/details/protocol_v2/protocol_v2_parser.hpp"
 
 namespace westonrobot {
-class RangerBase : public AgilexBase, public RangerInterface {
+class RangerBase : public AgilexBase<ProtocolV2Parser>, public RangerInterface {
  public:
-  RangerBase() : AgilexBase(){};
+  RangerBase() : AgilexBase<ProtocolV2Parser>(){};
   ~RangerBase() = default;
 
   // set up connection
-  void Connect(std::string dev_name) override;
+  void Connect(std::string dev_name) override {
+    AgilexBase::ConnectPort(dev_name, std::bind(&RangerBase::ParseCANFrame,
+                                                this, std::placeholders::_1));
+  }
 
   // robot control
+  void SetMotionCommand() {}
+
   void SetMotionCommand(double linear_vel, double steer_angle,
-                        double lateral_vel = 0.0, double angular_vel = 0.0);
-  void SetLightCommand(const RangerLightCmd &cmd);
-  void SetMotionMode(uint8_t mode);
+                        double lateral_vel = 0.0,
+                        double angular_vel = 0.0) override {
+    AgilexBase<ProtocolV2Parser>::SendMotionCommand(
+        linear_vel, angular_vel, lateral_vel, steer_angle / 10.0);
+  }
+
+  void SetLightCommand(LightMode f_mode, uint8_t f_value, LightMode r_mode,
+                       uint8_t r_value) override {
+    AgilexBase<ProtocolV2Parser>::SendLightCommand(f_mode, f_value, r_mode,
+                                                   r_value);
+  }
+
+  void SetMotionMode(uint8_t mode) { AgilexBase::SetMotionMode(mode); }
 
   // get robot state
-  RangerState GetRangerState();
+  RangerCoreState GetRobotState() override {
+    auto state = AgilexBase<ProtocolV2Parser>::GetRobotCoreStateMsgGroup();
 
- private:
-  RangerState ranger_state_;
+    RangerCoreState ranger_state;
+    ranger_state.system_state = state.system_state;
+    ranger_state.motion_state = state.motion_state;
+    ranger_state.light_state = state.light_state;
+    ranger_state.rc_state = state.rc_state;
+    return ranger_state;
+  }
 
-  void ParseCANFrame(can_frame *rx_frame) override;
-  void UpdateRangerState(const AgxMessage &status_msg, RangerState &state);
+  RangerActuatorState GetActuatorState() override {
+    auto actuator = AgilexBase<ProtocolV2Parser>::GetActuatorStateMsgGroup();
+
+    RangerActuatorState ranger_actuator;
+    for (int i = 0; i < 8; ++i) {
+      ranger_actuator.actuator_hs_state[i] = actuator.actuator_hs_state[i];
+      ranger_actuator.actuator_ls_state[i] = actuator.actuator_ls_state[i];
+    }
+    return ranger_actuator;
+  }
 };
+
+using RangerBaseV2 = RangerBase;
 }  // namespace westonrobot
 #endif  // RANGER_BASE_HPP

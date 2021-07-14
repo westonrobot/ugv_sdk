@@ -52,12 +52,14 @@ class ProtocolV1Parser : public ParserInterface<ProtocolVersion::AGX_V1> {
   }
 
   // UART support
-  bool DecodeMessage(uint8_t *data, uint8_t dlc, AgxMessage *msg) override {}
+  bool DecodeMessage(uint8_t *data, uint8_t dlc, AgxMessage *msg) override {
+    return false;
+  }
 
   void EncodeMessage(const AgxMessage *msg, uint8_t *buf,
                      uint8_t *len) override {}
 
-  uint8_t CalculateChecksum(uint8_t *buf, uint8_t len) override {}
+  uint8_t CalculateChecksum(uint8_t *buf, uint8_t len) override { return 0; }
 };
 
 using ScoutProtocolV1Parser = ProtocolV1Parser<ScoutV2Limits>;

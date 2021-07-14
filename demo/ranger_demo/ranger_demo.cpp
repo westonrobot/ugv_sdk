@@ -7,7 +7,7 @@
  * Copyright  : AgileX Robotics
  **/
 
-#include "ugv_sdk/protocol_v2/ranger_base.hpp"
+#include "ugv_sdk/mobile_robot/ranger_robot.hpp"
 
 using namespace westonrobot;
 
@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
     return -1;
   }
 
-  RangerBase ranger;
+  RangerRobot ranger;
   ranger.Connect(device_name);
 
   ranger.EnableCommandedMode();
@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
       ranger.SetMotionCommand(0.2, 0.0);
     }
 
-    auto state = ranger.GetRangerState();
+    auto state = ranger.GetRobotState();
     std::cout << "-------------------------------" << std::endl;
     std::cout << "count: " << count << std::endl;
     std::cout << "control mode: "

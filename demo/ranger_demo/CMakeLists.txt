@@ -1,0 +1,2 @@
+add_executable(demo_ranger_robot ranger_demo.cpp)
+target_link_libraries(demo_ranger_robot ugv_sdk)
