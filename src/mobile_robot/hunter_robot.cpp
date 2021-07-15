@@ -29,8 +29,8 @@ void HunterRobot::Connect(std::string can_name) { robot_->Connect(can_name); }
 
 void HunterRobot::ResetRobotState() { robot_->ResetRobotState(); }
 
-ProtocolVersion HunterRobot::GetProtocolVersion() {
-  return robot_->GetProtocolVersion();
+ProtocolVersion HunterRobot::GetParserProtocolVersion() {
+  return robot_->GetParserProtocolVersion();
 }
 
 void HunterRobot::SetMotionCommand(double linear_vel, double angular_vel) {

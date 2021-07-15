@@ -29,8 +29,8 @@ void BunkerRobot::Connect(std::string can_name) { robot_->Connect(can_name); }
 
 void BunkerRobot::ResetRobotState() { robot_->ResetRobotState(); }
 
-ProtocolVersion BunkerRobot::GetProtocolVersion() {
-  return robot_->GetProtocolVersion();
+ProtocolVersion BunkerRobot::GetParserProtocolVersion() {
+  return robot_->GetParserProtocolVersion();
 }
 
 void BunkerRobot::SetMotionCommand(double linear_vel, double angular_vel) {

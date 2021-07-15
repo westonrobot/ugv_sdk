@@ -29,7 +29,7 @@ class HunterRobot : public RobotCommonInterface, public HunterInterface {
 
   void ResetRobotState() override;
 
-  ProtocolVersion GetProtocolVersion() override;
+  ProtocolVersion GetParserProtocolVersion() override;
 
   // get robot state
   HunterCoreState GetRobotState() override;

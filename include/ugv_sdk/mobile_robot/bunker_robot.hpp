@@ -29,7 +29,7 @@ class BunkerRobot : public RobotCommonInterface, public BunkerInterface {
 
   void ResetRobotState() override;
 
-  ProtocolVersion GetProtocolVersion() override;
+  ProtocolVersion GetParserProtocolVersion() override;
 
   // get robot state
   BunkerCoreState GetRobotState() override;

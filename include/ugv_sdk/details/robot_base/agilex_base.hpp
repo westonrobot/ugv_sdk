@@ -60,7 +60,7 @@ class AgilexBase : public RobotCommonInterface {
     if (can_connected_) {
       // motion control message
       AgxMessage msg;
-      if (parser_.GetProtocolVersion() == ProtocolVersion::AGX_V1) {
+      if (parser_.GetParserProtocolVersion() == ProtocolVersion::AGX_V1) {
         msg.type = AgxMsgMotionCommandV1;
         msg.body.v1_motion_command_msg.control_mode = CONTROL_MODE_CAN;
         msg.body.v1_motion_command_msg.clear_all_error = false;
@@ -70,7 +70,8 @@ class AgilexBase : public RobotCommonInterface {
             std::abs(angular_vel) > std::abs(steering_angle) ? angular_vel
                                                              : steering_angle;
         msg.body.v1_motion_command_msg.lateral = lateral_velocity;
-      } else if (parser_.GetProtocolVersion() == ProtocolVersion::AGX_V2) {
+      } else if (parser_.GetParserProtocolVersion() ==
+                 ProtocolVersion::AGX_V2) {
         msg.type = AgxMsgMotionCommand;
         msg.body.motion_command_msg.linear_velocity = linear_vel;
         msg.body.motion_command_msg.angular_velocity = angular_vel;
@@ -133,8 +134,8 @@ class AgilexBase : public RobotCommonInterface {
 
   void ResetRobotState() override {}
 
-  ProtocolVersion GetProtocolVersion() override {
-    return parser_.GetProtocolVersion();
+  ProtocolVersion GetParserProtocolVersion() override {
+    return parser_.GetParserProtocolVersion();
   }
 
   CoreStateMsgGroup GetRobotCoreStateMsgGroup() override {

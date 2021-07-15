@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
 
   scout->Connect(device_name);
 
-  if (scout->GetProtocolVersion() == ProtocolVersion::AGX_V2) {
+  if (scout->GetParserProtocolVersion() == ProtocolVersion::AGX_V2) {
     scout->EnableCommandedMode();
     std::cout << "Protocol version 2" << std::endl;
   } else {
@@ -95,7 +95,7 @@ int main(int argc, char **argv) {
               << state.motion_state.angular_velocity << std::endl;
 
     auto actuator = scout->GetActuatorState();
-    if (scout->GetProtocolVersion() == ProtocolVersion::AGX_V1) {
+    if (scout->GetParserProtocolVersion() == ProtocolVersion::AGX_V1) {
       for (int i = 0; i < 4; ++i) {
         printf("motor %d: current %f, rpm %d, driver temp %f, motor temp %f\n",
                actuator.actuator_state[i].motor_id,

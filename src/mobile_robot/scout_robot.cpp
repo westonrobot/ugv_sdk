@@ -41,8 +41,8 @@ void ScoutRobot::Connect(std::string uart_name, uint32_t baudrate) {
 
 void ScoutRobot::ResetRobotState() { robot_->ResetRobotState(); }
 
-ProtocolVersion ScoutRobot::GetProtocolVersion() {
-  return robot_->GetProtocolVersion();
+ProtocolVersion ScoutRobot::GetParserProtocolVersion() {
+  return robot_->GetParserProtocolVersion();
 }
 
 void ScoutRobot::SetMotionCommand(double linear_vel, double angular_vel) {

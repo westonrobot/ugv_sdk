@@ -50,7 +50,7 @@ class RobotCommonInterface {
     // do nothing if no light on robot
   }
 
-  virtual ProtocolVersion GetProtocolVersion() = 0;
+  virtual ProtocolVersion GetParserProtocolVersion() = 0;
 
  protected:
   /****** functions not available/valid to all robots ******/

@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
 
   hunter->Connect(device_name);
 
-  if (hunter->GetProtocolVersion() == ProtocolVersion::AGX_V2) {
+  if (hunter->GetParserProtocolVersion() == ProtocolVersion::AGX_V2) {
     hunter->EnableCommandedMode();
     std::cout << "Protocol version 2" << std::endl;
   } else {
@@ -78,7 +78,7 @@ int main(int argc, char **argv) {
               << state.motion_state.angular_velocity << std::endl;
 
     auto actuator = hunter->GetActuatorState();
-    if (hunter->GetProtocolVersion() == ProtocolVersion::AGX_V1) {
+    if (hunter->GetParserProtocolVersion() == ProtocolVersion::AGX_V1) {
       for (int i = 0; i < 3; ++i) {
         printf("motor %d: current %f, rpm %d, driver temp %f, motor temp %f\n",
                actuator.actuator_state[i].motor_id,

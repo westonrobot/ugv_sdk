@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
 
   bunker->Connect(device_name);
 
-  if (bunker->GetProtocolVersion() == ProtocolVersion::AGX_V2) {
+  if (bunker->GetParserProtocolVersion() == ProtocolVersion::AGX_V2) {
     bunker->EnableCommandedMode();
     std::cout << "Protocol version 2" << std::endl;
   } else {
