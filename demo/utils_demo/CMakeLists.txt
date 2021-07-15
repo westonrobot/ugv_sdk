@@ -1,0 +1,2 @@
+add_executable(demo_protocol_detector demo_protocol_detector.cpp)
+target_link_libraries(demo_protocol_detector ugv_sdk)

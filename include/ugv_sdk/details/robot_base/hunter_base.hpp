@@ -15,12 +15,12 @@
 #include <thread>
 #include <mutex>
 
-#include "ugv_sdk/details/interface/scout_interface.hpp"
+#include "ugv_sdk/details/interface/hunter_interface.hpp"
 #include "ugv_sdk/details/robot_base/agilex_base.hpp"
 
 namespace westonrobot {
 template <typename ParserType>
-class HunterBase : public AgilexBase<ParserType>, public ScoutInterface {
+class HunterBase : public AgilexBase<ParserType>, public HunterInterface {
  public:
   HunterBase() : AgilexBase<ParserType>(){};
   ~HunterBase() = default;
@@ -36,33 +36,29 @@ class HunterBase : public AgilexBase<ParserType>, public ScoutInterface {
                                               angular_vel);
   }
 
-  void SetLightCommand(LightMode f_mode, uint8_t f_value, LightMode r_mode,
-                       uint8_t r_value) override {
-    AgilexBase<ParserType>::SendLightCommand(f_mode, f_value, r_mode, r_value);
-  }
-
   // get robot state
-  ScoutCoreState GetRobotState() override {
+  HunterCoreState GetRobotState() override {
     auto state = AgilexBase<ParserType>::GetRobotCoreStateMsgGroup();
 
-    ScoutCoreState scout_state;
-    scout_state.system_state = state.system_state;
-    scout_state.motion_state = state.motion_state;
-    scout_state.light_state = state.light_state;
-    scout_state.rc_state = state.rc_state;
-    return scout_state;
+    HunterCoreState hunter_state;
+    hunter_state.time_stamp = state.time_stamp;
+    hunter_state.system_state = state.system_state;
+    hunter_state.motion_state = state.motion_state;
+    hunter_state.rc_state = state.rc_state;
+    return hunter_state;
   }
 
-  ScoutActuatorState GetActuatorState() override {
+  HunterActuatorState GetActuatorState() override {
     auto actuator = AgilexBase<ParserType>::GetActuatorStateMsgGroup();
 
-    ScoutActuatorState scout_actuator;
-    for (int i = 0; i < 4; ++i) {
-      scout_actuator.actuator_hs_state[i] = actuator.actuator_hs_state[i];
-      scout_actuator.actuator_ls_state[i] = actuator.actuator_ls_state[i];
-      scout_actuator.actuator_state[i] = actuator.actuator_state[i];
+    HunterActuatorState hunter_actuator;
+    hunter_actuator.time_stamp = actuator.time_stamp;
+    for (int i = 0; i < 3; ++i) {
+      hunter_actuator.actuator_hs_state[i] = actuator.actuator_hs_state[i];
+      hunter_actuator.actuator_ls_state[i] = actuator.actuator_ls_state[i];
+      hunter_actuator.actuator_state[i] = actuator.actuator_state[i];
     }
-    return scout_actuator;
+    return hunter_actuator;
   }
 };
 }  // namespace westonrobot

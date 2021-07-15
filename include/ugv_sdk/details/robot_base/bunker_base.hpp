@@ -41,6 +41,7 @@ class BunkerBase : public AgilexBase<ParserType>, public BunkerInterface {
     auto state = AgilexBase<ParserType>::GetRobotCoreStateMsgGroup();
 
     BunkerCoreState bunker_state;
+    bunker_state.time_stamp = state.time_stamp;
     bunker_state.system_state = state.system_state;
     bunker_state.motion_state = state.motion_state;
     bunker_state.rc_state = state.rc_state;

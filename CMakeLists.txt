@@ -86,6 +86,9 @@ add_library(${PROJECT_NAME}
     src/async_port/async_serial.cpp
     src/async_port/async_can.cpp
     ########################
+    ## utilities
+    src/utilities/protocol_detector.cpp
+    ########################
     ## public interface to access robot
     src/mobile_robot/scout_robot.cpp
     src/mobile_robot/hunter_robot.cpp

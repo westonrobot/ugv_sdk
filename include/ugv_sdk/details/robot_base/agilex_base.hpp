@@ -22,7 +22,6 @@
 #include <mutex>
 #include <atomic>
 
-#include "ugv_sdk/details/stopwatch.hpp"
 #include "ugv_sdk/details/async_port/async_can.hpp"
 #include "ugv_sdk/details/interface/robot_common_interface.hpp"
 
@@ -79,8 +78,9 @@ class AgilexBase : public RobotCommonInterface {
         msg.body.motion_command_msg.steering_angle = steering_angle;
       }
 
-      std::cout << "sending motion cmd: " << linear_vel << "," << angular_vel
-                << std::endl;
+      //   std::cout << "sending motion cmd: " << linear_vel << "," <<
+      //   angular_vel
+      //             << std::endl;
 
       // send to can bus
       can_frame frame;
@@ -195,27 +195,32 @@ class AgilexBase : public RobotCommonInterface {
     switch (status_msg.type) {
       case AgxMsgSystemState: {
         //   std::cout << "system status feedback received" << std::endl;
+        core_state_msgs_.time_stamp = AgxMsgRefClock::now();
         core_state_msgs_.system_state = status_msg.body.system_state_msg;
         break;
       }
       case AgxMsgMotionState: {
         // std::cout << "motion control feedback received" << std::endl;
+        core_state_msgs_.time_stamp = AgxMsgRefClock::now();
         core_state_msgs_.motion_state = status_msg.body.motion_state_msg;
         break;
       }
       case AgxMsgLightState: {
         // std::cout << "light control feedback received" << std::endl;
+        core_state_msgs_.time_stamp = AgxMsgRefClock::now();
         core_state_msgs_.light_state = status_msg.body.light_state_msg;
         break;
       }
       case AgxMsgMotionModeState: {
         // std::cout << "motion mode feedback received" << std::endl;
+        core_state_msgs_.time_stamp = AgxMsgRefClock::now();
         core_state_msgs_.motion_mode_state =
             status_msg.body.motion_mode_state_msg;
         break;
       }
       case AgxMsgRcState: {
         // std::cout << "rc feedback received" << std::endl;
+        core_state_msgs_.time_stamp = AgxMsgRefClock::now();
         core_state_msgs_.rc_state = status_msg.body.rc_state_msg;
         break;
       }
@@ -229,6 +234,7 @@ class AgilexBase : public RobotCommonInterface {
     switch (status_msg.type) {
       case AgxMsgActuatorHSState: {
         // std::cout << "actuator hs feedback received" << std::endl;
+        actuator_state_msgs_.time_stamp = AgxMsgRefClock::now();
         actuator_state_msgs_
             .actuator_hs_state[status_msg.body.actuator_hs_state_msg.motor_id] =
             status_msg.body.actuator_hs_state_msg;
@@ -236,7 +242,7 @@ class AgilexBase : public RobotCommonInterface {
       }
       case AgxMsgActuatorLSState: {
         // std::cout << "actuator ls feedback received" << std::endl;
-
+        actuator_state_msgs_.time_stamp = AgxMsgRefClock::now();
         actuator_state_msgs_
             .actuator_ls_state[status_msg.body.actuator_ls_state_msg.motor_id] =
             status_msg.body.actuator_ls_state_msg;
@@ -244,6 +250,7 @@ class AgilexBase : public RobotCommonInterface {
       }
       case AgxMsgActuatorStateV1: {
         // std::cout << "actuator v1 feedback received" << std::endl;
+        actuator_state_msgs_.time_stamp = AgxMsgRefClock::now();
         actuator_state_msgs_
             .actuator_state[status_msg.body.v1_actuator_state_msg.motor_id] =
             status_msg.body.v1_actuator_state_msg;

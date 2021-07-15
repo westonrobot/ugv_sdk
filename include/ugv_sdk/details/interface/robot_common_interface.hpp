@@ -11,6 +11,7 @@
 #define ROBOT_INTERFACE_HPP
 
 #include <string>
+#include <chrono>
 
 #include "ugv_sdk/details/interface/agilex_message.h"
 #include "ugv_sdk/details/interface/parser_interface.hpp"
@@ -18,7 +19,12 @@
 #define AGX_MAX_ACTUATOR_NUM 8
 
 namespace westonrobot {
+using AgxMsgRefClock = std::chrono::steady_clock;
+using AgxMsgTimeStamp = std::chrono::time_point<AgxMsgRefClock>;
+
 struct CoreStateMsgGroup {
+  AgxMsgTimeStamp time_stamp;
+
   SystemStateMessage system_state;
   MotionStateMessage motion_state;
   LightStateMessage light_state;
@@ -27,6 +33,8 @@ struct CoreStateMsgGroup {
 };
 
 struct ActuatorStateMsgGroup {
+  AgxMsgTimeStamp time_stamp;
+
   ActuatorHSStateMessage actuator_hs_state[AGX_MAX_ACTUATOR_NUM];  // v2 only
   ActuatorLSStateMessage actuator_ls_state[AGX_MAX_ACTUATOR_NUM];  // v2 only
   ActuatorStateMessageV1 actuator_state[AGX_MAX_ACTUATOR_NUM];     // v1 only

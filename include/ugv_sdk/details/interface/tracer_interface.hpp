@@ -13,9 +13,12 @@
 #include <string>
 
 #include "ugv_sdk/details/interface/agilex_message.h"
+#include "ugv_sdk/details/interface/robot_common_interface.hpp"
 
 namespace westonrobot {
 struct TracerCoreState {
+  AgxMsgTimeStamp time_stamp;
+
   SystemStateMessage system_state;
   MotionStateMessage motion_state;
   LightStateMessage light_state;
@@ -23,6 +26,8 @@ struct TracerCoreState {
 };
 
 struct TracerActuatorState {
+  AgxMsgTimeStamp time_stamp;
+
   // actuator state
   ActuatorHSStateMessage actuator_hs_state[2];
   ActuatorLSStateMessage actuator_ls_state[2];

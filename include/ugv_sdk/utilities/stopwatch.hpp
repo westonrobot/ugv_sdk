@@ -9,7 +9,7 @@
  * [2] https://github.com/rxdu/stopwatch
  *
  * Copyright (c) 2019 sailormoon <http://unlicense.org>
- * Copyright (c) 2020 Ruixiang Du (rdu)
+ * Copyright (c) 2020 Weston Robot Pte. Ltd.
  *
  * License: <http://unlicense.org>
  */

@@ -50,6 +50,7 @@ class ScoutBase : public AgilexBase<ParserType>, public ScoutInterface {
     auto state = AgilexBase<ParserType>::GetRobotCoreStateMsgGroup();
 
     ScoutCoreState scout_state;
+    scout_state.time_stamp = state.time_stamp;
     scout_state.system_state = state.system_state;
     scout_state.motion_state = state.motion_state;
     scout_state.light_state = state.light_state;
@@ -61,6 +62,7 @@ class ScoutBase : public AgilexBase<ParserType>, public ScoutInterface {
     auto actuator = AgilexBase<ParserType>::GetActuatorStateMsgGroup();
 
     ScoutActuatorState scout_actuator;
+    scout_actuator.time_stamp = actuator.time_stamp;
     for (int i = 0; i < 4; ++i) {
       scout_actuator.actuator_hs_state[i] = actuator.actuator_hs_state[i];
       scout_actuator.actuator_ls_state[i] = actuator.actuator_ls_state[i];

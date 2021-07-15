@@ -18,7 +18,7 @@ bool DecodeCanFrameV1(const struct can_frame *rx_frame, AgxMessage *msg) {
   // if checksum not correct
   if (!CalcCanFrameChecksumV1(rx_frame->can_id, (uint8_t *)rx_frame->data,
                               rx_frame->can_dlc)) {
-    printf("wrong checksum for id: %x-------------->\n", rx_frame->can_id);
+    // printf("wrong checksum for id: %x-------------->\n", rx_frame->can_id);
     return false;
   }
 

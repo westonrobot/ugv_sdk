@@ -13,9 +13,12 @@
 #include <string>
 
 #include "ugv_sdk/details/interface/agilex_message.h"
+#include "ugv_sdk/details/interface/robot_common_interface.hpp"
 
 namespace westonrobot {
 struct BunkerCoreState {
+  AgxMsgTimeStamp time_stamp;
+
   SystemStateMessage system_state;
   MotionStateMessage motion_state;
   RcStateMessage rc_state;

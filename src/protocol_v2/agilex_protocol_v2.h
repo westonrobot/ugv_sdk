@@ -242,8 +242,8 @@ typedef struct {
 
 typedef struct {
   struct16_t driver_voltage;
-  struct16_t driver_temperature;
-  int8_t motor_temperature;
+  struct16_t driver_temp;
+  int8_t motor_temp;
   uint8_t driver_state;
   uint8_t reserved0;
   uint8_t reserved1;

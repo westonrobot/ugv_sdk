@@ -55,6 +55,7 @@ class RangerBase : public AgilexBase<ProtocolV2Parser>, public RangerInterface {
     auto state = AgilexBase<ProtocolV2Parser>::GetRobotCoreStateMsgGroup();
 
     RangerCoreState ranger_state;
+    ranger_state.time_stamp = state.time_stamp;
     ranger_state.system_state = state.system_state;
     ranger_state.motion_state = state.motion_state;
     ranger_state.light_state = state.light_state;
@@ -66,6 +67,7 @@ class RangerBase : public AgilexBase<ProtocolV2Parser>, public RangerInterface {
     auto actuator = AgilexBase<ProtocolV2Parser>::GetActuatorStateMsgGroup();
 
     RangerActuatorState ranger_actuator;
+    ranger_actuator.time_stamp = actuator.time_stamp;
     for (int i = 0; i < 8; ++i) {
       ranger_actuator.actuator_hs_state[i] = actuator.actuator_hs_state[i];
       ranger_actuator.actuator_ls_state[i] = actuator.actuator_ls_state[i];
