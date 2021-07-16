@@ -16,6 +16,9 @@ struct ScoutV2Limits {
   static constexpr double min_linear = -max_linear;
   static constexpr double max_angular = 0.5235;  // rad/s
   static constexpr double min_angular = -max_angular;
+
+  static constexpr double max_lateral = 0.0;
+  static constexpr double min_lateral = 0.0;
 };
 
 struct ScoutMiniLimits {
@@ -23,6 +26,9 @@ struct ScoutMiniLimits {
   static constexpr double min_linear = -max_linear;
   static constexpr double max_angular = 2.5235;  // rad/s
   static constexpr double min_angular = -max_angular;
+
+  static constexpr double max_lateral = 2.0;
+  static constexpr double min_lateral = -max_lateral;
 };
 
 struct BunkerLimits {
@@ -30,6 +36,9 @@ struct BunkerLimits {
   static constexpr double min_linear = -max_linear;
   static constexpr double max_angular = 2.5235;  // rad/s
   static constexpr double min_angular = -max_angular;
+
+  static constexpr double max_lateral = 0.0;
+  static constexpr double min_lateral = 0.0;
 };
 
 struct HunterV1Limits {
@@ -37,6 +46,9 @@ struct HunterV1Limits {
   static constexpr double min_linear = -max_linear;
   static constexpr double max_angular = 25.5;  // degree
   static constexpr double min_angular = -max_angular;
+
+  static constexpr double max_lateral = 0.0;
+  static constexpr double min_lateral = 0.0;
 };
 }  // namespace westonrobot
 

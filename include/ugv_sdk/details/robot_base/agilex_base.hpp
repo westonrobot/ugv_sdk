@@ -55,7 +55,7 @@ class AgilexBase : public RobotCommonInterface {
 
   // must be called at a frequency >= 50Hz
   void SendMotionCommand(double linear_vel, double angular_vel,
-                         double lateral_velocity, double steering_angle) {
+                         double lateral_vel, double steering_angle) {
     if (can_connected_) {
       // motion control message
       AgxMessage msg;
@@ -68,19 +68,18 @@ class AgilexBase : public RobotCommonInterface {
         msg.body.v1_motion_command_msg.angular =
             std::abs(angular_vel) > std::abs(steering_angle) ? angular_vel
                                                              : steering_angle;
-        msg.body.v1_motion_command_msg.lateral = lateral_velocity;
+        msg.body.v1_motion_command_msg.lateral = lateral_vel;
       } else if (parser_.GetParserProtocolVersion() ==
                  ProtocolVersion::AGX_V2) {
         msg.type = AgxMsgMotionCommand;
         msg.body.motion_command_msg.linear_velocity = linear_vel;
         msg.body.motion_command_msg.angular_velocity = angular_vel;
-        msg.body.motion_command_msg.lateral_velocity = lateral_velocity;
+        msg.body.motion_command_msg.lateral_velocity = lateral_vel;
         msg.body.motion_command_msg.steering_angle = steering_angle;
       }
 
-      //   std::cout << "sending motion cmd: " << linear_vel << "," <<
-      //   angular_vel
-      //             << std::endl;
+      std::cout << "sending motion cmd: " << linear_vel << "," << angular_vel
+                << "," << lateral_vel << std::endl;
 
       // send to can bus
       can_frame frame;

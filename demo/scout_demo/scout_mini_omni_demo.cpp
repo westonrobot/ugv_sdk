@@ -19,47 +19,30 @@ using namespace westonrobot;
 
 int main(int argc, char **argv) {
   std::string device_name;
-  std::string robot_subtype;
 
   if (argc == 2) {
     device_name = {argv[1]};
-    std::cout << "Selected interface " << device_name << ", robot type: scout"
-              << std::endl;
-  } else if (argc == 3) {
-    robot_subtype = {argv[1]};
-    device_name = {argv[2]};
-    std::cout << "Selected interface " << device_name
-              << ", robot type: " << robot_subtype << std::endl;
+    std::cout << "Selected interface " << device_name << std::endl;
   } else {
-    std::cout << "Usage: demo_scout_robot [<robot-subtype>] <interface>"
-              << std::endl
-              << "Example 1: ./demo_scout_robot can0" << std::endl
-              << "\t <robot-subtype>: mini" << std::endl;
+    std::cout << "Usage: demo_scout_mini_omni_robot <interface>" << std::endl
+              << "Example 1: ./demo_scout_mini_omni_robot can0" << std::endl;
     return -1;
   }
 
-  bool is_scout_mini = false;
-  if (robot_subtype == "mini") {
-    is_scout_mini = true;
-  } else if (!robot_subtype.empty() && robot_subtype != "scout") {
-    std::cout
-        << "Unkonwn robot subtype. Supported subtypes: \"scout\" or \"mini\""
-        << std::endl;
-  }
-
-  std::unique_ptr<ScoutRobot> scout;
+  std::unique_ptr<ScoutMiniOmniRobot> scout;
 
   ProtocolDectctor detector;
   detector.Connect("can0");
   auto proto = detector.DetectProtocolVersion(5);
   if (proto == ProtocolVersion::AGX_V1) {
     std::cout << "Detected protocol: AGX_V1" << std::endl;
-    scout = std::unique_ptr<ScoutRobot>(
-        new ScoutRobot(ProtocolVersion::AGX_V1, is_scout_mini));
+    scout = std::unique_ptr<ScoutMiniOmniRobot>(
+        new ScoutMiniOmniRobot(ProtocolVersion::AGX_V1));
+
   } else if (proto == ProtocolVersion::AGX_V2) {
     std::cout << "Detected protocol: AGX_V2" << std::endl;
-    scout = std::unique_ptr<ScoutRobot>(
-        new ScoutRobot(ProtocolVersion::AGX_V2, is_scout_mini));
+    scout = std::unique_ptr<ScoutMiniOmniRobot>(
+        new ScoutMiniOmniRobot(ProtocolVersion::AGX_V2));
   } else {
     std::cout << "Detected protocol: UNKONWN" << std::endl;
     return -1;
@@ -92,8 +75,8 @@ int main(int argc, char **argv) {
   int count = 0;
   while (true) {
     // motion control
-    std::cout << "Motor: 1.0, 0" << std::endl;
-    scout->SetMotionCommand(1.0, 0.0);
+    std::cout << "Setting motion command: 0.0, 0,0, 0.8" << std::endl;
+    scout->SetMotionCommand(0.0, 0.0, 0.8);
 
     // get robot state
     auto state = scout->GetRobotState();
@@ -107,9 +90,10 @@ int main(int argc, char **argv) {
               << std::dec
               << ", battery voltage: " << state.system_state.battery_voltage
               << std::endl;
-    std::cout << "velocity (linear, angular): "
+    std::cout << "velocity (linear, angular, lateral): "
               << state.motion_state.linear_velocity << ", "
-              << state.motion_state.angular_velocity << std::endl;
+              << state.motion_state.angular_velocity << ", "
+              << state.motion_state.lateral_velocity << std::endl;
     std::cout << "core state age (ms): "
               << std::chrono::duration_cast<std::chrono::milliseconds>(
                      AgxMsgRefClock::now() - state.time_stamp)

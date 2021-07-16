@@ -36,7 +36,7 @@ void ScoutRobot::EnableCommandedMode() { robot_->EnableCommandedMode(); }
 void ScoutRobot::Connect(std::string can_name) { robot_->Connect(can_name); }
 
 void ScoutRobot::Connect(std::string uart_name, uint32_t baudrate) {
-//   robot_->Connect(uart_name, baudrate);
+  //   robot_->Connect(uart_name, baudrate);
 }
 
 void ScoutRobot::ResetRobotState() { robot_->ResetRobotState(); }
@@ -66,5 +66,25 @@ ScoutCoreState ScoutRobot::GetRobotState() {
 ScoutActuatorState ScoutRobot::GetActuatorState() {
   auto scout = dynamic_cast<ScoutInterface*>(robot_);
   return scout->GetActuatorState();
+}
+
+///////////////////////////////////////////////////////////////////////////
+
+ScoutMiniOmniRobot::ScoutMiniOmniRobot(ProtocolVersion protocol) {
+  if (protocol == ProtocolVersion::AGX_V1) {
+    robot_ = new ScoutMiniOmniBaseV1();
+  } else if (protocol == ProtocolVersion::AGX_V2) {
+    robot_ = new ScoutMiniOmniBaseV2();
+  }
+}
+
+ScoutMiniOmniRobot::~ScoutMiniOmniRobot() {
+  if (robot_) delete robot_;
+}
+
+void ScoutMiniOmniRobot::SetMotionCommand(double linear_vel, double angular_vel,
+                                          double lateral_velocity) {
+  auto scout = dynamic_cast<ScoutOmniInterface*>(robot_);
+  scout->SetMotionCommand(linear_vel, angular_vel, lateral_velocity);
 }
 }  // namespace westonrobot

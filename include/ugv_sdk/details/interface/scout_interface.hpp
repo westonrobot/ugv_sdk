@@ -51,6 +51,13 @@ struct ScoutInterface {
   virtual ScoutCoreState GetRobotState() = 0;
   virtual ScoutActuatorState GetActuatorState() = 0;
 };
+
+struct ScoutOmniInterface {
+  virtual ~ScoutOmniInterface() = default;
+
+  virtual void SetMotionCommand(double linear_vel, double angular_vel,
+                                double lateral_velocity) = 0;
+};
 }  // namespace westonrobot
 
 #endif /* SCOUT_INTERFACE_HPP */

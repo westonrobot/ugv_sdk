@@ -40,8 +40,9 @@ class ScoutBase : public AgilexBase<ParserType>, public ScoutInterface {
                                               0.0);
   }
 
-  void SetLightCommand(LightMode f_mode, uint8_t f_value, LightMode r_mode,
-                       uint8_t r_value) override {
+  void SetLightCommand(LightMode f_mode, uint8_t f_value,
+                       LightMode r_mode = LightMode::CONST_ON,
+                       uint8_t r_value = 0) override {
     AgilexBase<ParserType>::SendLightCommand(f_mode, f_value, r_mode, r_value);
   }
 
@@ -71,6 +72,20 @@ class ScoutBase : public AgilexBase<ParserType>, public ScoutInterface {
     return scout_actuator;
   }
 };
+
+template <typename ParserType>
+class ScoutMiniOmniBase : public ScoutBase<ParserType>,
+                          public ScoutOmniInterface {
+ public:
+  void SetMotionCommand(double linear_vel, double angular_vel,
+                        double lateral_velocity) override {
+    AgilexBase<ParserType>::SendMotionCommand(linear_vel, angular_vel,
+                                              lateral_velocity, 0.0);
+  }
+
+ private:
+  using ScoutBase<ParserType>::SetMotionCommand;
+};
 }  // namespace westonrobot
 
 #include "ugv_sdk/details/protocol_v1/protocol_v1_parser.hpp"
@@ -79,9 +94,11 @@ class ScoutBase : public AgilexBase<ParserType>, public ScoutInterface {
 namespace westonrobot {
 using ScoutBaseV1 = ScoutBase<ScoutProtocolV1Parser>;
 using ScoutMiniBaseV1 = ScoutBase<ScoutMiniProtocolV1Parser>;
+using ScoutMiniOmniBaseV1 = ScoutMiniOmniBase<ScoutMiniProtocolV1Parser>;
 
 using ScoutBaseV2 = ScoutBase<ProtocolV2Parser>;
 using ScoutMiniBaseV2 = ScoutBase<ProtocolV2Parser>;
+using ScoutMiniOmniBaseV2 = ScoutMiniOmniBase<ProtocolV2Parser>;
 }  // namespace westonrobot
 
 #endif /* SCOUT_BASE_HPP */

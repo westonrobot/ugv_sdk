@@ -30,6 +30,8 @@ class ProtocolV1Parser : public ParserInterface<ProtocolVersion::AGX_V1> {
     if (msg->type == AgxMsgMotionCommandV1) {
       float linear = msg->body.v1_motion_command_msg.linear;
       float angular = msg->body.v1_motion_command_msg.angular;
+      float lateral = msg->body.v1_motion_command_msg.lateral;
+
       if (linear > RobotLimitsType::max_linear)
         linear = RobotLimitsType::max_linear;
       else if (linear < RobotLimitsType::min_linear)
@@ -38,11 +40,17 @@ class ProtocolV1Parser : public ParserInterface<ProtocolVersion::AGX_V1> {
         angular = RobotLimitsType::max_angular;
       else if (angular < RobotLimitsType::min_angular)
         angular = RobotLimitsType::min_angular;
+      if (lateral > RobotLimitsType::max_lateral)
+        lateral = RobotLimitsType::max_lateral;
+      else if (lateral < RobotLimitsType::min_lateral)
+        lateral = RobotLimitsType::min_lateral;
 
       msg_v1.body.v1_motion_command_msg.linear =
           linear / RobotLimitsType::max_linear * 100.0;
       msg_v1.body.v1_motion_command_msg.angular =
           angular / RobotLimitsType::max_angular * 100.0;
+      msg_v1.body.v1_motion_command_msg.lateral =
+          lateral / RobotLimitsType::max_lateral * 100.0;
     }
     return EncodeCanFrameV1(&msg_v1, tx_frame);
   }

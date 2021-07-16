@@ -20,7 +20,7 @@ class ScoutRobot : public RobotCommonInterface, public ScoutInterface {
  public:
   ScoutRobot(ProtocolVersion protocol = ProtocolVersion::AGX_V2,
              bool is_mini_model = false);
-  ~ScoutRobot();
+  virtual ~ScoutRobot();
 
   void Connect(std::string can_name) override;
   void Connect(std::string uart_name, uint32_t baudrate) override;
@@ -40,8 +40,23 @@ class ScoutRobot : public RobotCommonInterface, public ScoutInterface {
   ScoutCoreState GetRobotState() override;
   ScoutActuatorState GetActuatorState() override;
 
- private:
+ protected:
   RobotCommonInterface* robot_;
+};
+
+///////////////////////////////////////////////////////////////////////////
+
+class ScoutMiniOmniRobot : public ScoutRobot, public ScoutOmniInterface {
+ public:
+  ScoutMiniOmniRobot(ProtocolVersion protocol = ProtocolVersion::AGX_V2);
+  ~ScoutMiniOmniRobot();
+
+  void SetMotionCommand(double linear_vel, double angular_vel,
+                        double lateral_velocity) override;
+
+ private:
+  using ScoutRobot::SetMotionCommand;
+  //   void SetMotionCommand(double linear_vel, double angular_vel) = delete;
 };
 }  // namespace westonrobot
 
