@@ -10,23 +10,22 @@ This software package provides a C++ interface to communicate with the mobile pl
 - Copyright (c) 2020 [Weston Robot](https://www.westonrobot.com/) 
 - Copyright (c) 2020 [AgileX Robotics](http://www.agilex.ai/?lang=zh-cn)
 
-Please create an issue on Github at https://github.com/westonrobot/ugv_sdk/issues if you encounter any problems in using the packages.
-
-**Important Note:** Currently we're transitioning the communication protocol from version 1 to version 2. Please check with Weston Robot or AgileX Robotics to confirm which version your robot is using. 
-
-* V1 Protocol: master branch of scout_ros and ugv_sdk
-* V2 Protocol: v2.x branch of scout_ros and ugv_sdk
+Please create an issue on Github at https://github.com/westonrobot/ugv_sdk/issues if you encounter any problems when using the packages.
 
 **Supported robot platforms**
 
-* **Scout**: skid-steer mobile base
-* **Hunter**: ackermann mobile base
+* Scout
+* Scout Mini
+* Hunter
+* Tracer
+* Bunker
+* Ranger Mini
 
 **Supported environments**
 
-* **Architecture**: x86_64/arm64
-* **OS**: Ubuntu 16.04/18.04/20.04
-* **ROS**: Kinetic/Melodic/Noetic
+* Architecture: x86_64/arm64
+* OS: Ubuntu 16.04/18.04/20.04
+* ROS: Kinetic/Melodic/Noetic
 
 It should also work in other similar Linux environments but only the above listed environments are regularly tested.
 
@@ -34,33 +33,35 @@ It should also work in other similar Linux environments but only the above liste
 
 |       Robot       | Protocol V1 | Protocol V2 | UART  |  CAN  | Support Status |
 | :---------------: | :---------: | :---------: | :---: | :---: | :------------: |
-|     Scout 1.0     |      Y      |      -      |   Y   |   Y   |  Discontinued  |
-|     Scout 2.0     |      Y      |      Y      |   Y   |   Y   |     Active     |
+|     Scout 1.0     |      Y      |      -      | TODO  |   Y   |  Discontinued  |
+|     Scout 2.0     |      Y      |      Y      | TODO  |   Y   |     Active     |
 | Scout Mini (Skid) |      Y      |      Y      |   -   |   Y   |     Active     |
 | Scout Mini (Omni) |      Y      |      Y      |   -   |   Y   |     Active     |
 |    Hunter 1.0     |      Y      |      Y      |   -   |   Y   |     Active     |
 |    Hunter 2.0     |      -      |      Y      |   -   |   Y   |     Active     |
 |      Bunker       |      Y      |      Y      |   -   |   Y   |     Active     |
-|      Tracer       |      -      |      Y      |   Y   |   Y   |     Active     |
+|      Tracer       |      -      |      Y      | TODO  |   Y   |     Active     |
 |    Ranger Mini    |      -      |      Y      |   -   |   Y   |     Active     |
 
-Generally, you only need to instantiate an object of the robot base class (such as ScoutBase), then use the object to programmatically control the robot. Internally, the base class manages two background threads, one to process CAN/UART messages of the robot state and accordingly update state variables in the robot state data structure, and the other to maintain a 50Hz loop and send the latest command to the robot base. User can iteratively perform tasks in the main thread and check the robot state or set control commands. Advanced users may also use this setup as a reference and maintain the control and monitoring loops in a different way.
+**Important Note:** Currently we're transitioning the communication protocol from version 1 to version 2. Please check with Weston Robot or AgileX Robotics to confirm which version your robot is using. 
+
+* V1 Protocol: master branch of scout_ros and ugv_sdk
+* V2 Protocol: v2.x branch of scout_ros and ugv_sdk
 
 ## Build SDK
 
-### Install dependent libraries
+### Install dependencies
 
 ```
 $ sudo apt-get update
-$ sudo apt-get install build-essential git cmake
+$ sudo apt-get install build-essential git cmake libasio-dev
 ```
 
 ### Build the package in catkin workspace
 
 ```
 $ cd <your-catkin-ws>/src
-$ git clone https://github.com/westonrobot/async_port.git
-$ git clone -b v2.x https://github.com/westonrobot/ugv_sdk.git
+$ git clone -b next https://github.com/westonrobot/ugv_sdk.git
 $ cd ..
 $ catkin_make
 ```
@@ -93,14 +94,14 @@ $ catkin_make
 
 Two scripts inside the "./scripts" folder are provided for easy setup. You can run "./setup_can2usb.bash" for the first-time setup and run "./bringup_can2usb.bash" to bring up the device each time you unplug and re-plug the adapter.
 
-## Run Demo Apps
+## Demo Code
 
-The demo code expects one parameter for the CAN bus mode.
+You can find demo code for each robot in "demo" folder. For example, run the demo for Scout robot
 
 ```
-$ ./app_scout_demo can0
+$ ./bin/demo_scout_robot can0
 ```
 
 ## Reference
 
-* [CAN command reference in Linux](https://wiki.rdu.im/_pages/Notes/Embedded-System/Linux/can-bus-in-linux.html)
+* [CAN command reference in Linux](https://rdu.im/docs/canbus)
