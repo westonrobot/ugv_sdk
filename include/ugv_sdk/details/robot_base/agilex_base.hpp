@@ -24,12 +24,21 @@
 
 #include "ugv_sdk/details/async_port/async_can.hpp"
 #include "ugv_sdk/details/interface/robot_common_interface.hpp"
+#include "ugv_sdk/details/interface/parser_interface.hpp"
 
 namespace westonrobot {
 template <typename ParserType>
 class AgilexBase : public RobotCommonInterface {
  public:
-  AgilexBase() = default;
+  AgilexBase() {
+    static_assert(
+        std::is_base_of<ParserInterface<ProtocolVersion::AGX_V1>,
+                        ParserType>::value ||
+            std::is_base_of<ParserInterface<ProtocolVersion::AGX_V2>,
+                            ParserType>::value,
+        "Incompatible parser for the AgilexBase class, expecting one derived "
+        "from ParserInterface!");
+  };
   virtual ~AgilexBase() { DisconnectPort(); }
 
   // do not allow copy or assignment
