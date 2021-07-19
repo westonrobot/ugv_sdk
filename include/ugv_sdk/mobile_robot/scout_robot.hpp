@@ -56,7 +56,6 @@ class ScoutMiniOmniRobot : public ScoutRobot, public ScoutOmniInterface {
 
  private:
   using ScoutRobot::SetMotionCommand;
-  //   void SetMotionCommand(double linear_vel, double angular_vel) = delete;
 };
 }  // namespace westonrobot
 

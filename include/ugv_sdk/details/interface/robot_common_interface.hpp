@@ -65,22 +65,34 @@ class RobotCommonInterface {
   // functions to be implemented by class AgilexBase
   virtual void SetMotionMode(uint8_t mode){};
   virtual CoreStateMsgGroup GetRobotCoreStateMsgGroup() {
+    throw std::runtime_error(
+        "Only a derived version of this function with actual implementation "
+        "is supposed to be used.");
     return CoreStateMsgGroup{};
   };
   virtual ActuatorStateMsgGroup GetActuatorStateMsgGroup() {
+    throw std::runtime_error(
+        "Only a derived version of this function with actual implementation "
+        "is supposed to be used.");
     return ActuatorStateMsgGroup{};
   };
 
   // any specific robot will use a specialized version of the two functions
   virtual void SendMotionCommand(double linear_vel, double angular_vel,
                                  double lateral_velocity,
-                                 double steering_angle){
-      // use derived version
+                                 double steering_angle) {
+    throw std::runtime_error(
+        "Only a derived version of this function with actual implementation "
+        "is supposed to be used.");
   };
 
   virtual void SendLightCommand(LightMode front_mode,
                                 uint8_t front_custom_value, LightMode rear_mode,
-                                uint8_t rear_custom_value){};
+                                uint8_t rear_custom_value) {
+    throw std::runtime_error(
+        "Only a derived version of this function with actual implementation "
+        "is supposed to be used.");
+  };
 };
 }  // namespace westonrobot
 
