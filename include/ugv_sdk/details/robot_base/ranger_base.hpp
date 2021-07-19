@@ -33,8 +33,6 @@ class RangerBase : public AgilexBase<ProtocolV2Parser>, public RangerInterface {
   }
 
   // robot control
-  void SetMotionCommand() {}
-
   void SetMotionCommand(double linear_vel, double steer_angle,
                         double lateral_vel = 0.0,
                         double angular_vel = 0.0) override {
