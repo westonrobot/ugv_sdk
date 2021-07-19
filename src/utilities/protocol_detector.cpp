@@ -43,13 +43,18 @@ ProtocolVersion ProtocolDectctor::DetectProtocolVersion(uint32_t timeout_sec) {
 };
 
 void ProtocolDectctor::ParseCANFrame(can_frame *rx_frame) {
-  // state feedback frame with id 0x151 is unique to V1 protocol
-  if (rx_frame->can_id == 0x151) {
-    msg_v1_detected_ = true;
-  }
-  // rc state frame with id 0x241 is unique to V2 protocol
-  else if (rx_frame->can_id == 0x241) {
-    msg_v2_detected_ = true;
+  switch (rx_frame->can_id) {
+      // state feedback frame with id 0x151 is unique to V1 protocol
+    case 0x151: {
+      msg_v1_detected_ = true;
+      break;
+    }
+      // rc state frame with id 0x241 is unique to V2 protocol
+    case 0x221:
+    case 0x241: {
+      msg_v2_detected_ = true;
+      break;
+    }
   }
 }
 }  // namespace westonrobot

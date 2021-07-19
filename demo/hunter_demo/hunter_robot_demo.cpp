@@ -13,34 +13,36 @@
 #include <iostream>
 
 #include "ugv_sdk/mobile_robot/hunter_robot.hpp"
+#include "ugv_sdk/utilities/protocol_detector.hpp"
 
 using namespace westonrobot;
 
 int main(int argc, char **argv) {
-  std::string protocol_version;
   std::string device_name;
 
-  if (argc == 3) {
-    protocol_version = {argv[1]};
-    device_name = {argv[2]};
-    std::cout << "Use protocol " << protocol_version << " on interface "
-              << device_name << std::endl;
+  if (argc == 2) {
+    device_name = {argv[1]};
+    std::cout << "Selected interface " << device_name << std::endl;
   } else {
-    std::cout << "Usage: app_hunter_demo <protocol-version> <interface>"
-              << std::endl
-              << "Example 1: ./app_hunter_demo v1 can0" << std::endl;
+    std::cout << "Usage: app_hunter_demo <interface>" << std::endl
+              << "Example 1: ./app_hunter_demo can0" << std::endl;
     return -1;
   }
 
   std::unique_ptr<HunterRobot> hunter;
-  if (protocol_version == "v1") {
+
+  ProtocolDectctor detector;
+  detector.Connect(device_name);
+  auto proto = detector.DetectProtocolVersion(5);
+
+  if (proto == ProtocolVersion::AGX_V1) {
     hunter =
         std::unique_ptr<HunterRobot>(new HunterRobot(ProtocolVersion::AGX_V1));
-  } else if (protocol_version == "v2") {
+  } else if (proto == ProtocolVersion::AGX_V2) {
     hunter =
         std::unique_ptr<HunterRobot>(new HunterRobot(ProtocolVersion::AGX_V2));
   } else {
-    std::cout << "Error: invalid protocol version string" << std::endl;
+    std::cout << "Detected protocol: UNKONWN" << std::endl;
     return -1;
   }
 
@@ -60,7 +62,7 @@ int main(int argc, char **argv) {
   while (true) {
     // motion control
     std::cout << "Motor: 1.0, 0" << std::endl;
-    hunter->SetMotionCommand(1.0, 0.0);
+    // hunter->SetMotionCommand(1.0, 0.0);
 
     // get robot state
     auto state = hunter->GetRobotState();
@@ -75,7 +77,7 @@ int main(int argc, char **argv) {
               << std::endl;
     std::cout << "velocity (linear, angular): "
               << state.motion_state.linear_velocity << ", "
-              << state.motion_state.angular_velocity << std::endl;
+              << state.motion_state.steering_angle << std::endl;
 
     auto actuator = hunter->GetActuatorState();
     if (hunter->GetParserProtocolVersion() == ProtocolVersion::AGX_V1) {
