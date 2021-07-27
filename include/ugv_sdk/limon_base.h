@@ -54,7 +54,9 @@ struct LimonLightCmd {
 
 class LimonBase : public AgilexBaseSerialPort {
  public:
-  LimonBase() : AgilexBaseSerialPort(){};
+  LimonBase() : AgilexBaseSerialPort(){
+    limon_state_.system_state.motion_mode = MotionMode::MODE_UNKNOWN;
+  };
   ~LimonBase() = default;
 
   // set up connection

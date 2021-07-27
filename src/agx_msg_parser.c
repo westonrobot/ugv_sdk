@@ -200,6 +200,7 @@ bool DecodeCanFrame(const struct can_frame *rx_frame, AgxMessage *msg) {
 
       msg->body.motion_mode_feedback_msg.motion_mode = frame->motion_mode;
       msg->body.motion_mode_feedback_msg.mode_changing = frame->mode_changing;
+      // printf("mode: %d, changing: %d\n", frame->motion_mode, frame->mode_changing);
       break;
     }
     /****************** sensor frame *****************/
@@ -218,7 +219,7 @@ bool DecodeCanFrame(const struct can_frame *rx_frame, AgxMessage *msg) {
                     (uint32_t)(frame->right_wheel.msb) << 24);
       break;
     }
-    case CAN_MSG_IMU_ACCEL_ID: {
+    case CAN_MSG_IMU_ACCEL_ID: { //
       msg->type = AgxMsgImuAccel;
       // TODO
       break;

@@ -59,6 +59,7 @@ void LimonBase::UpdateLimonState(const AgxMessage &status_msg,
     }
     case AgxMsgMotionState: {
       state.motion_state = status_msg.body.motion_state_msg;
+      // std::cout << "motion state in system state: " << state.system_state.motion_mode << std::endl;
       break;
     }
     case AgxMsgLightState: {
@@ -82,11 +83,13 @@ void LimonBase::UpdateLimonState(const AgxMessage &status_msg,
     }
     case AgxMsgMotionModeState: {
       state.current_motion_mode = status_msg.body.motion_mode_feedback_msg;
+      // std::cout << "mode feedback : " << state.current_motion_mode.motion_mode << std::endl;
+      // std::cout << "changing feedback : " << state.current_motion_mode.mode_changing << std::endl;
       break;
     }
     /* sensor feedback */
     case AgxMsgOdometry: {
-      // std::cout << "Odometer msg feedback received" << std::endl;
+      // std::cout << "Odometer msg feedback received: " << state.odometry.left_wheel <<" , " << state.odometry.right_wheel << std::endl;
       state.odometry = status_msg.body.odometry_msg;
     }
     default:

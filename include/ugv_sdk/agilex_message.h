@@ -51,7 +51,8 @@ typedef struct {
 //0x211
 typedef enum{
   MODE_FOUR_DIFF=0x00,
-  MODE_ACKERMANN=0x01
+  MODE_ACKERMANN=0x01,
+  MODE_UNKNOWN=0xff,
 } MotionMode;
 
 // 0x131
