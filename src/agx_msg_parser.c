@@ -219,19 +219,28 @@ bool DecodeCanFrame(const struct can_frame *rx_frame, AgxMessage *msg) {
                     (uint32_t)(frame->right_wheel.msb) << 24);
       break;
     }
-    case CAN_MSG_IMU_ACCEL_ID: { //
+    case CAN_MSG_IMU_ACCEL_ID: { // accelerate
       msg->type = AgxMsgImuAccel;
-      // TODO
+      ImuAccelFrame* frame = (ImuAccelFrame*)(rx_frame->data);
+      msg->body.imu_accel_msg.accel_x = ((uint16_t)frame->accel_x.high_byte << 8 | frame->accel_x.low_byte) / 100.0;
+      msg->body.imu_accel_msg.accel_y = ((uint16_t)frame->accel_y.high_byte << 8 | frame->accel_y.low_byte) / 100.0;
+      msg->body.imu_accel_msg.accel_z = ((uint16_t)frame->accel_z.high_byte << 8 | frame->accel_z.low_byte) / 100.0;
       break;
     }
     case CAN_MSG_IMU_GYRO_ID: {
       msg->type = AgxMsgImuGyro;
-      // TODO
+      ImuGyroFrame *frame = (ImuGyroFrame *)(rx_frame->data);
+      msg->body.imu_gyro_msg.gyro_x = ((uint16_t)frame->gyro_x.high_byte << 8 | frame->gyro_x.low_byte) / 100.0;
+      msg->body.imu_gyro_msg.gyro_y = ((uint16_t)frame->gyro_y.high_byte << 8 | frame->gyro_y.low_byte) / 100.0;
+      msg->body.imu_gyro_msg.gyro_z = ((uint16_t)frame->gyro_z.high_byte << 8 | frame->gyro_z.low_byte) / 100.0;
       break;
     }
     case CAN_MSG_IMU_EULER_ID: {
       msg->type = AgxMsgImuEuler;
-      // TODO
+      ImuEulerFrame *frame = (ImuEulerFrame *)(rx_frame->data);
+      msg->body.imu_euler_msg.yaw = ((uint16_t)frame->yaw.high_byte << 8 | frame->yaw.low_byte) / 100.0;
+      msg->body.imu_euler_msg.pitch = ((uint16_t)frame->pitch.high_byte << 8 | frame->pitch.low_byte) / 100.0;
+      msg->body.imu_euler_msg.roll = ((uint16_t)frame->roll.high_byte << 8 | frame->roll.low_byte) / 100.0;
       break;
     }
     case CAN_MSG_SAFETY_BUMPER_ID: {
@@ -472,27 +481,27 @@ void EncodeCanFrame(const AgxMessage *msg, struct can_frame *tx_frame) {
       break;
     }
     case AgxMsgImuAccel: {
-      tx_frame->can_id = CAN_MSG_IMU_ACCEL_ID;
-      tx_frame->can_dlc = 8;
-      ImuAccelFrame frame;
-      // TODO
-      memcpy(tx_frame->data, (uint8_t *)(&frame), tx_frame->can_dlc);
+      // tx_frame->can_id = CAN_MSG_IMU_ACCEL_ID;
+      // tx_frame->can_dlc = 8;
+      // ImuAccelFrame frame;
+      // // TODO
+      // memcpy(tx_frame->data, (uint8_t *)(&frame), tx_frame->can_dlc);
       break;
     }
     case AgxMsgImuGyro: {
-      tx_frame->can_id = CAN_MSG_IMU_GYRO_ID;
-      tx_frame->can_dlc = 8;
-      ImuGyroFrame frame;
-      // TODO
-      memcpy(tx_frame->data, (uint8_t *)(&frame), tx_frame->can_dlc);
+      // tx_frame->can_id = CAN_MSG_IMU_GYRO_ID;
+      // tx_frame->can_dlc = 8;
+      // ImuGyroFrame frame;
+      // // TODO
+      // memcpy(tx_frame->data, (uint8_t *)(&frame), tx_frame->can_dlc);
       break;
     }
     case AgxMsgImuEuler: {
-      tx_frame->can_id = CAN_MSG_IMU_EULER_ID;
-      tx_frame->can_dlc = 8;
-      ImuEulerFrame frame;
-      // TODO
-      memcpy(tx_frame->data, (uint8_t *)(&frame), tx_frame->can_dlc);
+      // tx_frame->can_id = CAN_MSG_IMU_EULER_ID;
+      // tx_frame->can_dlc = 8;
+      // ImuEulerFrame frame;
+      // // TODO
+      // memcpy(tx_frame->data, (uint8_t *)(&frame), tx_frame->can_dlc);
       break;
     }
     case AgxMsgSafetyBumper: {
