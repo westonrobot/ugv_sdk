@@ -26,6 +26,11 @@ struct LimonState {
 
   // sensor data
   OdometryMessage odometry;
+
+  // imu
+  ImuAccelMessage imu_accel_;
+  ImuGyroMessage imu_gyro_;
+  ImuEulerMessage imu_euler_;
 };
 
 struct LimonMotionCmd {

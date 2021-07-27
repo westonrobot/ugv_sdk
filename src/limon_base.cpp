@@ -26,17 +26,19 @@ void LimonBase::Connect(std::string dev_name, uint32_t bouadrate) {
 void LimonBase::SetMotionCommand(double linear_vel, double steer_angle,
                                  double lateral_vel, double angular_vel) {
   AgilexBaseSerialPort::SetMotionCommand(linear_vel, angular_vel, lateral_vel,
-                              steer_angle);
+                                         steer_angle);
 }
 
 void LimonBase::SetLightCommand(const LimonLightCmd &cmd) {
   if (cmd.cmd_ctrl_allowed) {
-    AgilexBaseSerialPort::SendLightCommand(cmd.front_mode, cmd.front_custom_value,
-                                LightMode::CONST_OFF, 0);
+    AgilexBaseSerialPort::SendLightCommand(
+        cmd.front_mode, cmd.front_custom_value, LightMode::CONST_OFF, 0);
   }
 }
 
-void LimonBase::SetMotionMode(uint8_t mode) { AgilexBaseSerialPort::SetMotionMode(mode); }
+void LimonBase::SetMotionMode(uint8_t mode) {
+  AgilexBaseSerialPort::SetMotionMode(mode);
+}
 
 LimonState LimonBase::GetLimonState() {
   std::lock_guard<std::mutex> guard(state_mutex_);
@@ -59,7 +61,8 @@ void LimonBase::UpdateLimonState(const AgxMessage &status_msg,
     }
     case AgxMsgMotionState: {
       state.motion_state = status_msg.body.motion_state_msg;
-      // std::cout << "motion state in system state: " << state.system_state.motion_mode << std::endl;
+      // std::cout << "motion state in system state: " <<
+      // state.system_state.motion_mode << std::endl;
       break;
     }
     case AgxMsgLightState: {
@@ -83,14 +86,31 @@ void LimonBase::UpdateLimonState(const AgxMessage &status_msg,
     }
     case AgxMsgMotionModeState: {
       state.current_motion_mode = status_msg.body.motion_mode_feedback_msg;
-      // std::cout << "mode feedback : " << state.current_motion_mode.motion_mode << std::endl;
-      // std::cout << "changing feedback : " << state.current_motion_mode.mode_changing << std::endl;
+      // std::cout << "mode feedback : " <<
+      // state.current_motion_mode.motion_mode << std::endl; std::cout <<
+      // "changing feedback : " << state.current_motion_mode.mode_changing <<
+      // std::endl;
       break;
     }
     /* sensor feedback */
     case AgxMsgOdometry: {
-      // std::cout << "Odometer msg feedback received: " << state.odometry.left_wheel <<" , " << state.odometry.right_wheel << std::endl;
+      // std::cout << "Odometer msg feedback received: " <<
+      // state.odometry.left_wheel <<" , " << state.odometry.right_wheel <<
+      // std::endl;
       state.odometry = status_msg.body.odometry_msg;
+      break;
+    }
+    case AgxMsgImuAccel: {
+      state.imu_accel_ = status_msg.body.imu_accel_msg;
+      break;
+    }
+    case AgxMsgImuGyro: {
+      state.imu_gyro_ = status_msg.body.imu_gyro_msg;
+      break;
+    }
+    case AgxMsgImuEuler: {
+      state.imu_euler_ = status_msg.body.imu_euler_msg;
+      break;
     }
     default:
       break;
