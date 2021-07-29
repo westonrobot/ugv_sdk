@@ -190,6 +190,17 @@ class AgilexBase : public RobotCommonInterface {
     if (can_connected_) can_->StopService();
   }
 
+  void SetBrakeMode(BrakeMode mode) {
+    // construct message
+    AgxMessage msg;
+    msg.type = AgxMsgBrakeModeConfig;
+    msg.body.brake_mode_config_msg.mode = mode;
+
+    // encode msg to can frame and send to bus
+    can_frame frame;
+    if (parser_.EncodeMessage(&msg, &frame)) can_->SendFrame(frame);
+  }
+
   void ParseCANFrame(can_frame *rx_frame) {
     AgxMessage status_msg;
     if (parser_.DecodeMessage(rx_frame, &status_msg)) {
@@ -267,17 +278,6 @@ class AgilexBase : public RobotCommonInterface {
       default:
         break;
     }
-  }
-
-  void EnableBrakedMode(BrakeMode mode) {
-    // construct message
-    AgxMessage msg;
-    msg.type = AgxMsgBrakeModeConfig;
-    msg.body.brake_mode_config_msg.mode = mode;
-
-    // encode msg to can frame and send to bus
-    can_frame frame;
-    if (parser_.EncodeMessage(&msg, &frame)) can_->SendFrame(frame);
   }
 };
 }  // namespace westonrobot

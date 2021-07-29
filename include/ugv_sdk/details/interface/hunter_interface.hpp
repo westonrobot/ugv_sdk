@@ -39,7 +39,8 @@ struct HunterInterface {
 
   virtual void SetMotionCommand(double linear_vel, double steering_angle) = 0;
 
-  virtual void SetBrakeMode(BrakeMode mode) = 0;
+  virtual void ActivateBrake() = 0;
+  virtual void ReleaseBrake() = 0;
 
   // get robot state
   virtual HunterCoreState GetRobotState() = 0;

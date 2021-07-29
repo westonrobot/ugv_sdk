@@ -64,6 +64,8 @@ class RobotCommonInterface {
   /****** functions not available/valid to all robots ******/
   // functions to be implemented by class AgilexBase
   virtual void SetMotionMode(uint8_t mode){};
+  virtual void SetBrakedMode(BrakeMode mode){};
+
   virtual CoreStateMsgGroup GetRobotCoreStateMsgGroup() {
     throw std::runtime_error(
         "Only a derived version of this function with actual implementation "
@@ -93,8 +95,6 @@ class RobotCommonInterface {
         "Only a derived version of this function with actual implementation "
         "is supposed to be used.");
   };
-
-  virtual void EnableBrakeMode(BrakeMode mode){};
 };
 }  // namespace westonrobot
 

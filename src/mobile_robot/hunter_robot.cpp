@@ -38,9 +38,14 @@ void HunterRobot::SetMotionCommand(double linear_vel, double angular_vel) {
   hunter->SetMotionCommand(linear_vel, angular_vel);
 }
 
-void HunterRobot::SetBrakeMode(BrakeMode mode) {
+void HunterRobot::ActivateBrake() {
   auto hunter = dynamic_cast<HunterInterface*>(robot_);
-  hunter->SetBrakeMode(mode);
+  hunter->ActivateBrake();
+}
+
+void HunterRobot::ReleaseBrake() {
+  auto hunter = dynamic_cast<HunterInterface*>(robot_);
+  hunter->ReleaseBrake();
 }
 
 HunterCoreState HunterRobot::GetRobotState() {
