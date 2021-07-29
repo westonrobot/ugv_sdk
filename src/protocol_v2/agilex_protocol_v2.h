@@ -361,6 +361,17 @@ typedef struct {
 } ControlModeConfigFrame;
 
 typedef struct {
+  uint8_t mode;
+  uint8_t reserved0;
+  uint8_t reserved1;
+  uint8_t reserved2;
+  uint8_t reserved3;
+  uint8_t reserved4;
+  uint8_t reserved5;
+  uint8_t reserved6;
+} BrakeModeConfigFrame;
+
+typedef struct {
   uint8_t set_as_neutral;
   uint8_t reserved0;
   uint8_t reserved1;

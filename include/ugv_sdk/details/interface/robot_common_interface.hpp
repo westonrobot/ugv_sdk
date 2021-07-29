@@ -93,6 +93,8 @@ class RobotCommonInterface {
         "Only a derived version of this function with actual implementation "
         "is supposed to be used.");
   };
+
+  virtual void EnableBrakeMode(BrakeMode mode){};
 };
 }  // namespace westonrobot
 

@@ -563,6 +563,21 @@ bool EncodeCanFrameV2(const AgxMessage *msg, struct can_frame *tx_frame) {
       memcpy(tx_frame->data, (uint8_t *)(&frame), tx_frame->can_dlc);
       break;
     }
+    case AgxMsgBrakeModeConfig: {
+      tx_frame->can_id = CAN_MSG_BRAKING_COMMAND_ID;
+      tx_frame->can_dlc = 8;
+      BrakeModeConfigFrame frame;
+      frame.mode = msg->body.control_mode_config_msg.mode;
+      frame.reserved0 = 0;
+      frame.reserved1 = 0;
+      frame.reserved2 = 0;
+      frame.reserved3 = 0;
+      frame.reserved4 = 0;
+      frame.reserved5 = 0;
+      frame.reserved6 = 0;
+      memcpy(tx_frame->data, (uint8_t *)(&frame), tx_frame->can_dlc);
+      break;
+    }
     case AgxMsgSteerNeutralRequest: {
       tx_frame->can_id = CAN_MSG_STEER_NEUTRAL_REQUEST_ID;
       tx_frame->can_dlc = 8;

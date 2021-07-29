@@ -241,6 +241,10 @@ typedef struct {
 } ControlModeConfigMessage;
 
 typedef struct {
+  BrakeMode mode;
+} BrakeModeConfigMessage;
+
+typedef struct {
   bool set_as_neutral;
 } SteerNeutralRequestMessage;
 
@@ -295,6 +299,7 @@ typedef enum {
   AgxMsgSteerNeutralRequest,
   AgxMsgSteerNeutralResponse,
   AgxMsgStateResetConfig,
+  AgxMsgBrakeModeConfig,
   // V1-only messages
   AgxMsgMotionCommandV1,
   AgxMsgValueSetCommandV1,
@@ -333,6 +338,7 @@ typedef struct {
     VersionRequestMessage version_request_msg;
     VersionResponseMessage version_response_msg;
     ControlModeConfigMessage control_mode_config_msg;
+    BrakeModeConfigMessage brake_mode_config_msg;
     SteerNeutralRequestMessage steer_neutral_request_msg;
     SteerNeutralResponseMessage steer_neutral_response_msg;
     StateResetConfigMessage state_reset_config_msg;

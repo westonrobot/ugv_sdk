@@ -25,6 +25,8 @@ class HunterRobot : public RobotCommonInterface, public HunterInterface {
 
   void EnableCommandedMode() override;
 
+  void SetBrakeMode(BrakeMode mode) override;
+
   void SetMotionCommand(double linear_vel, double angular_vel) override;
 
   void ResetRobotState() override;

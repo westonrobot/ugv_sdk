@@ -36,6 +36,7 @@ class HunterBase : public AgilexBase<ParserType>, public HunterInterface {
                                               angular_vel);
   }
 
+
   // get robot state
   HunterCoreState GetRobotState() override {
     auto state = AgilexBase<ParserType>::GetRobotCoreStateMsgGroup();
@@ -59,6 +60,10 @@ class HunterBase : public AgilexBase<ParserType>, public HunterInterface {
       hunter_actuator.actuator_state[i] = actuator.actuator_state[i];
     }
     return hunter_actuator;
+  }
+
+  void SetBrakeMode(BrakeMode mode) override{
+    AgilexBase<ParserType>::EnableBrakeMode(mode);
   }
 };
 }  // namespace westonrobot
