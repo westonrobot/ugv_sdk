@@ -42,6 +42,12 @@ typedef enum {
 } ControlMode;
 
 typedef enum {
+  //   CONTROL_MODE_STANDBY = 0x00,
+  BRAKE_MODE_UNLOCK = 0x00,
+  BRAKE_MODE_LOCK = 0x01
+} BrakeMode;
+
+typedef enum {
   RC_SWITCH_UP = 0,
   RC_SWITCH_MIDDLE,
   RC_SWITCH_DOWN

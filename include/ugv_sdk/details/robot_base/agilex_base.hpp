@@ -268,6 +268,17 @@ class AgilexBase : public RobotCommonInterface {
         break;
     }
   }
+
+  void EnableBrakedMode(BrakeMode mode) {
+    // construct message
+    AgxMessage msg;
+    msg.type = AgxMsgBrakeModeConfig;
+    msg.body.brake_mode_config_msg.mode = mode;
+
+    // encode msg to can frame and send to bus
+    can_frame frame;
+    if (parser_.EncodeMessage(&msg, &frame)) can_->SendFrame(frame);
+  }
 };
 }  // namespace westonrobot
 
