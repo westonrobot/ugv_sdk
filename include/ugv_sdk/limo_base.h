@@ -12,7 +12,7 @@
 #define MAX_SERIAL_BUFFER_SIZE 2048
 
 namespace westonrobot {
-struct LimonState {
+struct LimoState {
   // system state
   SystemStateMessage system_state;
   MotionStateMessage motion_state;
@@ -33,14 +33,14 @@ struct LimonState {
   ImuEulerMessage imu_euler_;
 };
 
-struct LimonMotionCmd {
+struct LimoMotionCmd {
   double linear_velocity;
   double angular_velocity;
 };
 
-struct LimonLightCmd {
-  LimonLightCmd() = default;
-  LimonLightCmd(LightMode f_mode, uint8_t f_value, LightMode r_mode,
+struct LimoLightCmd {
+  LimoLightCmd() = default;
+  LimoLightCmd(LightMode f_mode, uint8_t f_value, LightMode r_mode,
                 uint8_t r_value)
       : cmd_ctrl_allowed(true),
         front_mode(f_mode),
@@ -57,12 +57,12 @@ struct LimonLightCmd {
 
 /////////////////////////////////////////////////////////////////////////
 
-class LimonBase : public AgilexBaseSerialPort {
+class LimoBase : public AgilexBaseSerialPort {
  public:
-  LimonBase() : AgilexBaseSerialPort(){
-    limon_state_.system_state.motion_mode = MotionMode::MODE_UNKNOWN;
+  LimoBase() : AgilexBaseSerialPort(){
+    limo_state_.system_state.motion_mode = MotionMode::MODE_UNKNOWN;
   };
-  ~LimonBase() = default;
+  ~LimoBase() = default;
 
   // set up connection
   void Connect(std::string dev_name, uint32_t bouadrate) override;
@@ -70,19 +70,19 @@ class LimonBase : public AgilexBaseSerialPort {
   // robot control
   void SetMotionCommand(double linear_vel, double steer_angle,
                         double lateral_vel = 0.0, double angular_vel = 0.0);
-  void SetLightCommand(const LimonLightCmd &cmd);
+  void SetLightCommand(const LimoLightCmd &cmd);
   void SetMotionMode(uint8_t mode);
 
   // get robot state
-  LimonState GetLimonState();
+  LimoState GetLimoState();
   void ParseSerialFrame(uint8_t *data, const size_t bufsize, size_t len);
 
 
  private:
-  LimonState limon_state_;
+  LimoState limo_state_;
 
   void ParseCANFrame(can_frame *rx_frame);
-  void UpdateLimonState(const AgxMessage &status_msg, LimonState &state);
+  void UpdateLimoState(const AgxMessage &status_msg, LimoState &state);
 
     std::mutex serial_callback_mutex_;
   std::queue<uint8_t> serial_raw_data_;

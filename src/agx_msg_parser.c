@@ -17,6 +17,7 @@ bool DecodeCanFrame(const struct can_frame *rx_frame, AgxMessage *msg) {
   msg->type = AgxMsgUnkonwn;
 
   switch (rx_frame->can_id) {
+printf("decode\n");
     /***************** command frame *****************/
     case CAN_MSG_MOTION_COMMAND_ID: {
       msg->type = AgxMsgMotionCommand;
@@ -222,25 +223,30 @@ bool DecodeCanFrame(const struct can_frame *rx_frame, AgxMessage *msg) {
     case CAN_MSG_IMU_ACCEL_ID: { // accelerate
       msg->type = AgxMsgImuAccel;
       ImuAccelFrame* frame = (ImuAccelFrame*)(rx_frame->data);
-      msg->body.imu_accel_msg.accel_x = ((uint16_t)frame->accel_x.high_byte << 8 | frame->accel_x.low_byte) / 100.0;
-      msg->body.imu_accel_msg.accel_y = ((uint16_t)frame->accel_y.high_byte << 8 | frame->accel_y.low_byte) / 100.0;
-      msg->body.imu_accel_msg.accel_z = ((uint16_t)frame->accel_z.high_byte << 8 | frame->accel_z.low_byte) / 100.0;
+      msg->body.imu_accel_msg.accel_x = ((int16_t)((int16_t)frame->accel_x.high_byte << 8 | frame->accel_x.low_byte)) / 100.0;
+      msg->body.imu_accel_msg.accel_y = ((int16_t)((int16_t)frame->accel_y.high_byte << 8 | frame->accel_y.low_byte)) / 100.0;
+      msg->body.imu_accel_msg.accel_z = ((int16_t)((int16_t)frame->accel_z.high_byte << 8 | frame->accel_z.low_byte)) / 100.0;
+      
       break;
     }
     case CAN_MSG_IMU_GYRO_ID: {
       msg->type = AgxMsgImuGyro;
       ImuGyroFrame *frame = (ImuGyroFrame *)(rx_frame->data);
-      msg->body.imu_gyro_msg.gyro_x = ((uint16_t)frame->gyro_x.high_byte << 8 | frame->gyro_x.low_byte) / 100.0;
-      msg->body.imu_gyro_msg.gyro_y = ((uint16_t)frame->gyro_y.high_byte << 8 | frame->gyro_y.low_byte) / 100.0;
-      msg->body.imu_gyro_msg.gyro_z = ((uint16_t)frame->gyro_z.high_byte << 8 | frame->gyro_z.low_byte) / 100.0;
+      msg->body.imu_gyro_msg.gyro_x = ((int16_t)((int16_t)frame->gyro_x.high_byte << 8 | frame->gyro_x.low_byte)) / 100.0;
+      msg->body.imu_gyro_msg.gyro_y = ((int16_t)((int16_t)frame->gyro_y.high_byte << 8 | frame->gyro_y.low_byte)) / 100.0;
+      msg->body.imu_gyro_msg.gyro_z = ((int16_t)((int16_t)frame->gyro_z.high_byte << 8 | frame->gyro_z.low_byte)) / 100.0;
       break;
     }
     case CAN_MSG_IMU_EULER_ID: {
       msg->type = AgxMsgImuEuler;
       ImuEulerFrame *frame = (ImuEulerFrame *)(rx_frame->data);
-      msg->body.imu_euler_msg.yaw = ((uint16_t)frame->yaw.high_byte << 8 | frame->yaw.low_byte) / 100.0;
-      msg->body.imu_euler_msg.pitch = ((uint16_t)frame->pitch.high_byte << 8 | frame->pitch.low_byte) / 100.0;
-      msg->body.imu_euler_msg.roll = ((uint16_t)frame->roll.high_byte << 8 | frame->roll.low_byte) / 100.0;
+      msg->body.imu_euler_msg.yaw =    ((int16_t)((int16_t)frame->yaw.high_byte << 8 | frame->yaw.low_byte)) / 100.0;
+      msg->body.imu_euler_msg.pitch =  ((int16_t)((int16_t)frame->pitch.high_byte << 8 | frame->pitch.low_byte)) / 100.0;
+      msg->body.imu_euler_msg.roll =   ((int16_t)((int16_t)frame->roll.high_byte << 8 | frame->roll.low_byte)) / 100.0;
+
+      printf("Angle x: %02x , %02x\n",frame->yaw.high_byte, frame->yaw.low_byte);
+      printf("Angle y: %02x , %02x\n",frame->pitch.high_byte, frame->pitch.low_byte);
+      printf("Angle z: %02x , %02x\n",frame->roll.high_byte, frame->roll.low_byte);
       break;
     }
     case CAN_MSG_SAFETY_BUMPER_ID: {

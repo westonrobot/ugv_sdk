@@ -1,4 +1,4 @@
-#include "ugv_sdk/limon_base.h"
+#include "ugv_sdk/limo_base.h"
 
 #include <algorithm>
 #include <array>
@@ -17,43 +17,43 @@
 using namespace std::placeholders;
 
 namespace westonrobot {
-void LimonBase::Connect(std::string dev_name, uint32_t bouadrate) {
+void LimoBase::Connect(std::string dev_name, uint32_t bouadrate) {
   AgilexBaseSerialPort::Connect(
-      dev_name, std::bind(&LimonBase::ParseSerialFrame, this, ::_1, ::_2, ::_3),
+      dev_name, std::bind(&LimoBase::ParseSerialFrame, this, ::_1, ::_2, ::_3),
       bouadrate);
 }
 
-void LimonBase::SetMotionCommand(double linear_vel, double steer_angle,
+void LimoBase::SetMotionCommand(double linear_vel, double steer_angle,
                                  double lateral_vel, double angular_vel) {
   AgilexBaseSerialPort::SetMotionCommand(linear_vel, angular_vel, lateral_vel,
                                          steer_angle);
 }
 
-void LimonBase::SetLightCommand(const LimonLightCmd &cmd) {
+void LimoBase::SetLightCommand(const LimoLightCmd &cmd) {
   if (cmd.cmd_ctrl_allowed) {
     AgilexBaseSerialPort::SendLightCommand(
         cmd.front_mode, cmd.front_custom_value, LightMode::CONST_OFF, 0);
   }
 }
 
-void LimonBase::SetMotionMode(uint8_t mode) {
+void LimoBase::SetMotionMode(uint8_t mode) {
   AgilexBaseSerialPort::SetMotionMode(mode);
 }
 
-LimonState LimonBase::GetLimonState() {
+LimoState LimoBase::GetLimoState() {
   std::lock_guard<std::mutex> guard(state_mutex_);
-  return limon_state_;
+  return limo_state_;
 }
 
-void LimonBase::ParseCANFrame(can_frame *rx_frame) {
+void LimoBase::ParseCANFrame(can_frame *rx_frame) {
   AgxMessage status_msg;
   DecodeCanFrame(rx_frame, &status_msg);
   std::lock_guard<std::mutex> guard(state_mutex_);
-  UpdateLimonState(status_msg, limon_state_);
+  UpdateLimoState(status_msg, limo_state_);
 }
 
-void LimonBase::UpdateLimonState(const AgxMessage &status_msg,
-                                 LimonState &state) {
+void LimoBase::UpdateLimoState(const AgxMessage &status_msg,
+                                 LimoState &state) {
   switch (status_msg.type) {
     case AgxMsgSystemState: {
       state.system_state = status_msg.body.system_state_msg;
@@ -116,7 +116,7 @@ void LimonBase::UpdateLimonState(const AgxMessage &status_msg,
       break;
   }
 }
-void LimonBase::ParseSerialFrame(uint8_t *data, const size_t bufsize,
+void LimoBase::ParseSerialFrame(uint8_t *data, const size_t bufsize,
                                  size_t len) {
   std::lock_guard<std::mutex> lock(serial_callback_mutex_);
   if (serial_raw_data_.size() >= (MAX_SERIAL_BUFFER_SIZE - len)) {
