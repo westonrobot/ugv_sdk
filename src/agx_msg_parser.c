@@ -17,7 +17,6 @@ bool DecodeCanFrame(const struct can_frame *rx_frame, AgxMessage *msg) {
   msg->type = AgxMsgUnkonwn;
 
   switch (rx_frame->can_id) {
-printf("decode\n");
     /***************** command frame *****************/
     case CAN_MSG_MOTION_COMMAND_ID: {
       msg->type = AgxMsgMotionCommand;
@@ -244,9 +243,9 @@ printf("decode\n");
       msg->body.imu_euler_msg.pitch =  ((int16_t)((int16_t)frame->pitch.high_byte << 8 | frame->pitch.low_byte)) / 100.0;
       msg->body.imu_euler_msg.roll =   ((int16_t)((int16_t)frame->roll.high_byte << 8 | frame->roll.low_byte)) / 100.0;
 
-      printf("Angle x: %02x , %02x\n",frame->yaw.high_byte, frame->yaw.low_byte);
-      printf("Angle y: %02x , %02x\n",frame->pitch.high_byte, frame->pitch.low_byte);
-      printf("Angle z: %02x , %02x\n",frame->roll.high_byte, frame->roll.low_byte);
+      // printf("Angle x: %02x , %02x\n",frame->yaw.high_byte, frame->yaw.low_byte);
+      // printf("Angle y: %02x , %02x\n",frame->pitch.high_byte, frame->pitch.low_byte);
+      // printf("Angle z: %02x , %02x\n",frame->roll.high_byte, frame->roll.low_byte);
       break;
     }
     case CAN_MSG_SAFETY_BUMPER_ID: {
