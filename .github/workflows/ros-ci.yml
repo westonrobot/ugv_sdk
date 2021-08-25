@@ -6,9 +6,9 @@ name: ROS
 # events but only for the master branch
 on:
   push:
-    branches: [ master, v2.x ]
+    branches: [ next ]
   pull_request:
-    branches: [ master, v2.x ]
+    branches: [ next ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -21,11 +21,11 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-    # - name: Install dependencies
-    #   run: sudo apt-get update && sudo apt-get install -y libasio-dev
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y libasio-dev
     - name: Create catkin workspace
       run: mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - name: Copy code to catkin workspace
-      run: cd /catkin_ws/src && git clone https://github.com/westonrobot/async_port.git && git clone -b v2.x https://github.com/westonrobot/ugv_sdk.git
+      run: cd /catkin_ws/src && git clone -b next https://github.com/westonrobot/ugv_sdk.git
     - name: Run catkin_make
       run: cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make"
