@@ -47,6 +47,19 @@ class BunkerBase : public AgilexBase<ParserType>, public BunkerInterface {
     bunker_state.rc_state = state.rc_state;
     return bunker_state;
   }
+
+  BunkerActuatorState GetActuatorState() override {
+    auto actuator = AgilexBase<ParserType>::GetActuatorStateMsgGroup();
+
+    BunkerActuatorState bunker_actuator;
+    bunker_actuator.time_stamp = actuator.time_stamp;
+    for (int i = 0; i < 3; ++i) {
+      bunker_actuator.actuator_hs_state[i] = actuator.actuator_hs_state[i];
+      bunker_actuator.actuator_ls_state[i] = actuator.actuator_ls_state[i];
+      bunker_actuator.actuator_state[i] = actuator.actuator_state[i];
+    }
+    return bunker_actuator;
+  }
 };
 }  // namespace westonrobot
 
