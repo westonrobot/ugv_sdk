@@ -71,15 +71,15 @@ bool AsyncSerial::SetupPort() {
 }
 
 void AsyncSerial::StopService() {
-  if (IsOpened()) {
-    serial_port_.cancel();
-    serial_port_.close();
-  }
-
   // stop io thread
   io_context_.stop();
   if (io_thread_.joinable()) io_thread_.join();
   io_context_.reset();
+
+  if (IsOpened()) {
+    serial_port_.cancel();
+    serial_port_.close();
+  }
 
   port_opened_ = false;
 }
