@@ -35,7 +35,10 @@ bool AsyncCAN::SetupPort() {
     memcpy(ifr.ifr_name, port_.c_str(), iface_name_size);
 
     const int ioctl_result = ioctl(can_fd_, SIOCGIFINDEX, &ifr);
-    if (ioctl_result < 0) StopService();
+    if (ioctl_result < 0) {
+      StopService();
+      return false;
+    }
 
     struct sockaddr_can addr;
     memset(&addr, 0, sizeof(addr));
@@ -44,12 +47,15 @@ bool AsyncCAN::SetupPort() {
 
     const int bind_result =
         bind(can_fd_, (struct sockaddr *)&addr, sizeof(addr));
-    if (bind_result < 0) StopService();
+    if (bind_result < 0) {
+      StopService();
+      return false;
+    }
 
     port_opened_ = true;
     std::cout << "Start listening to port: " << port_ << std::endl;
   } catch (std::system_error &e) {
-    std::cout << e.what();
+    std::cout << e.what() << std::endl;
     return false;
   }
 

@@ -11,13 +11,12 @@
 #include "ugv_sdk/utilities/stopwatch.hpp"
 
 namespace westonrobot {
-void ProtocolDectctor::Connect(std::string can_name) {
+bool ProtocolDectctor::Connect(std::string can_name) {
   can_ = std::make_shared<AsyncCAN>(can_name);
   can_->SetReceiveCallback(
       std::bind(&ProtocolDectctor::ParseCANFrame, this, std::placeholders::_1));
-  can_->StartListening();
+  return can_->StartListening();
 }
-void ProtocolDectctor::Connect(std::string uart_name, uint32_t baudrate) {}
 
 ProtocolVersion ProtocolDectctor::DetectProtocolVersion(uint32_t timeout_sec) {
   msg_v1_detected_ = false;

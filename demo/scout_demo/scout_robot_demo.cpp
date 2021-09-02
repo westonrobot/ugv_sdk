@@ -50,18 +50,21 @@ int main(int argc, char **argv) {
   std::unique_ptr<ScoutRobot> scout;
 
   ProtocolDectctor detector;
-  detector.Connect("can0");
-  auto proto = detector.DetectProtocolVersion(5);
-  if (proto == ProtocolVersion::AGX_V1) {
-    std::cout << "Detected protocol: AGX_V1" << std::endl;
-    scout = std::unique_ptr<ScoutRobot>(
-        new ScoutRobot(ProtocolVersion::AGX_V1, is_scout_mini));
-  } else if (proto == ProtocolVersion::AGX_V2) {
-    std::cout << "Detected protocol: AGX_V2" << std::endl;
-    scout = std::unique_ptr<ScoutRobot>(
-        new ScoutRobot(ProtocolVersion::AGX_V2, is_scout_mini));
+  if (detector.Connect(device_name)) {
+    auto proto = detector.DetectProtocolVersion(5);
+    if (proto == ProtocolVersion::AGX_V1) {
+      std::cout << "Detected protocol: AGX_V1" << std::endl;
+      scout = std::unique_ptr<ScoutRobot>(
+          new ScoutRobot(ProtocolVersion::AGX_V1, is_scout_mini));
+    } else if (proto == ProtocolVersion::AGX_V2) {
+      std::cout << "Detected protocol: AGX_V2" << std::endl;
+      scout = std::unique_ptr<ScoutRobot>(
+          new ScoutRobot(ProtocolVersion::AGX_V2, is_scout_mini));
+    } else {
+      std::cout << "Detected protocol: UNKONWN" << std::endl;
+      return -1;
+    }
   } else {
-    std::cout << "Detected protocol: UNKONWN" << std::endl;
     return -1;
   }
 

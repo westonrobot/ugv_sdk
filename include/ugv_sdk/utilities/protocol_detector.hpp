@@ -18,8 +18,7 @@
 namespace westonrobot {
 class ProtocolDectctor {
  public:
-  void Connect(std::string can_name);
-  void Connect(std::string uart_name, uint32_t baudrate);
+  bool Connect(std::string can_name);
 
   ProtocolVersion DetectProtocolVersion(uint32_t timeout_sec);
 

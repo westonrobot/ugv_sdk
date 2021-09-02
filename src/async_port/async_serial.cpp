@@ -55,9 +55,8 @@ bool AsyncSerial::SetupPort() {
     port_opened_ = true;
     std::cout << "Start listening to port: " << port_ << "@" << baud_rate_
               << std::endl;
-
   } catch (std::system_error &e) {
-    std::cout << e.what();
+    std::cout << e.what() << std::endl;
     return false;
   }
 

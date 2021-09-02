@@ -34,9 +34,10 @@ class AsyncPortBase {
       io_thread_ = std::thread([this]() { io_context_.run(); });
       return true;
     }
-    std::cerr << "Failed to setup port, please check if specified port exits "
-                 "or if you have proper permissions to access it"
-              << std::endl;
+    std::cerr
+        << "[ERROR] Failed to setup port, please check if specified port exits "
+           "or if you have proper permissions to access it"
+        << std::endl;
     return false;
   };
   virtual void StopService() {}
