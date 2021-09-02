@@ -24,6 +24,16 @@ struct BunkerCoreState {
   RcStateMessage rc_state;
 };
 
+struct BunkerActuatorState {
+  AgxMsgTimeStamp time_stamp;
+
+  // actuator state
+  ActuatorHSStateMessage actuator_hs_state[2];
+  ActuatorLSStateMessage actuator_ls_state[2];
+  // - for v1 robots only
+  ActuatorStateMessageV1 actuator_state[2];
+};
+
 struct BunkerInterface {
   virtual ~BunkerInterface() = default;
 
@@ -31,6 +41,7 @@ struct BunkerInterface {
 
   // get robot state
   virtual BunkerCoreState GetRobotState() = 0;
+  virtual BunkerActuatorState GetActuatorState() = 0;
 };
 }  // namespace westonrobot
 

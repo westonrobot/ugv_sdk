@@ -42,4 +42,9 @@ BunkerCoreState BunkerRobot::GetRobotState() {
   auto bunker = dynamic_cast<BunkerInterface*>(robot_);
   return bunker->GetRobotState();
 }
+
+BunkerActuatorState BunkerRobot::GetActuatorState() {
+  auto bunker = dynamic_cast<BunkerInterface*>(robot_);
+  return bunker->GetActuatorState();
+}
 }  // namespace westonrobot
