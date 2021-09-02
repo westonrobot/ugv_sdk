@@ -6,6 +6,8 @@ cmake-build-debug
 cmake-build-release/
 *.xlsx
 
+.editorconfig
+
 # Temp files
 *~
 */~
