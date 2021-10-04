@@ -40,8 +40,8 @@ class ScoutBase : public AgilexBase<ParserType>, public ScoutInterface {
                                               0.0);
   }
 
-  void SetLightCommand(LightMode f_mode, uint8_t f_value,
-                       LightMode r_mode = LightMode::CONST_ON,
+  void SetLightCommand(AgxLightMode f_mode, uint8_t f_value,
+                       AgxLightMode r_mode = AgxLightMode::CONST_ON,
                        uint8_t r_value = 0) override {
     AgilexBase<ParserType>::SendLightCommand(f_mode, f_value, r_mode, r_value);
   }

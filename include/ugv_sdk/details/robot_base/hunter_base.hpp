@@ -62,11 +62,11 @@ class HunterBase : public AgilexBase<ParserType>, public HunterInterface {
   }
 
   void ActivateBrake() override {
-    AgilexBase<ParserType>::SetBrakeMode(BrakeMode::BRAKE_MODE_LOCK);
+    AgilexBase<ParserType>::SetBrakeMode(AgxBrakeMode::BRAKE_MODE_LOCK);
   }
 
   void ReleaseBrake() override {
-    AgilexBase<ParserType>::SetBrakeMode(BrakeMode::BRAKE_MODE_UNLOCK);
+    AgilexBase<ParserType>::SetBrakeMode(AgxBrakeMode::BRAKE_MODE_UNLOCK);
   }
 };
 }  // namespace westonrobot

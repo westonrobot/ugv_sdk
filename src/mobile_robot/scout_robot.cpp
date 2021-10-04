@@ -52,8 +52,8 @@ void ScoutRobot::SetMotionCommand(double linear_vel, double angular_vel) {
 
 void ScoutRobot::DisableLightControl() { robot_->DisableLightControl(); }
 
-void ScoutRobot::SetLightCommand(LightMode f_mode, uint8_t f_value,
-                                 LightMode r_mode, uint8_t r_value) {
+void ScoutRobot::SetLightCommand(AgxLightMode f_mode, uint8_t f_value,
+                                 AgxLightMode r_mode, uint8_t r_value) {
   auto scout = dynamic_cast<ScoutInterface*>(robot_);
   scout->SetLightCommand(f_mode, f_value, r_mode, r_value);
 }

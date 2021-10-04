@@ -28,7 +28,7 @@ class ScoutRobot : public RobotCommonInterface, public ScoutInterface {
   void EnableCommandedMode() override;
 
   void SetMotionCommand(double linear_vel, double angular_vel) override;
-  void SetLightCommand(LightMode f_mode, uint8_t f_value, LightMode r_mode,
+  void SetLightCommand(AgxLightMode f_mode, uint8_t f_value, AgxLightMode r_mode,
                        uint8_t r_value) override;
   void DisableLightControl() override;
 

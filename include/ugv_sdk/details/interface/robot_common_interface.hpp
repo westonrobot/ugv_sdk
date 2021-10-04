@@ -64,7 +64,7 @@ class RobotCommonInterface {
   /****** functions not available/valid to all robots ******/
   // functions to be implemented by class AgilexBase
   virtual void SetMotionMode(uint8_t mode){};
-  virtual void SetBrakedMode(BrakeMode mode){};
+  virtual void SetBrakedMode(AgxBrakeMode mode){};
 
   virtual CoreStateMsgGroup GetRobotCoreStateMsgGroup() {
     throw std::runtime_error(
@@ -88,8 +88,8 @@ class RobotCommonInterface {
         "is supposed to be used.");
   };
 
-  virtual void SendLightCommand(LightMode front_mode,
-                                uint8_t front_custom_value, LightMode rear_mode,
+  virtual void SendLightCommand(AgxLightMode front_mode,
+                                uint8_t front_custom_value, AgxLightMode rear_mode,
                                 uint8_t rear_custom_value) {
     throw std::runtime_error(
         "Only a derived version of this function with actual implementation "

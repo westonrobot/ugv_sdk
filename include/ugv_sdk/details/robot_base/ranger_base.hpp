@@ -40,7 +40,7 @@ class RangerBase : public AgilexBase<ProtocolV2Parser>, public RangerInterface {
         linear_vel, angular_vel, lateral_vel, steer_angle / 10.0);
   }
 
-  void SetLightCommand(LightMode f_mode, uint8_t f_value, LightMode r_mode,
+  void SetLightCommand(AgxLightMode f_mode, uint8_t f_value, AgxLightMode r_mode,
                        uint8_t r_value) override {
     AgilexBase<ProtocolV2Parser>::SendLightCommand(f_mode, f_value, r_mode,
                                                    r_value);

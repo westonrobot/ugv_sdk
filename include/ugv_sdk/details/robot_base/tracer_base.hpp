@@ -42,7 +42,7 @@ class TracerBaseV2 : public AgilexBase<ProtocolV2Parser>,
                                                     0.0, 0.0);
   }
 
-  void SetLightCommand(LightMode f_mode, uint8_t f_value) override {
+  void SetLightCommand(AgxLightMode f_mode, uint8_t f_value) override {
     AgilexBase<ProtocolV2Parser>::SendLightCommand(f_mode, f_value, CONST_OFF,
                                                    0);
   }

@@ -32,8 +32,8 @@ typedef struct {
 
 typedef struct {
   bool enable_cmd_ctrl;
-  LightOperation front_light;
-  LightOperation rear_light;
+  AgxLightOperation front_light;
+  AgxLightOperation rear_light;
 } LightCommandMessage;
 
 typedef struct {
@@ -46,7 +46,7 @@ typedef struct {
 
 // V1-only messages
 typedef struct {
-  ControlMode control_mode;
+  AgxControlMode control_mode;
   bool clear_all_error;
   float linear;
   float angular;
@@ -73,8 +73,8 @@ typedef ValueSetCommandMessageV1 ValueSetStateMessageV1;
 #define SYSTEM_ERROR_STEER_ENCODER_MASK ((uint16_t)0x0080)
 
 typedef struct {
-  VehicleState vehicle_state;
-  ControlMode control_mode;
+  AgxVehicleState vehicle_state;
+  AgxControlMode control_mode;
   float battery_voltage;
   uint16_t error_code;
 } SystemStateMessage;
@@ -89,10 +89,10 @@ typedef struct {
 typedef LightCommandMessage LightStateMessage;
 
 typedef struct {
-  RcSwitchState swa;
-  RcSwitchState swb;
-  RcSwitchState swc;
-  RcSwitchState swd;
+  AgxRcSwitchState swa;
+  AgxRcSwitchState swb;
+  AgxRcSwitchState swc;
+  AgxRcSwitchState swd;
   int8_t stick_right_v;
   int8_t stick_right_h;
   int8_t stick_left_v;
@@ -237,11 +237,11 @@ typedef struct {
 } VersionResponseMessage;
 
 typedef struct {
-  ControlMode mode;
+  AgxControlMode mode;
 } ControlModeConfigMessage;
 
 typedef struct {
-  BrakeMode mode;
+  AgxBrakeMode mode;
 } BrakeModeConfigMessage;
 
 typedef struct {

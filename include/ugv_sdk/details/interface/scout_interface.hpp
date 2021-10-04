@@ -44,8 +44,8 @@ struct ScoutInterface {
   };
 
   virtual void SetMotionCommand(double linear_vel, double angular_vel) = 0;
-  virtual void SetLightCommand(LightMode f_mode, uint8_t f_value,
-                               LightMode r_mode, uint8_t r_value) = 0;
+  virtual void SetLightCommand(AgxLightMode f_mode, uint8_t f_value,
+                               AgxLightMode r_mode, uint8_t r_value) = 0;
 
   // get robot state
   virtual ScoutCoreState GetRobotState() = 0;

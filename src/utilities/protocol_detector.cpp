@@ -8,7 +8,7 @@
  */
 
 #include "ugv_sdk/utilities/protocol_detector.hpp"
-#include "ugv_sdk/utilities/stopwatch.hpp"
+#include "utilities/stopwatch.hpp"
 
 namespace westonrobot {
 bool ProtocolDectctor::Connect(std::string can_name) {

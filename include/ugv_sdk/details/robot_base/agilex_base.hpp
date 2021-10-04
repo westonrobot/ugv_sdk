@@ -97,8 +97,8 @@ class AgilexBase : public RobotCommonInterface {
   }
 
   // one-shot light command
-  void SendLightCommand(LightMode front_mode, uint8_t front_custom_value,
-                        LightMode rear_mode, uint8_t rear_custom_value) {
+  void SendLightCommand(AgxLightMode front_mode, uint8_t front_custom_value,
+                        AgxLightMode rear_mode, uint8_t rear_custom_value) {
     if (can_connected_) {
       AgxMessage msg;
       msg.type = AgxMsgLightCommand;
@@ -190,7 +190,7 @@ class AgilexBase : public RobotCommonInterface {
     if (can_connected_) can_->StopService();
   }
 
-  void SetBrakeMode(BrakeMode mode) {
+  void SetBrakeMode(AgxBrakeMode mode) {
     // construct message
     AgxMessage msg;
     msg.type = AgxMsgBrakeModeConfig;
