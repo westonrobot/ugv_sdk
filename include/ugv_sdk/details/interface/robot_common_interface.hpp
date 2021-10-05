@@ -50,7 +50,7 @@ class RobotCommonInterface {
   virtual void EnableCommandedMode() = 0;
 
   // functions to be implemented by each robot class
-  virtual void Connect(std::string can_name) = 0;
+  virtual bool Connect(std::string can_name) = 0;
 
   virtual void ResetRobotState() = 0;
 

@@ -45,9 +45,10 @@ class AgilexBase : public RobotCommonInterface {
   AgilexBase(const AgilexBase &hunter) = delete;
   AgilexBase &operator=(const AgilexBase &hunter) = delete;
 
-  void Connect(std::string can_name) override {
-    ConnectPort(can_name, std::bind(&AgilexBase<ParserType>::ParseCANFrame,
-                                    this, std::placeholders::_1));
+  bool Connect(std::string can_name) override {
+    return ConnectPort(can_name,
+                       std::bind(&AgilexBase<ParserType>::ParseCANFrame, this,
+                                 std::placeholders::_1));
   }
 
   // switch to commanded mode
@@ -179,11 +180,11 @@ class AgilexBase : public RobotCommonInterface {
 
   // connect to roboot from CAN or serial
   using CANFrameRxCallback = AsyncCAN::ReceiveCallback;
-  void ConnectPort(std::string dev_name, CANFrameRxCallback cb) {
+  bool ConnectPort(std::string dev_name, CANFrameRxCallback cb) {
     can_ = std::make_shared<AsyncCAN>(dev_name);
     can_->SetReceiveCallback(cb);
-    can_->StartListening();
-    can_connected_ = true;
+    can_connected_ = can_->StartListening();
+    return can_connected_;
   }
 
   void DisconnectPort() {

@@ -21,7 +21,7 @@ class HunterRobot : public RobotCommonInterface, public HunterInterface {
   HunterRobot(ProtocolVersion protocol = ProtocolVersion::AGX_V2);
   ~HunterRobot();
 
-  void Connect(std::string can_name) override;
+  bool Connect(std::string can_name) override;
 
   void EnableCommandedMode() override;
 

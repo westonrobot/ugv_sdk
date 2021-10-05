@@ -27,9 +27,10 @@ class RangerBase : public AgilexBase<ProtocolV2Parser>, public RangerInterface {
   ~RangerBase() = default;
 
   // set up connection
-  void Connect(std::string dev_name) override {
-    AgilexBase::ConnectPort(dev_name, std::bind(&RangerBase::ParseCANFrame,
-                                                this, std::placeholders::_1));
+  bool Connect(std::string dev_name) override {
+    return AgilexBase::ConnectPort(
+        dev_name,
+        std::bind(&RangerBase::ParseCANFrame, this, std::placeholders::_1));
   }
 
   // robot control

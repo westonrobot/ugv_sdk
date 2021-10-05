@@ -22,7 +22,7 @@ class ScoutRobot : public RobotCommonInterface, public ScoutInterface {
              bool is_mini_model = false);
   virtual ~ScoutRobot();
 
-  void Connect(std::string can_name) override;
+  bool Connect(std::string can_name) override;
   void Connect(std::string uart_name, uint32_t baudrate) override;
 
   void EnableCommandedMode() override;

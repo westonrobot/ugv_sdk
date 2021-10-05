@@ -28,8 +28,8 @@ class TracerBaseV2 : public AgilexBase<ProtocolV2Parser>,
   ~TracerBaseV2() = default;
 
   // set up connection
-  void Connect(std::string can_name) override {
-    AgilexBase<ProtocolV2Parser>::Connect(can_name);
+  bool Connect(std::string can_name) override {
+    return AgilexBase<ProtocolV2Parser>::Connect(can_name);
   }
 
   void Connect(std::string uart_name, uint32_t baudrate) override {

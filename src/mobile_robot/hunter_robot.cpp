@@ -25,7 +25,9 @@ HunterRobot::~HunterRobot() {
 
 void HunterRobot::EnableCommandedMode() { robot_->EnableCommandedMode(); }
 
-void HunterRobot::Connect(std::string can_name) { robot_->Connect(can_name); }
+bool HunterRobot::Connect(std::string can_name) {
+  return robot_->Connect(can_name);
+}
 
 void HunterRobot::ResetRobotState() { robot_->ResetRobotState(); }
 
