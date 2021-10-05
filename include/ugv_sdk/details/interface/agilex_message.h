@@ -124,6 +124,7 @@ typedef struct {
   uint8_t driver_state;
 } ActuatorLSStateMessage;
 
+// for ranger
 typedef struct {
   uint8_t motion_mode;
   uint8_t mode_changing;

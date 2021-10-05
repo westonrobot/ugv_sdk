@@ -4,12 +4,6 @@
  * Created on: Dec 22, 2020 17:14
  * Description:
  *
- * Each robot class derived from this base class should provide implementation
- * for the following two functions:
- *
- * - virtual void Connect(std::string dev_name) = 0;
- * - virtual void ParseCANFrame(can_frame *rx_frame) = 0;
- *
  * Copyright (c) 2020 Ruixiang Du (rdu)
  */
 
@@ -87,8 +81,8 @@ class AgilexBase : public RobotCommonInterface {
         msg.body.motion_command_msg.steering_angle = steering_angle;
       }
 
-      std::cout << "sending motion cmd: " << linear_vel << "," << angular_vel
-                << "," << lateral_vel << std::endl;
+      std::cout << "Sending motion cmd: " << linear_vel << ", " << angular_vel
+                << ", " << lateral_vel << std::endl;
 
       // send to can bus
       can_frame frame;

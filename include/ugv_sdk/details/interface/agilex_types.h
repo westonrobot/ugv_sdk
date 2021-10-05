@@ -29,9 +29,9 @@ typedef struct {
 } AgxLightOperation;
 
 typedef enum {
-  VehicleStateNormal = 0x00,
-  VehicleStateEStop = 0x01,
-  VehicleStateException = 0x02
+  VEHICLE_STATE_NORMAL = 0x00,
+  VEHICLE_STATE_ESTOP = 0x01,
+  VEHICLE_STATE_EXCEPTION = 0x02
 } AgxVehicleState;
 
 typedef enum {
