@@ -25,7 +25,9 @@ BunkerRobot::~BunkerRobot() {
 
 void BunkerRobot::EnableCommandedMode() { robot_->EnableCommandedMode(); }
 
-void BunkerRobot::Connect(std::string can_name) { robot_->Connect(can_name); }
+bool BunkerRobot::Connect(std::string can_name) {
+  return robot_->Connect(can_name);
+}
 
 void BunkerRobot::ResetRobotState() { robot_->ResetRobotState(); }
 

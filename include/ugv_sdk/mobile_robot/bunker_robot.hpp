@@ -21,7 +21,7 @@ class BunkerRobot : public RobotCommonInterface, public BunkerInterface {
   BunkerRobot(ProtocolVersion protocol = ProtocolVersion::AGX_V2);
   ~BunkerRobot();
 
-  void Connect(std::string can_name) override;
+  bool Connect(std::string can_name) override;
 
   void EnableCommandedMode() override;
 

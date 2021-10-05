@@ -26,8 +26,8 @@ class HunterBase : public AgilexBase<ParserType>, public HunterInterface {
   ~HunterBase() = default;
 
   // set up connection
-  void Connect(std::string can_name) override {
-    AgilexBase<ParserType>::Connect(can_name);
+  bool Connect(std::string can_name) override {
+    return AgilexBase<ParserType>::Connect(can_name);
   }
 
   // robot control
