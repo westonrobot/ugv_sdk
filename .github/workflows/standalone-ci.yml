@@ -2,9 +2,13 @@ name: Cpp
 
 on:
   push:
-    branches: [ next ]
+    branches: 
+      - main
+      - next
   pull_request:
-    branches: [ next ]
+    branches: 
+      - main
+      - next
 
 jobs:
   build:

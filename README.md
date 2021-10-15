@@ -33,19 +33,21 @@ It should also work in other similar Linux environments but only the above liste
 
 |       Robot       | Protocol V1 | Protocol V2 | UART  |  CAN  | Support Status |
 | :---------------: | :---------: | :---------: | :---: | :---: | :------------: |
-|     Scout 1.0     |      Y      |      -      | TODO  |   Y   |  Discontinued  |
-|     Scout 2.0     |      Y      |      Y      | TODO  |   Y   |     Active     |
+|     Scout 1.0     |      Y      |      -      |   N   |   Y   |  Discontinued  |
+|     Scout 2.0     |      Y      |      Y      |   N   |   Y   |     Active     |
 | Scout Mini (Skid) |      Y      |      Y      |   -   |   Y   |     Active     |
 | Scout Mini (Omni) |      Y      |      Y      |   -   |   Y   |     Active     |
 |    Hunter 1.0     |      Y      |      Y      |   -   |   Y   |     Active     |
 |    Hunter 2.0     |      -      |      Y      |   -   |   Y   |     Active     |
 |      Bunker       |      Y      |      Y      |   -   |   Y   |     Active     |
-|      Tracer       |      -      |      Y      | TODO  |   Y   |     Active     |
+|      Tracer       |      -      |      Y      |   N   |   Y   |     Active     |
 |    Ranger Mini    |      -      |      Y      |   -   |   Y   |     Active     |
 
-**Important Note:** Currently we're transitioning the communication protocol from version 1 to version 2. Please check with Weston Robot or AgileX Robotics to confirm which version your robot is using. 
+**Important Note** 
 
-* V1 Protocol: master branch of scout_ros and ugv_sdk
+The main branch of this repository supports all Scout variants and both V1 and V2 protocol. Earlier versions of the SDK can be found in v1.x and v2.x branch for V1 and V2 protocol support respectively.
+
+* V1 Protocol: v1.x branch of scout_ros and ugv_sdk
 * V2 Protocol: v2.x branch of scout_ros and ugv_sdk
 
 ## Build SDK
@@ -61,7 +63,7 @@ $ sudo apt-get install build-essential git cmake libasio-dev
 
 ```
 $ cd <your-catkin-ws>/src
-$ git clone -b next https://github.com/westonrobot/ugv_sdk.git
+$ git clone https://github.com/westonrobot/ugv_sdk.git
 $ cd ..
 $ catkin_make
 ```
