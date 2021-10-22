@@ -12,6 +12,7 @@
 
 #include <string>
 #include <chrono>
+#include <stdexcept>
 
 #include "ugv_sdk/details/interface/agilex_message.h"
 #include "ugv_sdk/details/interface/parser_interface.hpp"
