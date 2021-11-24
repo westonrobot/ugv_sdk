@@ -35,6 +35,7 @@ void MobileBase::Connect(std::string dev_name, int32_t baud_rate) {
 }
 
 void MobileBase::Disconnect() {
+  keep_running_ = false;
   if (can_connected_) can_if_->StopService();
   if (serial_connected_ && serial_if_->IsOpened()) {
     serial_if_->StopService();
