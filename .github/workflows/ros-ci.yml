@@ -8,11 +8,9 @@ on:
   push:
     branches: 
       - main
-      - next
   pull_request:
     branches: 
       - main
-      - next
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
