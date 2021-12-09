@@ -49,7 +49,6 @@ class ScoutRobot : public RobotCommonInterface, public ScoutInterface {
 class ScoutMiniOmniRobot : public ScoutRobot, public ScoutOmniInterface {
  public:
   ScoutMiniOmniRobot(ProtocolVersion protocol = ProtocolVersion::AGX_V2);
-  ~ScoutMiniOmniRobot();
 
   void SetMotionCommand(double linear_vel, double angular_vel,
                         double lateral_velocity) override;

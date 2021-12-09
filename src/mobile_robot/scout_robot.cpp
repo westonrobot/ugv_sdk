@@ -81,10 +81,6 @@ ScoutMiniOmniRobot::ScoutMiniOmniRobot(ProtocolVersion protocol)
   }
 }
 
-ScoutMiniOmniRobot::~ScoutMiniOmniRobot() {
-  if (robot_) delete robot_;
-}
-
 void ScoutMiniOmniRobot::SetMotionCommand(double linear_vel, double angular_vel,
                                           double lateral_velocity) {
   auto scout = dynamic_cast<ScoutOmniInterface*>(robot_);

@@ -21,3 +21,5 @@ target_include_directories(utests PRIVATE ${PRIVATE_HEADERS})
 # add_test(NAME gtest_all COMMAND utests)
 
 # add_subdirectory(devel)
+add_executable(scout_memory_check scout_memory_check.cpp)
+target_link_libraries(scout_memory_check ugv_sdk)
