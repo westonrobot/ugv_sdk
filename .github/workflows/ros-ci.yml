@@ -28,6 +28,6 @@ jobs:
     - name: Create catkin workspace
       run: mkdir -p /catkin_ws/src && cd /catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
     - name: Copy code to catkin workspace
-      run: cd /catkin_ws/src && git clone -b next https://github.com/westonrobot/ugv_sdk.git
+      run: cd /catkin_ws/src && git clone https://github.com/westonrobot/ugv_sdk.git
     - name: Run catkin_make
       run: cd /catkin_ws && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_make"
