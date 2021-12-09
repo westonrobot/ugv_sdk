@@ -39,6 +39,8 @@ struct RangerActuatorState {
 /////////////////////////////////////////////////////////////////////////
 
 struct RangerInterface {
+  virtual ~RangerInterface() = default;
+  
   virtual bool Connect(std::string dev_name) = 0;
 
   // robot control

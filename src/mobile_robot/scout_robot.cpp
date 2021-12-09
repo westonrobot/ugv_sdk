@@ -72,7 +72,8 @@ ScoutActuatorState ScoutRobot::GetActuatorState() {
 
 ///////////////////////////////////////////////////////////////////////////
 
-ScoutMiniOmniRobot::ScoutMiniOmniRobot(ProtocolVersion protocol) {
+ScoutMiniOmniRobot::ScoutMiniOmniRobot(ProtocolVersion protocol)
+    : ScoutRobot(ProtocolVersion::UNKONWN) {
   if (protocol == ProtocolVersion::AGX_V1) {
     robot_ = new ScoutMiniOmniBaseV1();
   } else if (protocol == ProtocolVersion::AGX_V2) {

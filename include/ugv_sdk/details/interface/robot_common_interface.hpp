@@ -45,7 +45,7 @@ struct CommonSensorStateMsgGroup {};
 
 class RobotCommonInterface {
  public:
-  ~RobotCommonInterface() = default;
+  virtual ~RobotCommonInterface() = default;
 
   // functions to be implemented by class AgilexBase
   virtual void EnableCommandedMode() = 0;

@@ -23,7 +23,7 @@ template <typename ParserType>
 class ScoutBase : public AgilexBase<ParserType>, public ScoutInterface {
  public:
   ScoutBase() : AgilexBase<ParserType>(){};
-  ~ScoutBase() = default;
+  virtual ~ScoutBase() = default;
 
   // set up connection
   bool Connect(std::string can_name) override {
