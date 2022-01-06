@@ -15,7 +15,7 @@ bool ProtocolDectctor::Connect(std::string can_name) {
   can_ = std::make_shared<AsyncCAN>(can_name);
   can_->SetReceiveCallback(
       std::bind(&ProtocolDectctor::ParseCANFrame, this, std::placeholders::_1));
-  return can_->StartListening();
+  return can_->Open();
 }
 
 ProtocolVersion ProtocolDectctor::DetectProtocolVersion(uint32_t timeout_sec) {
