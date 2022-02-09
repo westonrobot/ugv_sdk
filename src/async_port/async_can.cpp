@@ -20,9 +20,11 @@
 
 namespace westonrobot {
 AsyncCAN::AsyncCAN(std::string can_port)
-    : AsyncPortBase(can_port), socketcan_stream_(io_context_) {}
+    : port_(can_port), socketcan_stream_(io_context_) {}
 
-bool AsyncCAN::SetupPort() {
+AsyncCAN::~AsyncCAN() { Close(); }
+
+bool AsyncCAN::Open() {
   try {
     const size_t iface_name_size = strlen(port_.c_str()) + 1;
     if (iface_name_size > IFNAMSIZ) return false;
@@ -36,7 +38,7 @@ bool AsyncCAN::SetupPort() {
 
     const int ioctl_result = ioctl(can_fd_, SIOCGIFINDEX, &ifr);
     if (ioctl_result < 0) {
-      StopService();
+      Close();
       return false;
     }
 
@@ -48,13 +50,14 @@ bool AsyncCAN::SetupPort() {
     const int bind_result =
         bind(can_fd_, (struct sockaddr *)&addr, sizeof(addr));
     if (bind_result < 0) {
-      StopService();
+      Close();
       return false;
     }
 
     port_opened_ = true;
     std::cout << "Start listening to port: " << port_ << std::endl;
   } catch (std::system_error &e) {
+    port_opened_ = false;
     std::cout << e.what() << std::endl;
     return false;
   }
@@ -72,21 +75,25 @@ bool AsyncCAN::SetupPort() {
                        std::ref(socketcan_stream_)));
 #endif
 
+  // start io thread
+  io_thread_ = std::thread([this]() { io_context_.run(); });
+
   return true;
 }
 
-void AsyncCAN::StopService() {
-  // stop io thread
+void AsyncCAN::Close() {
   io_context_.stop();
   if (io_thread_.joinable()) io_thread_.join();
   io_context_.reset();
-
+  
   // release port fd
   const int close_result = ::close(can_fd_);
   can_fd_ = -1;
 
   port_opened_ = false;
 }
+
+bool AsyncCAN::IsOpened() const { return port_opened_; }
 
 void AsyncCAN::DefaultReceiveCallback(can_frame *rx_frame) {
   std::cout << std::hex << rx_frame->can_id << "  ";
@@ -102,7 +109,7 @@ void AsyncCAN::ReadFromPort(struct can_frame &rec_frame,
       asio::buffer(&rec_frame, sizeof(rec_frame)),
       [sthis](asio::error_code error, size_t bytes_transferred) {
         if (error) {
-          sthis->StopService();
+          sthis->Close();
           return;
         }
 

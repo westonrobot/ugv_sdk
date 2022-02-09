@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
   while (true) {
     // motion control
     std::cout << "Setting motion command: 0.0, 0,0, 0.8" << std::endl;
-    scout->SetMotionCommand(0.0, 0.0, 0.8);
+    scout->SetMotionCommand(0.0, 0.3, 0.0);
 
     // get robot state
     auto state = scout->GetRobotState();

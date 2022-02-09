@@ -19,15 +19,17 @@
 namespace westonrobot {
 
 AsyncSerial::AsyncSerial(std::string port_name, uint32_t baud_rate)
-    : AsyncPortBase(port_name),
-      baud_rate_(baud_rate),
-      serial_port_(io_context_) {}
+    : port_(port_name), baud_rate_(baud_rate), serial_port_(io_context_) {}
+
+AsyncSerial::~AsyncSerial() { Close(); }
 
 void AsyncSerial::SetBaudRate(unsigned baudrate) {
   serial_port_.set_option(asio::serial_port_base::baud_rate(baudrate));
 }
 
-bool AsyncSerial::SetupPort() {
+void AsyncSerial::SetHardwareFlowControl(bool enabled) { hwflow_ = enabled; }
+
+bool AsyncSerial::Open() {
   using SPB = asio::serial_port_base;
 
   try {
@@ -67,15 +69,17 @@ bool AsyncSerial::SetupPort() {
   asio::post(io_context_, std::bind(&AsyncSerial::ReadFromPort, this));
 #endif
 
+  // start io thread
+  io_thread_ = std::thread([this]() { io_context_.run(); });
+
   return true;
 }
 
-void AsyncSerial::StopService() {
-  // stop io thread
+void AsyncSerial::Close() {
   io_context_.stop();
   if (io_thread_.joinable()) io_thread_.join();
   io_context_.reset();
-
+  
   if (IsOpened()) {
     serial_port_.cancel();
     serial_port_.close();
@@ -83,6 +87,8 @@ void AsyncSerial::StopService() {
 
   port_opened_ = false;
 }
+
+bool AsyncSerial::IsOpened() const { return serial_port_.is_open(); }
 
 void AsyncSerial::DefaultReceiveCallback(uint8_t *data, const size_t bufsize,
                                          size_t len) {}
@@ -93,7 +99,7 @@ void AsyncSerial::ReadFromPort() {
       asio::buffer(rx_buf_),
       [sthis](asio::error_code error, size_t bytes_transferred) {
         if (error) {
-          sthis->StopService();
+          sthis->Close();
           return;
         }
 
@@ -122,7 +128,7 @@ void AsyncSerial::WriteToPort(bool check_if_busy) {
       asio::buffer(tx_buf_, len),
       [sthis](asio::error_code error, size_t bytes_transferred) {
         if (error) {
-          sthis->StopService();
+          sthis->Close();
           return;
         }
         std::lock_guard<std::recursive_mutex> lock(sthis->tx_mutex_);

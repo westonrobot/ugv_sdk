@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
   while (true) {
     // motion control
     std::cout << "Motor: 1.0, 0" << std::endl;
-    tracer->SetMotionCommand(1.0, 0.0);
+    tracer->SetMotionCommand(0.0, 0.0);
 
     // get robot state
     auto state = tracer->GetRobotState();
