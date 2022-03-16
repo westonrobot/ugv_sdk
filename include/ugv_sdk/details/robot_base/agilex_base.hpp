@@ -54,14 +54,16 @@ class AgilexBase : public RobotCommonInterface {
     msg.body.control_mode_config_msg.mode = CONTROL_MODE_CAN;
 
     // encode msg to can frame and send to bus
-    can_frame frame;
-    if (parser_.EncodeMessage(&msg, &frame)) can_->SendFrame(frame);
+    if (can_ != nullptr && can_->IsOpened()) {
+      can_frame frame;
+      if (parser_.EncodeMessage(&msg, &frame)) can_->SendFrame(frame);
+    }
   }
 
   // must be called at a frequency >= 50Hz
   void SendMotionCommand(double linear_vel, double angular_vel,
                          double lateral_vel, double steering_angle) {
-    if (can_->IsOpened()) {
+    if (can_ != nullptr && can_->IsOpened()) {
       // motion control message
       AgxMessage msg;
       if (parser_.GetParserProtocolVersion() == ProtocolVersion::AGX_V1) {
@@ -95,7 +97,7 @@ class AgilexBase : public RobotCommonInterface {
   // one-shot light command
   void SendLightCommand(AgxLightMode front_mode, uint8_t front_custom_value,
                         AgxLightMode rear_mode, uint8_t rear_custom_value) {
-    if (can_->IsOpened()) {
+    if (can_ != nullptr && can_->IsOpened()) {
       AgxMessage msg;
       msg.type = AgxMsgLightCommand;
       msg.body.light_command_msg.enable_cmd_ctrl = true;
@@ -111,7 +113,7 @@ class AgilexBase : public RobotCommonInterface {
   }
 
   void DisableLightControl() {
-    if (can_->IsOpened()) {
+    if (can_ != nullptr && can_->IsOpened()) {
       AgxMessage msg;
       msg.type = AgxMsgLightCommand;
 
@@ -125,7 +127,7 @@ class AgilexBase : public RobotCommonInterface {
 
   // motion mode change
   void SetMotionMode(uint8_t mode) {
-    if (can_->IsOpened()) {
+    if (can_ != nullptr && can_->IsOpened()) {
       AgxMessage msg;
       msg.type = AgxMsgSetMotionModeCommand;
       msg.body.motion_mode_msg.motion_mode = mode;
@@ -181,7 +183,7 @@ class AgilexBase : public RobotCommonInterface {
   }
 
   void DisconnectPort() {
-    if (can_->IsOpened()) can_->Close();
+    if (can_ != nullptr && can_->IsOpened()) can_->Close();
   }
 
   void SetBrakeMode(AgxBrakeMode mode) {
@@ -191,8 +193,10 @@ class AgilexBase : public RobotCommonInterface {
     msg.body.brake_mode_config_msg.mode = mode;
 
     // encode msg to can frame and send to bus
-    can_frame frame;
-    if (parser_.EncodeMessage(&msg, &frame)) can_->SendFrame(frame);
+    if (can_ != nullptr && can_->IsOpened()) {
+      can_frame frame;
+      if (parser_.EncodeMessage(&msg, &frame)) can_->SendFrame(frame);
+    }
   }
 
   void ParseCANFrame(can_frame *rx_frame) {
