@@ -85,8 +85,8 @@ class AgilexBase : public RobotCommonInterface {
         msg.body.motion_command_msg.steering_angle = steering_angle;
       }
 
-      std::cout << "Sending motion cmd: " << linear_vel << ", " << angular_vel
-                << ", " << lateral_vel << std::endl;
+    //   std::cout << "Sending motion cmd: " << linear_vel << ", " << angular_vel
+    //             << ", " << lateral_vel << std::endl;
 
       // send to can bus
       can_frame frame;

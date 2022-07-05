@@ -44,7 +44,7 @@ struct BunkerLimits {
 struct HunterV1Limits {
   static constexpr double max_linear = 1.5;  // m/s
   static constexpr double min_linear = -max_linear;
-  static constexpr double max_angular = 25.5;  // degree
+  static constexpr double max_angular = 0.444;  // rad
   static constexpr double min_angular = -max_angular;
 
   static constexpr double max_lateral = 0.0;
