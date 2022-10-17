@@ -11,6 +11,11 @@
 #include "utilities/stopwatch.hpp"
 
 namespace westonrobot {
+
+ProtocolDectctor::~ProtocolDectctor() {
+  can_->StopService();
+}
+
 bool ProtocolDectctor::Connect(std::string can_name) {
   can_ = std::make_shared<AsyncCAN>(can_name);
   can_->SetReceiveCallback(
