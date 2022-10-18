@@ -11,14 +11,14 @@
 #include "utilities/stopwatch.hpp"
 
 namespace westonrobot {
-bool ProtocolDectctor::Connect(std::string can_name) {
+bool ProtocolDetector::Connect(std::string can_name) {
   can_ = std::make_shared<AsyncCAN>(can_name);
   can_->SetReceiveCallback(
-      std::bind(&ProtocolDectctor::ParseCANFrame, this, std::placeholders::_1));
+      std::bind(&ProtocolDetector::ParseCANFrame, this, std::placeholders::_1));
   return can_->Open();
 }
 
-ProtocolVersion ProtocolDectctor::DetectProtocolVersion(uint32_t timeout_sec) {
+ProtocolVersion ProtocolDetector::DetectProtocolVersion(uint32_t timeout_sec) {
   msg_v1_detected_ = false;
   msg_v2_detected_ = false;
 
@@ -41,7 +41,7 @@ ProtocolVersion ProtocolDectctor::DetectProtocolVersion(uint32_t timeout_sec) {
   return ProtocolVersion::UNKONWN;
 };
 
-void ProtocolDectctor::ParseCANFrame(can_frame *rx_frame) {
+void ProtocolDetector::ParseCANFrame(can_frame *rx_frame) {
   switch (rx_frame->can_id) {
       // state feedback frame with id 0x151 is unique to V1 protocol
     case 0x151: {

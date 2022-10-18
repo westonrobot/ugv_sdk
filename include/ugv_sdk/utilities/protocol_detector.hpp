@@ -16,7 +16,7 @@
 #include "ugv_sdk/details/interface/parser_interface.hpp"
 
 namespace westonrobot {
-class ProtocolDectctor {
+class ProtocolDetector {
  public:
   bool Connect(std::string can_name);
 

@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
 
   std::unique_ptr<ScoutMiniOmniRobot> scout;
 
-  ProtocolDectctor detector;
+  ProtocolDetector detector;
   detector.Connect(device_name);
   auto proto = detector.DetectProtocolVersion(5);
   if (proto == ProtocolVersion::AGX_V1) {
