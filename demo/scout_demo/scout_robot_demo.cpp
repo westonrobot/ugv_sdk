@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
 
   std::unique_ptr<ScoutRobot> scout;
 
-  ProtocolDectctor detector;
+  ProtocolDetector detector;
   if (detector.Connect(device_name)) {
     auto proto = detector.DetectProtocolVersion(5);
     if (proto == ProtocolVersion::AGX_V1) {

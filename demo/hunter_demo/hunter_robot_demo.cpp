@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
 
   std::unique_ptr<HunterRobot> hunter;
 
-  ProtocolDectctor detector;
+  ProtocolDetector detector;
   detector.Connect(device_name);
   auto proto = detector.DetectProtocolVersion(5);
 
