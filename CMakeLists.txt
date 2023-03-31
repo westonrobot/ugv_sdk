@@ -116,7 +116,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     
 # Build demo
 if(BUILD_WITHOUT_ROS)
-    add_subdirectory(demo)
+    add_subdirectory(sample)
 endif()
 
 # Build tests

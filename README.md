@@ -120,13 +120,20 @@ The log file can be replayed using the following command
 $ canplayer -I <candump-log-file-name>.log
 ```
 
-## Demo Code
+## Sample Code
 
-You can find demo code for each robot in "demo" folder. For example, run the demo for Scout robot
+You can find sample code for each robot in "sample" folder. For example, you can run the demo for Scout robot
 
 ```
 $ ./bin/demo_scout_robot can0
 ```
+
+**Important note:**
+
+* **The demo program may command the robot to move!** Please make sure you have the remote controller with you and the
+  robot is in a safe place to move around. You can also modify the demo code to disable the motion commands.
+* If the robot is not moving as expected, please first check if the remote controller is in manual mode and if the
+  E-Stop buttons are released.
 
 ## Reference
 
