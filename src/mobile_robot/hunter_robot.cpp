@@ -25,6 +25,10 @@ HunterRobot::~HunterRobot() {
 
 void HunterRobot::EnableCommandedMode() { robot_->EnableCommandedMode(); }
 
+std::string HunterRobot::RequestVersion(int timeout_sec) {
+    return robot_->RequestVersion(timeout_sec);
+}
+
 bool HunterRobot::Connect(std::string can_name) {
   return robot_->Connect(can_name);
 }

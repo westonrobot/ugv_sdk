@@ -100,7 +100,7 @@ extern "C" {
 
 // query/config group: 0x4
 #define CAN_MSG_VERSION_REQUEST_ID ((uint32_t)0x411)
-#define CAN_MSG_VERSION_RESPONSE_ID ((uint32_t)0x41a)
+#define CAN_MSG_VERSION_RESPONSE_ID ((uint32_t)0x4a1)
 
 #define CAN_MSG_CTRL_MODE_CONFIG_ID ((uint32_t)0x421)
 
@@ -342,12 +342,24 @@ typedef struct {
   uint8_t reserved6;
 } VersionRequestFrame;
 
+//typedef struct {
+//  struct16_t controller_hw_version;
+//  struct16_t motor_driver_hw_version;
+//  struct16_t controller_sw_version;
+//  struct16_t motor_driver_sw_version;
+//} VersionResponseFrame;
+
 typedef struct {
-  struct16_t controller_hw_version;
-  struct16_t motor_driver_hw_version;
-  struct16_t controller_sw_version;
-  struct16_t motor_driver_sw_version;
+  uint8_t res0;
+  uint8_t res1;
+  uint8_t res2;
+  uint8_t res3;
+  uint8_t res4;
+  uint8_t res5;
+  uint8_t res6;
+  uint8_t res7;
 } VersionResponseFrame;
+
 
 typedef struct {
   uint8_t mode;
@@ -403,6 +415,20 @@ typedef struct {
   uint8_t reserved5;
   uint8_t reserved6;
 } StateResetConfigFrame;
+
+typedef struct {
+  struct16_t angle_5;
+  struct16_t angle_6;
+  struct16_t angle_7;
+  struct16_t angle_8;
+} MoterAngleFrame;
+
+typedef struct {
+  struct16_t speed_1;
+  struct16_t speed_2;
+  struct16_t speed_3;
+  struct16_t speed_4;
+} MoterSpeedFrame;
 
 #pragma pack(pop)
 

@@ -23,6 +23,8 @@ class HunterRobot : public RobotCommonInterface, public HunterInterface {
 
   bool Connect(std::string can_name) override;
 
+  std::string RequestVersion(int timeout_sec = 3) override;
+
   void EnableCommandedMode() override;
 
   void ActivateBrake() override;
