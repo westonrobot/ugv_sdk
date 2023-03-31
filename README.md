@@ -6,8 +6,7 @@
 ## Introduction
 
 This software package provides a C++ interface to communicate with the mobile platforms, for sending commands to the
-robot and receiving the latest robot state. The repository is a joint effort by the development teams at **Weston Robot (
-Singapore)** and **AgileX Robotics (China)**.
+robot and receiving the latest robot state. The repository is a joint effort by the development teams at Weston Robot (Singapore) and AgileX Robotics (China).
 
 - Copyright (c) 2020-2023 [Weston Robot](https://www.westonrobot.com/)
 - Copyright (c) 2020-2023 [AgileX Robotics](http://www.agilex.ai/?lang=zh-cn)
