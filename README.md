@@ -6,7 +6,8 @@
 ## Introduction
 
 This software package provides a C++ interface to communicate with the mobile platforms, for sending commands to the
-robot and receiving the latest robot state. The repository is a joint effort by the development teams at Weston Robot (Singapore) and AgileX Robotics (China).
+robot and receiving the latest robot state. The repository is a joint effort by the development teams at Weston Robot (
+Singapore) and AgileX Robotics (China).
 
 - Copyright (c) 2020-2023 [Weston Robot](https://www.westonrobot.com/)
 - Copyright (c) 2020-2023 [AgileX Robotics](http://www.agilex.ai/?lang=zh-cn)
@@ -48,8 +49,9 @@ It should also work in other similar Linux environments but only the above liste
 |    Ranger Mini    |      -      |      Y      |  -   |  Y  |     Active     |
 
 **Important note:** The main branch of this repository supports all Scout variants and both V1 and V2 protocol. Earlier
-versions of the SDK can be found in v1.x and v2.x branch for V1 and V2 protocol support respectively. These two branches are not
-actively maintained any longer and only kept for reference.
+versions of the SDK can be found in v1.x and v2.x branch for V1 and V2 protocol support respectively. These two branches
+are not
+actively maintained any longer and are only kept for reference.
 
 * V1 Protocol: v1.x branch of scout_ros and ugv_sdk
 * V2 Protocol: v2.x branch of scout_ros and ugv_sdk
@@ -63,7 +65,7 @@ $ sudo apt-get update
 $ sudo apt-get install build-essential git cmake libasio-dev
 ```
 
-### Build the package in catkin workspace
+### Build the package in a catkin workspace
 
 ```
 $ cd <your-catkin-ws>/src
@@ -72,7 +74,7 @@ $ cd ..
 $ catkin_make
 ```
 
-## Setup CAN-To-USB adapter
+## Setup CAN-To-USB Adapter
 
 1. Enable gs_usb kernel module
     ```
@@ -100,6 +102,23 @@ $ catkin_make
 
 Two scripts inside the "./scripts" folder are provided for easy setup. You can run "./setup_can2usb.bash" for the
 first-time setup and run "./bringup_can2usb.bash" to bring up the device each time you unplug and re-plug the adapter.
+
+## Log CAN Data
+
+In the case that you get an issue with the robot base, you can log the CAN data to a file for further analysis. To do
+so, run
+
+```bash
+$ candump -l can0
+```
+
+If you're using a different CAN interface, replace "can0" with the name of your interface.
+
+The log file can be replayed using the following command
+
+```bash
+$ canplayer -I <candump-log-file-name>.log
+```
 
 ## Demo Code
 
