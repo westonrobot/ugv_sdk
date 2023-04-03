@@ -61,8 +61,5 @@ int main(int argc, char **argv) {
     std::cout << "AGX_V1 does not support version check" << std::endl;
   }
 
-  while (true) {
-  }
-
   return 0;
 }
