@@ -36,6 +36,12 @@ struct ScoutActuatorState {
   ActuatorStateMessageV1 actuator_state[4];
 };
 
+struct ScoutCommonSensorState {
+  AgxMsgTimeStamp time_stamp;
+
+  BmsBasicMessage bms_basic_state;
+};
+
 struct ScoutInterface {
   virtual ~ScoutInterface() = default;
 
@@ -50,6 +56,7 @@ struct ScoutInterface {
   // get robot state
   virtual ScoutCoreState GetRobotState() = 0;
   virtual ScoutActuatorState GetActuatorState() = 0;
+  virtual ScoutCommonSensorState GetCommonSensorState() = 0;
 };
 
 struct ScoutOmniInterface {

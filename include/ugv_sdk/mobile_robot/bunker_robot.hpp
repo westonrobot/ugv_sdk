@@ -23,6 +23,8 @@ class BunkerRobot : public RobotCommonInterface, public BunkerInterface {
 
   bool Connect(std::string can_name) override;
 
+  std::string RequestVersion(int timeout_sec = 3) override;
+
   void EnableCommandedMode() override;
 
   void SetMotionCommand(double linear_vel, double angular_vel) override;

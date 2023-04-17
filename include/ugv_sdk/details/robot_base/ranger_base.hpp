@@ -59,6 +59,7 @@ class RangerBase : public AgilexBase<ProtocolV2Parser>, public RangerInterface {
     ranger_state.motion_state = state.motion_state;
     ranger_state.light_state = state.light_state;
     ranger_state.rc_state = state.rc_state;
+    ranger_state.current_motion_mode = state.motion_mode_state;
     return ranger_state;
   }
 
@@ -73,6 +74,37 @@ class RangerBase : public AgilexBase<ProtocolV2Parser>, public RangerInterface {
     }
     return ranger_actuator;
   }
+
+  RangerMotorState GetMotorState() override {
+    auto motor = AgilexBase<ProtocolV2Parser>::GetMotorMsgGroup();
+
+    RangerMotorState ranger_motor;
+    ranger_motor.motor_speed_state.speed_1 = motor.MoterSpeed.speed_1;
+    ranger_motor.motor_speed_state.speed_2 = motor.MoterSpeed.speed_2;
+    ranger_motor.motor_speed_state.speed_3 = motor.MoterSpeed.speed_3;
+    ranger_motor.motor_speed_state.speed_4 = motor.MoterSpeed.speed_4;
+    ranger_motor.motor_angle_state.angle_5 = motor.MoterAngle.angle_5;
+    ranger_motor.motor_angle_state.angle_6 = motor.MoterAngle.angle_6;
+    ranger_motor.motor_angle_state.angle_7 = motor.MoterAngle.angle_7;
+    ranger_motor.motor_angle_state.angle_8 = motor.MoterAngle.angle_8;
+
+    return ranger_motor;
+  }
+
+  RangerBmsState GetBmsState() override{
+    auto motor = AgilexBase<ProtocolV2Parser>::GetCommonSensorStateMsgGroup();
+
+    RangerBmsState ranger_bms;
+    ranger_bms.bmsbasic.current = motor.bms_basic_state.current;
+    ranger_bms.bmsbasic.voltage = motor.bms_basic_state.voltage;
+    ranger_bms.bmsbasic.battery_soc = motor.bms_basic_state.battery_soc;
+    ranger_bms.bmsbasic.battery_soh = motor.bms_basic_state.battery_soh;
+    ranger_bms.bmsbasic.temperature = motor.bms_basic_state.temperature;
+
+    return ranger_bms;
+  }
+
+
 };
 
 using RangerBaseV2 = RangerBase;

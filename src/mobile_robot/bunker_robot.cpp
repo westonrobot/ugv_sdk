@@ -23,6 +23,10 @@ BunkerRobot::~BunkerRobot() {
   if (robot_) delete robot_;
 }
 
+std::string BunkerRobot::RequestVersion(int timeout_sec) {
+    return robot_->RequestVersion(timeout_sec);
+}
+
 void BunkerRobot::EnableCommandedMode() { robot_->EnableCommandedMode(); }
 
 bool BunkerRobot::Connect(std::string can_name) {

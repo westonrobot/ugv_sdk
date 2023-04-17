@@ -189,6 +189,20 @@ typedef struct {
   float temperature;
 } BmsBasicMessage;
 
+typedef struct {
+  float angle_5;
+  float angle_6;
+  float angle_7;
+  float angle_8;
+} MotorAngleMessage;
+
+typedef struct {
+  float speed_1;
+  float speed_2;
+  float speed_3;
+  float speed_4;
+} MotorSpeedMessage;
+
 #define BMS_PROT1_CHARGING_CURRENT_NONZERO_MASK ((uint8_t)0x01)
 #define BMS_PROT1_CHARGING_OVERCURRENT_SET_MASK ((uint8_t)0x02)
 #define BMS_PROT1_DISCHARGING_CURRENT_NONZERO_MASK ((uint8_t)0x10)
@@ -231,10 +245,7 @@ typedef struct {
 } VersionRequestMessage;
 
 typedef struct {
-  uint16_t controller_hw_version;
-  uint16_t motor_driver_hw_version;
-  uint16_t controller_sw_version;
-  uint16_t motor_driver_sw_version;
+  uint8_t bytes[8];
 } VersionResponseMessage;
 
 typedef struct {
@@ -283,6 +294,8 @@ typedef enum {
   // actuator feedback
   AgxMsgActuatorHSState,
   AgxMsgActuatorLSState,
+  AgxMsgMotorAngle,
+  AgxMsgMotorSpeed,
   // sensor
   AgxMsgOdometry,
   AgxMsgImuAccel,
@@ -348,6 +361,9 @@ typedef struct {
     ValueSetCommandMessageV1 v1_value_set_command_msg;
     ValueSetStateMessageV1 v1_value_set_state_msg;
     ActuatorStateMessageV1 v1_actuator_state_msg;
+
+    MotorAngleMessage motor_angle_msg;
+    MotorSpeedMessage motor_speed_msg;
   } body;
 } AgxMessage;
 

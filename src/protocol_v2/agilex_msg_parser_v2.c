@@ -91,7 +91,7 @@ bool DecodeCanFrameV2(const struct can_frame *rx_frame, AgxMessage *msg) {
       msg->body.motion_state_msg.steering_angle =
           (int16_t)((uint16_t)(frame->steering_angle.low_byte) |
                     (uint16_t)(frame->steering_angle.high_byte) << 8) /
-          1000.0;
+          100.0;
       break;
     }
     case CAN_MSG_LIGHT_STATE_ID: {
@@ -259,17 +259,17 @@ bool DecodeCanFrameV2(const struct can_frame *rx_frame, AgxMessage *msg) {
       msg->body.bms_basic_msg.battery_soc = frame->battery_soc;
       msg->body.bms_basic_msg.battery_soh = frame->battery_soh;
       msg->body.bms_basic_msg.voltage =
-          ((uint16_t)(frame->voltage.low_byte) |
-           (uint16_t)(frame->voltage.high_byte) << 8) /
-          10.0f;
+          (int16_t)((uint16_t)(frame->voltage.low_byte) |
+                    (uint16_t)(frame->voltage.high_byte) << 8) *
+          0.1f;
       msg->body.bms_basic_msg.current =
           (int16_t)((uint16_t)(frame->current.low_byte) |
-                    (uint16_t)(frame->current.high_byte) << 8) /
-          10.0f;
+                    (uint16_t)(frame->current.high_byte) << 8) *
+          0.1f;
       msg->body.bms_basic_msg.temperature =
-          (int16_t)(((uint16_t)(frame->temperature.low_byte) |
-                     (uint16_t)(frame->temperature.high_byte) << 8)) /
-          10.0f;
+          (int16_t)((uint16_t)(frame->temperature.low_byte) |
+                    (uint16_t)(frame->temperature.high_byte) << 8) *
+          0.1f;
       break;
     }
     case CAN_MSG_BMS_EXTENDED_ID: {
@@ -293,7 +293,15 @@ bool DecodeCanFrameV2(const struct can_frame *rx_frame, AgxMessage *msg) {
     }
     case CAN_MSG_VERSION_RESPONSE_ID: {
       msg->type = AgxMsgVersionResponse;
-      // TODO
+      VersionResponseFrame *frame = (VersionResponseFrame *)(rx_frame->data);
+      msg->body.version_response_msg.bytes[0] = frame->res0;
+      msg->body.version_response_msg.bytes[1] = frame->res1;
+      msg->body.version_response_msg.bytes[2] = frame->res2;
+      msg->body.version_response_msg.bytes[3] = frame->res3;
+      msg->body.version_response_msg.bytes[4] = frame->res4;
+      msg->body.version_response_msg.bytes[5] = frame->res5;
+      msg->body.version_response_msg.bytes[6] = frame->res6;
+      msg->body.version_response_msg.bytes[7] = frame->res7;
       break;
     }
     case CAN_MSG_CTRL_MODE_CONFIG_ID: {
@@ -318,6 +326,48 @@ bool DecodeCanFrameV2(const struct can_frame *rx_frame, AgxMessage *msg) {
       StateResetConfigFrame *frame = (StateResetConfigFrame *)(rx_frame->data);
       msg->body.state_reset_config_msg.error_clear_byte =
           frame->error_clear_byte;
+      break;
+    }
+    case CAN_MSG_MOTOR_ANGLE_INFO: {
+      msg->type = AgxMsgMotorAngle;
+      MoterAngleFrame *frame = (MoterAngleFrame *)(rx_frame->data);
+      msg->body.motor_angle_msg.angle_5 =
+          (int16_t)((uint16_t)(frame->angle_5.low_byte) |
+                    (uint16_t)(frame->angle_5.high_byte) << 8) *
+          0.01;
+      msg->body.motor_angle_msg.angle_6 =
+          (int16_t)((uint16_t)(frame->angle_6.low_byte) |
+                    (uint16_t)(frame->angle_6.high_byte) << 8) *
+          0.01;
+      msg->body.motor_angle_msg.angle_7 =
+          (int16_t)((uint16_t)(frame->angle_7.low_byte) |
+                    (uint16_t)(frame->angle_7.high_byte) << 8) *
+          0.01;
+      msg->body.motor_angle_msg.angle_8 =
+          (int16_t)((uint16_t)(frame->angle_8.low_byte) |
+                    (uint16_t)(frame->angle_8.high_byte) << 8) *
+          0.01;
+      break;
+    }
+    case CAN_MSG_MOTOR_SPEED_INFO: {
+      msg->type = AgxMsgMotorSpeed;
+      MoterSpeedFrame *frame = (MoterSpeedFrame *)(rx_frame->data);
+      msg->body.motor_speed_msg.speed_1 =
+          (int16_t)((uint16_t)(frame->speed_1.low_byte) |
+                    (uint16_t)(frame->speed_1.high_byte) << 8) *
+          0.001;
+      msg->body.motor_speed_msg.speed_2 =
+          (int16_t)((uint16_t)(frame->speed_2.low_byte) |
+                    (uint16_t)(frame->speed_2.high_byte) << 8) *
+          0.001;
+      msg->body.motor_speed_msg.speed_3 =
+          (int16_t)((uint16_t)(frame->speed_3.low_byte) |
+                    (uint16_t)(frame->speed_3.high_byte) << 8) *
+          0.001;
+      msg->body.motor_speed_msg.speed_4 =
+          (int16_t)((uint16_t)(frame->speed_4.low_byte) |
+                    (uint16_t)(frame->speed_4.high_byte) << 8) *
+          0.001;
       break;
     }
     default:

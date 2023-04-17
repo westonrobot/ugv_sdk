@@ -36,6 +36,15 @@ struct RangerActuatorState {
   ActuatorLSStateMessage actuator_ls_state[8];
 };
 
+struct RangerMotorState {
+  MotorAngleMessage motor_angle_state;
+  MotorSpeedMessage motor_speed_state;
+};
+
+struct RangerBmsState {
+  BmsBasicMessage bmsbasic;
+};
+
 /////////////////////////////////////////////////////////////////////////
 
 struct RangerInterface {
@@ -53,6 +62,8 @@ struct RangerInterface {
   // get robot state
   virtual RangerCoreState GetRobotState() = 0;
   virtual RangerActuatorState GetActuatorState() = 0;
+  virtual RangerMotorState GetMotorState() = 0;
+  virtual RangerBmsState GetBmsState() = 0;
 };
 }  // namespace westonrobot
 
