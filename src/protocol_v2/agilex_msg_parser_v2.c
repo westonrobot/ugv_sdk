@@ -91,7 +91,7 @@ bool DecodeCanFrameV2(const struct can_frame *rx_frame, AgxMessage *msg) {
       msg->body.motion_state_msg.steering_angle =
           (int16_t)((uint16_t)(frame->steering_angle.low_byte) |
                     (uint16_t)(frame->steering_angle.high_byte) << 8) /
-          100.0;
+          1000.0;
       break;
     }
     case CAN_MSG_LIGHT_STATE_ID: {
