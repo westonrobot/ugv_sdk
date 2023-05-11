@@ -32,24 +32,24 @@ struct RangerCoreState {
 struct RangerActuatorState {
   AgxMsgTimeStamp time_stamp;
 
+  MotorAngleMessage motor_angles;
+  MotorSpeedMessage motor_speeds;
+
   ActuatorHSStateMessage actuator_hs_state[8];
   ActuatorLSStateMessage actuator_ls_state[8];
 };
 
-struct RangerMotorState {
-  MotorAngleMessage motor_angle_state;
-  MotorSpeedMessage motor_speed_state;
-};
+struct RangerCommonSensorState {
+  AgxMsgTimeStamp time_stamp;
 
-struct RangerBmsState {
-  BmsBasicMessage bmsbasic;
+  BmsBasicMessage bms_basic_state;
 };
 
 /////////////////////////////////////////////////////////////////////////
 
 struct RangerInterface {
   virtual ~RangerInterface() = default;
-  
+
   virtual bool Connect(std::string dev_name) = 0;
 
   // robot control
@@ -62,8 +62,7 @@ struct RangerInterface {
   // get robot state
   virtual RangerCoreState GetRobotState() = 0;
   virtual RangerActuatorState GetActuatorState() = 0;
-  virtual RangerMotorState GetMotorState() = 0;
-  virtual RangerBmsState GetBmsState() = 0;
+  virtual RangerCommonSensorState GetBmsState() = 0;
 };
 }  // namespace westonrobot
 

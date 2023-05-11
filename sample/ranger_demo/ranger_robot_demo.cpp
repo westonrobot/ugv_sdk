@@ -30,10 +30,10 @@ int main(int argc, char *argv[]) {
 
   int count = 0;
   while (true) {
-    if (count < 100) {
-      std::cout << "Motor: 0.2, 0" << std::endl;
-      ranger.SetMotionCommand(0.2, 0.0);
-    }
+    // if (count < 100) {
+    //   std::cout << "Motor: 0.2, 0" << std::endl;
+    //   ranger.SetMotionCommand(0.2, 0.0);
+    // }
 
     auto state = ranger.GetRobotState();
     std::cout << "-------------------------------" << std::endl;
@@ -45,9 +45,11 @@ int main(int argc, char *argv[]) {
               << std::endl;
     std::cout << "battery voltage: " << state.system_state.battery_voltage
               << std::endl;
-    std::cout << "velocity (linear, angular): "
+    std::cout << "velocity (linear, angular, lateral, steering): "
               << state.motion_state.linear_velocity << ", "
-              << state.motion_state.angular_velocity << std::endl;
+              << state.motion_state.angular_velocity << ", "
+              << state.motion_state.lateral_velocity << ", "
+              << state.motion_state.steering_angle << std::endl;
     std::cout << "-------------------------------" << std::endl;
 
     usleep(20000);

@@ -161,11 +161,6 @@ class AgilexBase : public RobotCommonInterface {
     return common_sensor_state_msgs_;
   }
 
-  MotorMsgGroup GetMotorMsgGroup() override {
-    std::lock_guard<std::mutex> guard(motor_state_mtx_);
-    return motor_msgs;
-  }
-
  protected:
   ParserType parser_;
 
@@ -184,12 +179,6 @@ class AgilexBase : public RobotCommonInterface {
   /* feedback group 3: common sensor */
   std::mutex common_sensor_state_mtx_;
   CommonSensorStateMsgGroup common_sensor_state_msgs_;
-
-  std::mutex motor_state_mtx_;
-  MotorMsgGroup motor_msgs;
-
-  std::mutex bms_state_mtx_;
-  MotorMsgGroup bms_msgs;
 
   std::mutex version_str_buf_mtx_;
   std::string version_string_buffer_;
@@ -265,7 +254,6 @@ class AgilexBase : public RobotCommonInterface {
       UpdateActuatorState(status_msg);
       UpdateCommonSensorState(status_msg);
       UpdateResponseVersion(status_msg);
-      UpdateMotorState(status_msg);
     }
   }
 
@@ -310,10 +298,32 @@ class AgilexBase : public RobotCommonInterface {
 
   void UpdateActuatorState(const AgxMessage &status_msg) {
     std::lock_guard<std::mutex> guard(actuator_state_mtx_);
+    actuator_state_msgs_.time_stamp = AgxMsgRefClock::now();
     switch (status_msg.type) {
+      case AgxMsgMotorAngle: {
+        actuator_state_msgs_.motor_angles.angle_5 =
+            status_msg.body.motor_angle_msg.angle_5;
+        actuator_state_msgs_.motor_angles.angle_6 =
+            status_msg.body.motor_angle_msg.angle_6;
+        actuator_state_msgs_.motor_angles.angle_7 =
+            status_msg.body.motor_angle_msg.angle_7;
+        actuator_state_msgs_.motor_angles.angle_8 =
+            status_msg.body.motor_angle_msg.angle_8;
+        break;
+      }
+      case AgxMsgMotorSpeed: {
+        actuator_state_msgs_.motor_speeds.speed_1 =
+            status_msg.body.motor_speed_msg.speed_1;
+        actuator_state_msgs_.motor_speeds.speed_2 =
+            status_msg.body.motor_speed_msg.speed_2;
+        actuator_state_msgs_.motor_speeds.speed_3 =
+            status_msg.body.motor_speed_msg.speed_3;
+        actuator_state_msgs_.motor_speeds.speed_4 =
+            status_msg.body.motor_speed_msg.speed_4;
+        break;
+      }
       case AgxMsgActuatorHSState: {
         // std::cout << "actuator hs feedback received" << std::endl;
-        actuator_state_msgs_.time_stamp = AgxMsgRefClock::now();
         actuator_state_msgs_
             .actuator_hs_state[status_msg.body.actuator_hs_state_msg.motor_id] =
             status_msg.body.actuator_hs_state_msg;
@@ -321,7 +331,6 @@ class AgilexBase : public RobotCommonInterface {
       }
       case AgxMsgActuatorLSState: {
         // std::cout << "actuator ls feedback received" << std::endl;
-        actuator_state_msgs_.time_stamp = AgxMsgRefClock::now();
         actuator_state_msgs_
             .actuator_ls_state[status_msg.body.actuator_ls_state_msg.motor_id] =
             status_msg.body.actuator_ls_state_msg;
@@ -329,7 +338,6 @@ class AgilexBase : public RobotCommonInterface {
       }
       case AgxMsgActuatorStateV1: {
         // std::cout << "actuator v1 feedback received" << std::endl;
-        actuator_state_msgs_.time_stamp = AgxMsgRefClock::now();
         actuator_state_msgs_
             .actuator_state[status_msg.body.v1_actuator_state_msg.motor_id] =
             status_msg.body.v1_actuator_state_msg;
@@ -366,28 +374,6 @@ class AgilexBase : public RobotCommonInterface {
           if (data < 32 || data > 126) data = 32;
           version_string_buffer_ += data;
         }
-        break;
-      }
-      default:
-        break;
-    }
-  }
-
-  void UpdateMotorState(const AgxMessage &status_msg) {
-    std::lock_guard<std::mutex> guard(motor_state_mtx_);
-    switch (status_msg.type) {
-      case AgxMsgMotorAngle: {
-        motor_msgs.MoterAngle.angle_5 = status_msg.body.motor_angle_msg.angle_5;
-        motor_msgs.MoterAngle.angle_6 = status_msg.body.motor_angle_msg.angle_6;
-        motor_msgs.MoterAngle.angle_7 = status_msg.body.motor_angle_msg.angle_7;
-        motor_msgs.MoterAngle.angle_8 = status_msg.body.motor_angle_msg.angle_8;
-        break;
-      }
-      case AgxMsgMotorSpeed: {
-        motor_msgs.MoterSpeed.speed_1 = status_msg.body.motor_speed_msg.speed_1;
-        motor_msgs.MoterSpeed.speed_2 = status_msg.body.motor_speed_msg.speed_2;
-        motor_msgs.MoterSpeed.speed_3 = status_msg.body.motor_speed_msg.speed_3;
-        motor_msgs.MoterSpeed.speed_4 = status_msg.body.motor_speed_msg.speed_4;
         break;
       }
       default:
