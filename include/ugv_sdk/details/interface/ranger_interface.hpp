@@ -48,6 +48,13 @@ struct RangerCommonSensorState {
 /////////////////////////////////////////////////////////////////////////
 
 struct RangerInterface {
+    enum MotionMode {
+        kDualAckerman = 0,
+        kParrallel = 1,
+        kSpinning = 2,
+        kSideSlip = 3
+    };
+
   virtual ~RangerInterface() = default;
 
   virtual bool Connect(std::string dev_name) = 0;
@@ -55,14 +62,14 @@ struct RangerInterface {
   // robot control
   virtual void SetMotionMode(uint8_t mode) = 0;
   virtual void SetMotionCommand(double linear_vel, double steer_angle,
-                                double lateral_vel, double angular_vel) = 0;
+                                double angular_vel) = 0;
   virtual void SetLightCommand(AgxLightMode f_mode, uint8_t f_value,
                                AgxLightMode r_mode, uint8_t r_value) = 0;
 
   // get robot state
   virtual RangerCoreState GetRobotState() = 0;
   virtual RangerActuatorState GetActuatorState() = 0;
-  virtual RangerCommonSensorState GetBmsState() = 0;
+  virtual RangerCommonSensorState GetCommonSensorState() = 0;
 };
 }  // namespace westonrobot
 

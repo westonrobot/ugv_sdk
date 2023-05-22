@@ -35,11 +35,12 @@ class RangerBaseV2 : public AgilexBase<ProtocolV2Parser>,
   }
 
   // robot control
+  void SetMotionMode(uint8_t mode) { AgilexBase::SetMotionMode(mode); }
+
   void SetMotionCommand(double linear_vel, double steer_angle,
-                        double lateral_vel = 0.0,
                         double angular_vel = 0.0) override {
-    AgilexBase<ProtocolV2Parser>::SendMotionCommand(
-        linear_vel, angular_vel, lateral_vel, steer_angle / 10.0);
+    AgilexBase<ProtocolV2Parser>::SendMotionCommand(linear_vel, angular_vel,
+                                                    0.0, steer_angle);
   }
 
   void SetLightCommand(AgxLightMode f_mode, uint8_t f_value,
@@ -47,8 +48,6 @@ class RangerBaseV2 : public AgilexBase<ProtocolV2Parser>,
     AgilexBase<ProtocolV2Parser>::SendLightCommand(f_mode, f_value, r_mode,
                                                    r_value);
   }
-
-  void SetMotionMode(uint8_t mode) { AgilexBase::SetMotionMode(mode); }
 
   // get robot state
   RangerCoreState GetRobotState() override {
@@ -86,7 +85,7 @@ class RangerBaseV2 : public AgilexBase<ProtocolV2Parser>,
     return ranger_actuator;
   }
 
-  RangerCommonSensorState GetBmsState() override {
+  RangerCommonSensorState GetCommonSensorState() override {
     auto common_sensor =
         AgilexBase<ProtocolV2Parser>::GetCommonSensorStateMsgGroup();
 

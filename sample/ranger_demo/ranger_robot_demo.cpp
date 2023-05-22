@@ -7,6 +7,8 @@
  * Copyright  : AgileX Robotics
  **/
 
+#include <iomanip>
+
 #include "ugv_sdk/mobile_robot/ranger_robot.hpp"
 
 using namespace westonrobot;
@@ -30,12 +32,14 @@ int main(int argc, char *argv[]) {
 
   int count = 0;
   while (true) {
-    // if (count < 100) {
-    //   std::cout << "Motor: 0.2, 0" << std::endl;
-    //   ranger.SetMotionCommand(0.2, 0.0);
-    // }
+    if (count < 2000) {
+      ranger.SetMotionMode(RangerInterface::MotionMode::kParrallel);
+      ranger.SetMotionCommand(0.2, -1.54);
+    }
 
     auto state = ranger.GetRobotState();
+    auto sensor = ranger.GetCommonSensorState();
+
     std::cout << "-------------------------------" << std::endl;
     std::cout << "count: " << count << std::endl;
     std::cout << "control mode: "
@@ -44,13 +48,22 @@ int main(int argc, char *argv[]) {
               << static_cast<int>(state.system_state.vehicle_state)
               << std::endl;
     std::cout << "battery voltage: " << state.system_state.battery_voltage
+              << ", SOC: "
+              << static_cast<int>(sensor.bms_basic_state.battery_soc)
               << std::endl;
     std::cout << "velocity (linear, angular, lateral, steering): "
-              << state.motion_state.linear_velocity << ", "
-              << state.motion_state.angular_velocity << ", "
-              << state.motion_state.lateral_velocity << ", "
-              << state.motion_state.steering_angle << std::endl;
-    std::cout << "-------------------------------" << std::endl;
+              << std::setw(6) << state.motion_state.linear_velocity << ", "
+              << std::setw(6) << state.motion_state.angular_velocity << ", "
+              << std::setw(6) << state.motion_state.lateral_velocity << ", "
+              << std::setw(6) << state.motion_state.steering_angle << std::endl;
+    //        printf("velocity (linear, angular, lateral, steering): %.2f, %.2f,
+    //        %.2f, "
+    //               "%.2f\n",
+    //               state.motion_state.linear_velocity,
+    //               state.motion_state.angular_velocity,
+    //               state.motion_state.lateral_velocity,
+    //               state.motion_state.steering_angle);
+    //        std::cout << "-------------------------------" << std::endl;
 
     usleep(20000);
     ++count;
