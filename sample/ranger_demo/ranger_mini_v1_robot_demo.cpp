@@ -1,11 +1,3 @@
-/**
- * @Kit       : Qt-Creator: Desktop
- * @Author    : Wang Zhe
- * @Date      : 2021-04-19  19:41:52
- * @FileName  : ranger_demo.cpp
- * @Mail      : wangzheqie@qq.com
- * Copyright  : AgileX Robotics
- **/
 
 #include <iomanip>
 
@@ -25,7 +17,7 @@ int main(int argc, char *argv[]) {
     return -1;
   }
 
-  RangerRobot ranger;
+  RangerMiniV1Robot ranger;
   ranger.Connect(device_name);
 
   ranger.EnableCommandedMode();
