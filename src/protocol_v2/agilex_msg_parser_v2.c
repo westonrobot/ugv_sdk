@@ -334,20 +334,20 @@ bool DecodeCanFrameV2(const struct can_frame *rx_frame, AgxMessage *msg) {
       msg->type = AgxMsgMotorAngle;
       MoterAngleFrame *frame = (MoterAngleFrame *)(rx_frame->data);
       msg->body.motor_angle_msg.angle_5 =
-          (int16_t)((uint16_t)(frame->angle_5.low_byte) |
-                    (uint16_t)(frame->angle_5.high_byte) << 8) *
+          -(int16_t)((uint16_t)(frame->angle_5.low_byte) |
+                     (uint16_t)(frame->angle_5.high_byte) << 8) *
           0.01 / 180.0 * M_PI;
       msg->body.motor_angle_msg.angle_6 =
-          (int16_t)((uint16_t)(frame->angle_6.low_byte) |
-                    (uint16_t)(frame->angle_6.high_byte) << 8) *
+          -(int16_t)((uint16_t)(frame->angle_6.low_byte) |
+                     (uint16_t)(frame->angle_6.high_byte) << 8) *
           0.01 / 180.0 * M_PI;
       msg->body.motor_angle_msg.angle_7 =
-          (int16_t)((uint16_t)(frame->angle_7.low_byte) |
-                    (uint16_t)(frame->angle_7.high_byte) << 8) *
+          -(int16_t)((uint16_t)(frame->angle_7.low_byte) |
+                     (uint16_t)(frame->angle_7.high_byte) << 8) *
           0.01 / 180.0 * M_PI;
       msg->body.motor_angle_msg.angle_8 =
-          (int16_t)((uint16_t)(frame->angle_8.low_byte) |
-                    (uint16_t)(frame->angle_8.high_byte) << 8) *
+          -(int16_t)((uint16_t)(frame->angle_8.low_byte) |
+                     (uint16_t)(frame->angle_8.high_byte) << 8) *
           0.01 / 180.0 * M_PI;
       break;
     }
