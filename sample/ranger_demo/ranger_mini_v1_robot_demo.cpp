@@ -25,8 +25,8 @@ int main(int argc, char *argv[]) {
   int count = 0;
   while (true) {
     if (count < 2000) {
-//      ranger.SetMotionMode(RangerInterface::MotionMode::kParallel);
-//      ranger.SetMotionCommand(0.2, -1.54);
+      ranger.SetMotionMode(RangerInterface::MotionMode::kSpinning);
+      ranger.SetMotionCommand(0.0, 0.0, -0.2);
     }
 
     auto state = ranger.GetRobotState();

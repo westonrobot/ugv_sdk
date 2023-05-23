@@ -48,12 +48,12 @@ struct RangerCommonSensorState {
 /////////////////////////////////////////////////////////////////////////
 
 struct RangerInterface {
-    enum MotionMode {
-        kDualAckerman = 0,
-        kParallel = 1,
-        kSpinning = 2,
-        kSideSlip = 3
-    };
+  enum MotionMode {
+    kDualAckerman = 0,
+    kParallel = 1,
+    kSpinning = 2,
+    kSideSlip = 3
+  };
 
   virtual ~RangerInterface() = default;
 
