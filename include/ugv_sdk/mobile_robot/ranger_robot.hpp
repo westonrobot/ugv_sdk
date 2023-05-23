@@ -10,6 +10,8 @@
 #ifndef RANGER_ROBOT_HPP
 #define RANGER_ROBOT_HPP
 
+#include <cmath>
+
 #include "ugv_sdk/details/robot_base/ranger_base.hpp"
 
 namespace westonrobot {
