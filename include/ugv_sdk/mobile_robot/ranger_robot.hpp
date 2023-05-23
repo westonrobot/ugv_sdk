@@ -28,7 +28,7 @@ class RangerMiniV1Robot : public RangerBaseV2 {
   void SetMotionCommand(double linear_vel, double steer_angle,
                         double angular_vel = 0.0) override {
     AgilexBase<ProtocolV2Parser>::SendMotionCommand(
-        linear_vel, angular_vel, 0.0, steer_angle / 3.14 * 180 * 100);
+        linear_vel, angular_vel, 0.0, -steer_angle / 10.0 / 3.14 * 180);
   }
 
   RangerCoreState GetRobotState() override {
@@ -45,7 +45,7 @@ class RangerMiniV1Robot : public RangerBaseV2 {
     ranger_state.motion_state.lateral_velocity =
         state.motion_state.lateral_velocity;
     ranger_state.motion_state.steering_angle =
-        state.motion_state.steering_angle * 10 / 180.0 * 3.14;
+        -state.motion_state.steering_angle * 10 / 180.0 * 3.14;
 
     ranger_state.light_state = state.light_state;
     ranger_state.rc_state = state.rc_state;
@@ -63,10 +63,10 @@ class RangerMiniV1Robot : public RangerBaseV2 {
     ranger_actuator.motor_speeds.speed_2 = actuator.motor_speeds.speed_2;
     ranger_actuator.motor_speeds.speed_3 = actuator.motor_speeds.speed_3;
     ranger_actuator.motor_speeds.speed_4 = actuator.motor_speeds.speed_4;
-    ranger_actuator.motor_angles.angle_5 = actuator.motor_angles.angle_5;
-    ranger_actuator.motor_angles.angle_6 = actuator.motor_angles.angle_6;
-    ranger_actuator.motor_angles.angle_7 = actuator.motor_angles.angle_7;
-    ranger_actuator.motor_angles.angle_8 = actuator.motor_angles.angle_8;
+    ranger_actuator.motor_angles.angle_5 = -actuator.motor_angles.angle_5 / 18.0 * M_PI;
+    ranger_actuator.motor_angles.angle_6 = -actuator.motor_angles.angle_6 / 18.0 * M_PI;
+    ranger_actuator.motor_angles.angle_7 = -actuator.motor_angles.angle_7 / 18.0 * M_PI;
+    ranger_actuator.motor_angles.angle_8 = -actuator.motor_angles.angle_8 / 18.0 * M_PI;
 
     for (int i = 0; i < 8; ++i) {
       ranger_actuator.actuator_hs_state[i] = actuator.actuator_hs_state[i];
