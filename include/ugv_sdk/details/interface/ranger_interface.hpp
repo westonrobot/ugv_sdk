@@ -50,7 +50,7 @@ struct RangerCommonSensorState {
 struct RangerInterface {
     enum MotionMode {
         kDualAckerman = 0,
-        kParrallel = 1,
+        kParallel = 1,
         kSpinning = 2,
         kSideSlip = 3
     };

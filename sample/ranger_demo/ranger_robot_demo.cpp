@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
   int count = 0;
   while (true) {
     if (count < 2000) {
-//      ranger.SetMotionMode(RangerInterface::MotionMode::kParrallel);
+//      ranger.SetMotionMode(RangerInterface::MotionMode::kParallel);
 //      ranger.SetMotionCommand(0.2, -1.54);
     }
 
