@@ -14,7 +14,6 @@
   <url type="repository">https://github.com/westonrobot/ugv_sdk</url>
 
   <buildtool_depend>catkin</buildtool_depend> 
-  <build_depend>libasio-dev</build_depend>
-  <run_depend>libasio-dev</run_depend>
+  <build_depend>asio</build_depend>
   <export></export>
 </package>
