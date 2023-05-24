@@ -10,84 +10,66 @@
 #include "ugv_sdk/details/robot_base/ranger_base.hpp"
 
 namespace westonrobot {
-// robot control
-void RangerMiniV1Robot::SetMotionCommand(double linear_vel, double steer_angle,
-                                         double angular_vel) {
-  auto state = GetRobotState();
-  if (state.current_motion_mode.motion_mode ==
-      RangerInterface::MotionMode::kSpinning) {
-    angular_vel *= 0.254558;
-  }
-  AgilexBase<ProtocolV2Parser>::SendMotionCommand(
-      linear_vel, 0.0, -angular_vel, -steer_angle / 10.0 / 3.14 * 180);
-}
-
-RangerCoreState RangerMiniV1Robot::GetRobotState() {
-  auto state = AgilexBase<ProtocolV2Parser>::GetRobotCoreStateMsgGroup();
-
-  RangerCoreState ranger_state;
-  ranger_state.time_stamp = state.time_stamp;
-  ranger_state.system_state = state.system_state;
-
-  ranger_state.light_state = state.light_state;
-  ranger_state.rc_state = state.rc_state;
-  ranger_state.current_motion_mode = state.motion_mode_state;
-
-  if (ranger_state.current_motion_mode.motion_mode ==
-      RangerInterface::MotionMode::kSpinning) {
-    ranger_state.motion_state.linear_velocity = 0;
-    ranger_state.motion_state.angular_velocity =
-        -state.motion_state.linear_velocity / 0.254558;
-    ranger_state.motion_state.lateral_velocity =
-        state.motion_state.lateral_velocity;
-    ranger_state.motion_state.steering_angle =
-        -state.motion_state.steering_angle * 10 / 180.0 * 3.14;
-  } else if (ranger_state.current_motion_mode.motion_mode ==
-             RangerInterface::MotionMode::kSideSlip) {
-    ranger_state.motion_state.linear_velocity =
-        -state.motion_state.linear_velocity;
-    state.motion_state.angular_velocity;
-    ranger_state.motion_state.lateral_velocity =
-        state.motion_state.lateral_velocity;
-    ranger_state.motion_state.steering_angle =
-        -state.motion_state.steering_angle * 10 / 180.0 * 3.14;
+RangerRobot::RangerRobot(bool is_mini_v1) {
+  if (is_mini_v1) {
+    robot_ = new RangerMiniV1Base();
   } else {
-    ranger_state.motion_state.linear_velocity =
-        state.motion_state.linear_velocity;
-    ranger_state.motion_state.angular_velocity =
-        -state.motion_state.angular_velocity;
-    ranger_state.motion_state.lateral_velocity =
-        state.motion_state.lateral_velocity;
-    ranger_state.motion_state.steering_angle =
-        -state.motion_state.steering_angle * 10 / 180.0 * 3.14;
+    robot_ = new RangerBaseV2();
   }
-
-  return ranger_state;
 }
 
-RangerActuatorState RangerMiniV1Robot::GetActuatorState() {
-  auto actuator = AgilexBase<ProtocolV2Parser>::GetActuatorStateMsgGroup();
+RangerRobot::~RangerRobot() {
+  if (robot_) delete robot_;
+}
 
-  RangerActuatorState ranger_actuator;
-  ranger_actuator.time_stamp = actuator.time_stamp;
+bool RangerRobot::Connect(std::string can_name) {
+  return robot_->Connect(can_name);
+}
 
-  ranger_actuator.motor_speeds.speed_1 = actuator.motor_speeds.speed_1;
-  ranger_actuator.motor_speeds.speed_2 = actuator.motor_speeds.speed_2;
-  ranger_actuator.motor_speeds.speed_3 = actuator.motor_speeds.speed_3;
-  ranger_actuator.motor_speeds.speed_4 = actuator.motor_speeds.speed_4;
-  ranger_actuator.motor_angles.angle_5 =
-      -actuator.motor_angles.angle_5 / 18.0 * M_PI;
-  ranger_actuator.motor_angles.angle_6 =
-      -actuator.motor_angles.angle_6 / 18.0 * M_PI;
-  ranger_actuator.motor_angles.angle_7 =
-      -actuator.motor_angles.angle_7 / 18.0 * M_PI;
-  ranger_actuator.motor_angles.angle_8 =
-      -actuator.motor_angles.angle_8 / 18.0 * M_PI;
+void RangerRobot::EnableCommandedMode() { robot_->EnableCommandedMode(); }
 
-  for (int i = 0; i < 8; ++i) {
-    ranger_actuator.actuator_hs_state[i] = actuator.actuator_hs_state[i];
-    ranger_actuator.actuator_ls_state[i] = actuator.actuator_ls_state[i];
-  }
-  return ranger_actuator;
+std::string RangerRobot::RequestVersion(int timeout_sec) {
+  return robot_->RequestVersion(timeout_sec);
+}
+
+// functions to be implemented by each robot class
+void RangerRobot::ResetRobotState() { robot_->ResetRobotState(); }
+
+ProtocolVersion RangerRobot::GetParserProtocolVersion() {
+  return robot_->GetParserProtocolVersion();
+}
+
+// robot control
+void RangerRobot::SetMotionMode(uint8_t mode) {
+  auto ranger = dynamic_cast<RangerInterface*>(robot_);
+  return ranger->SetMotionMode(mode);
+}
+
+void RangerRobot::SetMotionCommand(double linear_vel, double steer_angle,
+                                   double angular_vel) {
+  auto ranger = dynamic_cast<RangerInterface*>(robot_);
+  return ranger->SetMotionCommand(linear_vel, steer_angle, angular_vel);
+}
+
+void RangerRobot::SetLightCommand(AgxLightMode f_mode, uint8_t f_value,
+                                  AgxLightMode r_mode, uint8_t r_value) {
+  auto ranger = dynamic_cast<RangerInterface*>(robot_);
+  return ranger->SetLightCommand(f_mode, f_value, r_mode, r_value);
+}
+
+// get robot state
+RangerCoreState RangerRobot::GetRobotState() {
+  auto ranger = dynamic_cast<RangerInterface*>(robot_);
+  return ranger->GetRobotState();
+}
+
+RangerActuatorState RangerRobot::GetActuatorState() {
+  auto ranger = dynamic_cast<RangerInterface*>(robot_);
+  return ranger->GetActuatorState();
+}
+
+RangerCommonSensorState RangerRobot::GetCommonSensorState() {
+  auto ranger = dynamic_cast<RangerInterface*>(robot_);
+  return ranger->GetCommonSensorState();
 }
 }  // namespace westonrobot

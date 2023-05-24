@@ -15,31 +15,41 @@ using namespace westonrobot;
 
 int main(int argc, char *argv[]) {
   std::string device_name;
+  bool is_mini_v1 = false;
 
   if (argc == 2) {
     device_name = {argv[1]};
     std::cout << "Specified CAN: " << device_name << std::endl;
+  } else if (argc == 3) {
+    device_name = {argv[1]};
+    std::string check = argv[2];
+    if (check == "mini_v1") {
+      is_mini_v1 = true;
+      std::cout << "Specified mini v1" << std::endl;
+    }
+    std::cout << "Specified CAN: " << device_name << std::endl;
   } else {
-    std::cout << "Usage: app_ranger_demo <interface>" << std::endl
-              << "Example 1: ./app_ranger_demo can0" << std::endl;
+    std::cout << "Usage: app_ranger_demo <interface> <ranger_model>"
+              << std::endl
+              << "Example 1: ./app_ranger_demo can0 mini_v1" << std::endl;
     return -1;
   }
 
-  RangerRobot ranger;
-  ranger.Connect(device_name);
-
-  ranger.EnableCommandedMode();
+  // RangerMiniV1Robot ranger;
+  auto ranger = std::make_shared<RangerRobot>(is_mini_v1);
+  ranger->Connect(device_name);
+  ranger->EnableCommandedMode();
 
   int count = 0;
   while (true) {
     if (count < 2000) {
-     ranger.SetMotionMode(RangerInterface::MotionMode::kSpinning);
-     ranger.SetMotionCommand(0.0, 0.0, -0.2);
+      ranger->SetMotionMode(RangerInterface::MotionMode::kDualAckerman);
+      ranger->SetMotionCommand(0.0, 0.4);
     }
 
-    auto state = ranger.GetRobotState();
-    auto sensor = ranger.GetCommonSensorState();
-    auto motion = ranger.GetActuatorState();
+    auto state = ranger->GetRobotState();
+    auto sensor = ranger->GetCommonSensorState();
+    auto motion = ranger->GetActuatorState();
 
     std::cout << "-------------------------------" << std::endl;
     std::cout << "count: " << count << std::endl;
@@ -59,15 +69,13 @@ int main(int argc, char *argv[]) {
               << std::setw(6) << state.motion_state.lateral_velocity << ", "
               << std::setw(6) << state.motion_state.steering_angle << std::endl;
 
-    std::cout << "Wheel angles: "
-              << std::setw(6) << motion.motor_angles.angle_5 << ", "
-              << std::setw(6) << motion.motor_angles.angle_6 << ", "
+    std::cout << "Wheel angles: " << std::setw(6) << motion.motor_angles.angle_5
+              << ", " << std::setw(6) << motion.motor_angles.angle_6 << ", "
               << std::setw(6) << motion.motor_angles.angle_7 << ", "
               << std::setw(6) << motion.motor_angles.angle_8 << std::endl;
 
-    std::cout << "Wheel speeds: "
-              << std::setw(6) << motion.motor_speeds.speed_1 << ", "
-              << std::setw(6) << motion.motor_speeds.speed_2 << ", "
+    std::cout << "Wheel speeds: " << std::setw(6) << motion.motor_speeds.speed_1
+              << ", " << std::setw(6) << motion.motor_speeds.speed_2 << ", "
               << std::setw(6) << motion.motor_speeds.speed_3 << ", "
               << std::setw(6) << motion.motor_speeds.speed_4 << std::endl;
     //        printf("velocity (linear, angular, lateral, steering): %.2f, %.2f,
