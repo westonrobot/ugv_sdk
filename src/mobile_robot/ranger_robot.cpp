@@ -14,7 +14,7 @@ namespace westonrobot {
 void RangerMiniV1Robot::SetMotionCommand(double linear_vel, double steer_angle,
                                          double angular_vel) {
   AgilexBase<ProtocolV2Parser>::SendMotionCommand(
-      linear_vel, 0.0, angular_vel, -steer_angle / 10.0 / 3.14 * 180);
+      linear_vel, 0.0, -angular_vel * 0.254558, -steer_angle / 10.0 / 3.14 * 180);
 }
 
 RangerCoreState RangerMiniV1Robot::GetRobotState() {
