@@ -13,8 +13,13 @@ namespace westonrobot {
 // robot control
 void RangerMiniV1Robot::SetMotionCommand(double linear_vel, double steer_angle,
                                          double angular_vel) {
+  auto state = GetRobotState();
+  if (state.current_motion_mode.motion_mode ==
+      RangerInterface::MotionMode::kSpinning) {
+    angular_vel *= 0.254558;
+  }
   AgilexBase<ProtocolV2Parser>::SendMotionCommand(
-      linear_vel, 0.0, -angular_vel * 0.254558, -steer_angle / 10.0 / 3.14 * 180);
+      linear_vel, 0.0, -angular_vel, -steer_angle / 10.0 / 3.14 * 180);
 }
 
 RangerCoreState RangerMiniV1Robot::GetRobotState() {
@@ -28,10 +33,20 @@ RangerCoreState RangerMiniV1Robot::GetRobotState() {
   ranger_state.rc_state = state.rc_state;
   ranger_state.current_motion_mode = state.motion_mode_state;
 
-  if (ranger_state.current_motion_mode.motion_mode == 2) {
+  if (ranger_state.current_motion_mode.motion_mode ==
+      RangerInterface::MotionMode::kSpinning) {
     ranger_state.motion_state.linear_velocity = 0;
     ranger_state.motion_state.angular_velocity =
         -state.motion_state.linear_velocity / 0.254558;
+    ranger_state.motion_state.lateral_velocity =
+        state.motion_state.lateral_velocity;
+    ranger_state.motion_state.steering_angle =
+        -state.motion_state.steering_angle * 10 / 180.0 * 3.14;
+  } else if (ranger_state.current_motion_mode.motion_mode ==
+             RangerInterface::MotionMode::kSideSlip) {
+    ranger_state.motion_state.linear_velocity =
+        -state.motion_state.linear_velocity;
+    state.motion_state.angular_velocity;
     ranger_state.motion_state.lateral_velocity =
         state.motion_state.lateral_velocity;
     ranger_state.motion_state.steering_angle =
