@@ -15,16 +15,6 @@ Please create an issue on Github at https://github.com/westonrobot/ugv_sdk/issue
 using the packages.
 
 ## Supported Platforms
-
-### Robot bases
-
-* Scout
-* Scout Mini
-* Hunter
-* Tracer
-* Bunker
-* Ranger Mini
-
 ### Software environments
 
 * Architecture: x86_64/arm64
@@ -33,27 +23,26 @@ using the packages.
 
 It should also work in other similar Linux environments but only the above listed environments are regularly tested.
 
-### Communication protocols
+### Robots and communication protocols
 
-|       Robot       | Protocol V1 | Protocol V2 | UART | CAN | Support Status |
-|:-----------------:|:-----------:|:-----------:|:----:|:---:|:--------------:|
-|     Scout 1.0     |      Y      |      -      |  N   |  Y  |  Discontinued  |
-|     Scout 2.0     |      Y      |      Y      |  N   |  Y  |     Active     |
-| Scout Mini (Skid) |      Y      |      Y      |  -   |  Y  |     Active     |
-| Scout Mini (Omni) |      Y      |      Y      |  -   |  Y  |     Active     |
-|    Hunter 1.0     |      Y      |      Y      |  -   |  Y  |     Active     |
-|    Hunter 2.0     |      -      |      Y      |  -   |  Y  |     Active     |
-|      Bunker       |      Y      |      Y      |  -   |  Y  |     Active     |
-|      Tracer       |      -      |      Y      |  N   |  Y  |     Active     |
-|    Ranger Mini    |      -      |      Y      |  -   |  Y  |     Active     |
+|        Robot        | Protocol V1 | Protocol V2 | UART  |  CAN  | Support Status |
+| :-----------------: | :---------: | :---------: | :---: | :---: | :------------: |
+|    ~~Scout 1.0~~    |      Y      |      -      |   N   |   Y   |  Discontinued  |
+|      Scout 2.0      |      Y      |      Y      |   N   |   Y   |     Active     |
+|  Scout Mini (Skid)  |      Y      |      Y      |   -   |   Y   |     Active     |
+|  Scout Mini (Omni)  |      Y      |      Y      |   -   |   Y   |     Active     |
+|     Hunter 1.0      |      Y      |      Y      |   -   |   Y   |     Active     |
+|     Hunter 2.0      |      -      |      Y      |   -   |   Y   |     Active     |
+|       Bunker        |      Y      |      Y      |   -   |   Y   |     Active     |
+|       Tracer        |      -      |      Y      |   N   |   Y   |     Active     |
+| ~~Ranger Mini 1.0~~ |      -      |     Y*      |   -   |   Y   |  Discontinued  |
+|   Ranger Mini 2.0   |      -      |      Y      |   -   |   Y   |     Active     |
+|       Ranger        |      -      |      Y      |   -   |   Y   |     Active     |
 
-**Important note:** The main branch of this repository supports all Scout variants and both V1 and V2 protocol. Earlier
-versions of the SDK can be found in v1.x and v2.x branch for V1 and V2 protocol support respectively. These two branches
-are not
-actively maintained any longer and are only kept for reference.
+**Important note:** 
 
-* V1 Protocol: v1.x branch of scout_ros and ugv_sdk
-* V2 Protocol: v2.x branch of scout_ros and ugv_sdk
+* The main branch of this repository supports all robot models and both V1 and V2 protocol. Earlier versions of the SDK can be found in v1.x and v2.x branch for V1 and V2 protocol support respectively. These two branches are not actively maintained any longer and are only kept for reference.
+* \* Ranger Mini 1.0 uses a modified version of Protocol V2. A few CAN messages and the reference frame definitions are inconsistent with other robot bases. Since this model has been discontinued by AgileX (as in May 2023), no new firmware will be released to fix this issue on Ranger Mini 1.0. Thus, a fix is provided for Ranger Mini 1.0 at the SDK level. You should use "class RangerMiniV1Robot" for Ranger Mini 1.0 to get consistent behaviors, as compared to Ranger and Ranger Mini 2.0.
 
 ## Build SDK
 

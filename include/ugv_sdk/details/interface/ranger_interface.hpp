@@ -32,38 +32,44 @@ struct RangerCoreState {
 struct RangerActuatorState {
   AgxMsgTimeStamp time_stamp;
 
+  MotorAngleMessage motor_angles;
+  MotorSpeedMessage motor_speeds;
+
   ActuatorHSStateMessage actuator_hs_state[8];
   ActuatorLSStateMessage actuator_ls_state[8];
 };
 
-struct RangerMotorState {
-  MotorAngleMessage motor_angle_state;
-  MotorSpeedMessage motor_speed_state;
-};
+struct RangerCommonSensorState {
+  AgxMsgTimeStamp time_stamp;
 
-struct RangerBmsState {
-  BmsBasicMessage bmsbasic;
+  BmsBasicMessage bms_basic_state;
 };
 
 /////////////////////////////////////////////////////////////////////////
 
 struct RangerInterface {
+  enum MotionMode {
+    kDualAckerman = 0,
+    kParallel = 1,
+    kSpinning = 2,
+    kSideSlip = 3
+  };
+
   virtual ~RangerInterface() = default;
-  
+
   virtual bool Connect(std::string dev_name) = 0;
 
   // robot control
   virtual void SetMotionMode(uint8_t mode) = 0;
   virtual void SetMotionCommand(double linear_vel, double steer_angle,
-                                double lateral_vel, double angular_vel) = 0;
+                                double angular_vel) = 0;
   virtual void SetLightCommand(AgxLightMode f_mode, uint8_t f_value,
                                AgxLightMode r_mode, uint8_t r_value) = 0;
 
   // get robot state
   virtual RangerCoreState GetRobotState() = 0;
   virtual RangerActuatorState GetActuatorState() = 0;
-  virtual RangerMotorState GetMotorState() = 0;
-  virtual RangerBmsState GetBmsState() = 0;
+  virtual RangerCommonSensorState GetCommonSensorState() = 0;
 };
 }  // namespace westonrobot
 

@@ -1,2 +1,5 @@
 add_executable(demo_ranger_robot ranger_robot_demo.cpp)
 target_link_libraries(demo_ranger_robot ugv_sdk)
+
+add_executable(demo_ranger_mini_v1_robot ranger_mini_v1_robot_demo.cpp)
+target_link_libraries(demo_ranger_mini_v1_robot ugv_sdk)

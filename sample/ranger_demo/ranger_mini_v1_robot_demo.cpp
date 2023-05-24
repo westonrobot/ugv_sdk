@@ -1,11 +1,3 @@
-/**
- * @Kit       : Qt-Creator: Desktop
- * @Author    : Wang Zhe
- * @Date      : 2021-04-19  19:41:52
- * @FileName  : ranger_demo.cpp
- * @Mail      : wangzheqie@qq.com
- * Copyright  : AgileX Robotics
- **/
 
 #include <iomanip>
 
@@ -25,7 +17,7 @@ int main(int argc, char *argv[]) {
     return -1;
   }
 
-  RangerRobot ranger;
+  RangerMiniV1Robot ranger;
   ranger.Connect(device_name);
 
   ranger.EnableCommandedMode();
@@ -33,8 +25,8 @@ int main(int argc, char *argv[]) {
   int count = 0;
   while (true) {
     if (count < 2000) {
-     ranger.SetMotionMode(RangerInterface::MotionMode::kSpinning);
-     ranger.SetMotionCommand(0.0, 0.0, -0.2);
+      ranger.SetMotionMode(RangerInterface::MotionMode::kSpinning);
+      ranger.SetMotionCommand(0.0, 0.0, -0.2);
     }
 
     auto state = ranger.GetRobotState();
@@ -53,6 +45,8 @@ int main(int argc, char *argv[]) {
               << ", SOC: "
               << static_cast<int>(sensor.bms_basic_state.battery_soc)
               << std::endl;
+
+    std::cout << "current motion mode: " << static_cast<int>(state.current_motion_mode.motion_mode) << std::endl;
     std::cout << "velocity (linear, angular, lateral, steering): "
               << std::setw(6) << state.motion_state.linear_velocity << ", "
               << std::setw(6) << state.motion_state.angular_velocity << ", "

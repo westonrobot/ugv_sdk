@@ -72,20 +72,18 @@ class ScoutBase : public AgilexBase<ParserType>, public ScoutInterface {
     return scout_actuator;
   }
 
-  ScoutCommonSensorState GetCommonSensorState() override{
+  ScoutCommonSensorState GetCommonSensorState() override {
     auto common_sensor = AgilexBase<ParserType>::GetCommonSensorStateMsgGroup();
 
     ScoutCommonSensorState scout_common_sensor;
 
     scout_common_sensor.time_stamp = common_sensor.time_stamp;
     scout_common_sensor.bms_basic_state = common_sensor.bms_basic_state;
-//    std::cout << static_cast<unsigned int>(scout_common_sensor.bms_basic_state.battery_soc) << std::endl;
+    //    std::cout << static_cast<unsigned
+    //    int>(scout_common_sensor.bms_basic_state.battery_soc) << std::endl;
 
     return scout_common_sensor;
-
-
   }
-
 };
 
 template <typename ParserType>
