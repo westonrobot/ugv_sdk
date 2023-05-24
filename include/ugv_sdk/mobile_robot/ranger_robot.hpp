@@ -18,7 +18,7 @@ namespace westonrobot {
 using RangerRobot = RangerBaseV2;
 using RangerMiniV2Robot = RangerBaseV2;
 
-// Note: Ranger Mini V1 is using a modified AgileX V2 protocol
+// Note: Ranger Mini V1 uses a modified AgileX V2 protocol
 // Here we provide a work-around fix as no new firmware will be provided from
 // AgileX to properly fix the issue.
 class RangerMiniV1Robot : public RangerBaseV2 {
