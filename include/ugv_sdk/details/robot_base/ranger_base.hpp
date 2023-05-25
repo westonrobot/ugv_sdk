@@ -7,8 +7,8 @@
  * Copyright  : AgileX Robotics
  **/
 
-#ifndef ROBOT_BASE_RANGER_BASE_HPP
-#define ROBOT_BASE_RANGER_BASE_HPP
+#ifndef RANGER_BASE_HPP
+#define RANGER_BASE_HPP
 
 #include <cstdint>
 #include <mutex>
@@ -194,4 +194,4 @@ class RangerMiniV1Base : public RangerBaseV2 {
   }
 };
 }  // namespace westonrobot
-#endif /* ROBOT_BASE_RANGER_BASE_HPP */
+#endif /* RANGER_BASE_HPP */

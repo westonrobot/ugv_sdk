@@ -7,8 +7,8 @@
  * Copyright (c) 2021 Ruixiang Du (rdu)
  */
 
-#ifndef MOBILE_ROBOT_RANGER_ROBOT_HPP
-#define MOBILE_ROBOT_RANGER_ROBOT_HPP
+#ifndef RANGER_ROBOT_HPP
+#define RANGER_ROBOT_HPP
 
 #include <cmath>
 
@@ -51,4 +51,4 @@ class RangerRobot : public RobotCommonInterface, public RangerInterface {
 };
 }  // namespace westonrobot
 
-#endif /* MOBILE_ROBOT_RANGER_ROBOT_HPP */
+#endif /* RANGER_ROBOT_HPP */
