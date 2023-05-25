@@ -23,7 +23,7 @@ struct RangerCoreState {
   SystemStateMessage system_state;
   MotionStateMessage motion_state;
   LightStateMessage light_state;
-  MotionModeStateMessage current_motion_mode;
+  MotionModeStateMessage motion_mode_state;
 
   RcStateMessage rc_state;
   OdometryMessage odometry;

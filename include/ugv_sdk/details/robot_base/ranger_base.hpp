@@ -57,7 +57,7 @@ class RangerBaseV2 : public AgilexBase<ProtocolV2Parser>,
     ranger_state.motion_state = state.motion_state;
     ranger_state.light_state = state.light_state;
     ranger_state.rc_state = state.rc_state;
-    ranger_state.current_motion_mode = state.motion_mode_state;
+    ranger_state.motion_mode_state = state.motion_mode_state;
     return ranger_state;
   }
 
@@ -92,7 +92,11 @@ class RangerBaseV2 : public AgilexBase<ProtocolV2Parser>,
     ranger_bms.time_stamp = common_sensor.time_stamp;
 
     ranger_bms.bms_basic_state.current = common_sensor.bms_basic_state.current;
-    ranger_bms.bms_basic_state.voltage = common_sensor.bms_basic_state.voltage;
+    // Note: BMS CAN message definition is not consistent across AgileX robots.
+    // Robots with steering mechanism should additionally divide the voltage by
+    // 10.
+    ranger_bms.bms_basic_state.voltage =
+        common_sensor.bms_basic_state.voltage * 0.1f;
     ranger_bms.bms_basic_state.battery_soc =
         common_sensor.bms_basic_state.battery_soc;
     ranger_bms.bms_basic_state.battery_soh =
@@ -116,7 +120,7 @@ class RangerMiniV1Base : public RangerBaseV2 {
   void SetMotionCommand(double linear_vel, double steer_angle,
                         double angular_vel) override {
     auto state = GetRobotState();
-    if (state.current_motion_mode.motion_mode ==
+    if (state.motion_mode_state.motion_mode ==
         RangerInterface::MotionMode::kSpinning) {
       angular_vel *= 0.254558;
     }
@@ -133,9 +137,9 @@ class RangerMiniV1Base : public RangerBaseV2 {
 
     ranger_state.light_state = state.light_state;
     ranger_state.rc_state = state.rc_state;
-    ranger_state.current_motion_mode = state.motion_mode_state;
+    ranger_state.motion_mode_state = state.motion_mode_state;
 
-    if (ranger_state.current_motion_mode.motion_mode ==
+    if (ranger_state.motion_mode_state.motion_mode ==
         RangerInterface::MotionMode::kSpinning) {
       ranger_state.motion_state.linear_velocity = 0;
       ranger_state.motion_state.angular_velocity =
@@ -144,7 +148,7 @@ class RangerMiniV1Base : public RangerBaseV2 {
           state.motion_state.lateral_velocity;
       ranger_state.motion_state.steering_angle =
           -state.motion_state.steering_angle * 10 / 180.0 * 3.14;
-    } else if (ranger_state.current_motion_mode.motion_mode ==
+    } else if (ranger_state.motion_mode_state.motion_mode ==
                RangerInterface::MotionMode::kSideSlip) {
       ranger_state.motion_state.linear_velocity =
           -state.motion_state.linear_velocity;
