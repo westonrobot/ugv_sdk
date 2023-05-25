@@ -57,8 +57,6 @@ struct RangerInterface {
 
   virtual ~RangerInterface() = default;
 
-  virtual bool Connect(std::string dev_name) = 0;
-
   // robot control
   virtual void SetMotionMode(uint8_t mode) = 0;
   virtual void SetMotionCommand(double linear_vel, double steer_angle,

@@ -129,7 +129,7 @@ There are certain cases where you may want to use the C++ interface from the SDK
 
 #### The communication pipeline
 
-The copmlete pipeline from the robot base to a ROS application is illustrated in the following diagram. The main function of the SDK is to translate between raw CAN frames and C++ data structures so that you can programmatically interact with the robot.
+The complete pipeline from the robot base to a ROS application is illustrated in the following diagram. A main function of the SDK is to translate between raw CAN frames and C++ data structures so that you can programmatically interact with the robot.
 
 ![Interface Hierarchy](./docs/interface_hierarchy.png)
 
@@ -141,11 +141,11 @@ With this structure in mind, whenever you are facing issues communicating with t
 
 #### The abstraction layers
 
-Besides translating between CAN messages and C++ data structures, another function of the SDK is to provide a set of interfaces to all the different robot models.
+Besides translating between CAN messages and C++ data structures, another important function of the SDK is to provide a set of interfaces to all the different robot models. In order to minimize duplicated code for different robot models, we structured the SDK into 3 abstraction layers:
 
-* **interface** (include/ugv_sdk/details/interface): this layer defines the C++ APIs for each robot, e.g., the functions that you can call to get the state of the robot 
-* **robot_base** (include/ugv_sdk/details/robot_base): this layer implements the C++ API for each family of robot (e.g., Scout/ScoutMiniOmni/ScoutMiniSkid) and handles the different versions of CAN communication protocols (most functionalities are implemented at this layer)
-* **mobile_robot** (include/ugv_sdk/mobile_robot): the main purpose of this layer is to provide an unified interface to instantiate different robot models from the same family during runtime (handling polymorphism internally).
+* **interface** (include/ugv_sdk/details/interface): this layer defines the C++ APIs for all the robots, e.g., the functions that you can call to get the state of the robot. A complete list of interfaces for a specific robot consists of two parts: the robot common interface (RobotCommonInterface) and the robot-specific interface (e.g., ScoutInterface).
+* **robot_base** (include/ugv_sdk/details/robot_base): this layer implements the C++ APIs for each family of robot (e.g., Scout/ScoutMiniOmni/ScoutMiniSkid) and handles the different versions of CAN communication protocols (most functionalities are implemented in this layer). With this layer, you can already communicate with a specific robot (e.g., Scout V2.0 with Protocol V2).
+* **mobile_robot** (include/ugv_sdk/mobile_robot): the main purpose of this layer is to provide an unified interface class to instantiate different robot models from the same family according to given parameters during runtime (handling polymorphism internally).
 
 "mobile_robot" layer should be the layer you check first for your application. You only need to refer to the other two layers if more details are required.
 
