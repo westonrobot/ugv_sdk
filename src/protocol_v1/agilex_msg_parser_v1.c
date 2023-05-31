@@ -15,6 +15,7 @@
 #include "string.h"
 
 bool DecodeCanFrameV1(const struct can_frame *rx_frame, AgxMessage *msg) {
+  bool ret = true;
   // if checksum not correct
   if (!CalcCanFrameChecksumV1(rx_frame->can_id, (uint8_t *)rx_frame->data,
                               rx_frame->can_dlc)) {
@@ -87,10 +88,11 @@ bool DecodeCanFrameV1(const struct can_frame *rx_frame, AgxMessage *msg) {
       break;
     }
     default:
+      ret = false;
       break;
   }
 
-  return true;
+  return ret;
 }
 
 bool EncodeCanFrameV1(const AgxMessage *msg, struct can_frame *tx_frame) {
