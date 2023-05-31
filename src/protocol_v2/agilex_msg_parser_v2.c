@@ -15,6 +15,7 @@
 #include "math.h"
 
 bool DecodeCanFrameV2(const struct can_frame *rx_frame, AgxMessage *msg) {
+  bool ret = true;
   msg->type = AgxMsgUnkonwn;
 
   switch (rx_frame->can_id) {
@@ -372,10 +373,11 @@ bool DecodeCanFrameV2(const struct can_frame *rx_frame, AgxMessage *msg) {
       break;
     }
     default:
+      ret = false;
       break;
   }
 
-  return true;
+  return ret;
 }
 
 bool EncodeCanFrameV2(const AgxMessage *msg, struct can_frame *tx_frame) {
