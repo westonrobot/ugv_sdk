@@ -47,6 +47,10 @@ class RangerBaseV2 : public AgilexBase<ProtocolV2Parser>,
                                                    r_value);
   }
 
+  void DisableLightControl() override {
+    AgilexBase<ProtocolV2Parser>::DisableLightControl();
+  }
+
   // get robot state
   RangerCoreState GetRobotState() override {
     auto state = AgilexBase<ProtocolV2Parser>::GetRobotCoreStateMsgGroup();
@@ -83,11 +87,10 @@ class RangerBaseV2 : public AgilexBase<ProtocolV2Parser>,
     return ranger_actuator;
   }
 
-  RangerCommonSensorState GetCommonSensorState() override {
-    auto common_sensor =
-        AgilexBase<ProtocolV2Parser>::GetCommonSensorStateMsgGroup();
+  RangerSensorState GetSensorState() override {
+    auto common_sensor = AgilexBase<ProtocolV2Parser>::GetSensorStateMsgGroup();
 
-    RangerCommonSensorState ranger_bms;
+    RangerSensorState ranger_bms;
 
     ranger_bms.time_stamp = common_sensor.time_stamp;
 

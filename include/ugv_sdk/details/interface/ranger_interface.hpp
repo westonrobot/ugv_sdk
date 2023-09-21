@@ -18,7 +18,7 @@
 namespace westonrobot {
 struct RangerCoreState {
   // system state
-  AgxMsgTimeStamp time_stamp;
+  SdkTimePoint time_stamp;
 
   SystemStateMessage system_state;
   MotionStateMessage motion_state;
@@ -30,7 +30,7 @@ struct RangerCoreState {
 };
 
 struct RangerActuatorState {
-  AgxMsgTimeStamp time_stamp;
+  SdkTimePoint time_stamp;
 
   MotorAngleMessage motor_angles;
   MotorSpeedMessage motor_speeds;
@@ -39,8 +39,8 @@ struct RangerActuatorState {
   ActuatorLSStateMessage actuator_ls_state[8];
 };
 
-struct RangerCommonSensorState {
-  AgxMsgTimeStamp time_stamp;
+struct RangerSensorState {
+  SdkTimePoint time_stamp;
 
   BmsBasicMessage bms_basic_state;
 };
@@ -63,11 +63,12 @@ struct RangerInterface {
                                 double angular_vel) = 0;
   virtual void SetLightCommand(AgxLightMode f_mode, uint8_t f_value,
                                AgxLightMode r_mode, uint8_t r_value) = 0;
+  virtual void DisableLightControl() = 0;
 
   // get robot state
   virtual RangerCoreState GetRobotState() = 0;
   virtual RangerActuatorState GetActuatorState() = 0;
-  virtual RangerCommonSensorState GetCommonSensorState() = 0;
+  virtual RangerSensorState GetSensorState() = 0;
 };
 }  // namespace westonrobot
 

@@ -23,7 +23,6 @@ class ScoutRobot : public RobotCommonInterface, public ScoutInterface {
   virtual ~ScoutRobot();
 
   bool Connect(std::string can_name) override;
-  void Connect(std::string uart_name, uint32_t baudrate) override;
 
   void EnableCommandedMode() override;
   std::string RequestVersion(int timeout_sec = 3) override;
@@ -40,7 +39,7 @@ class ScoutRobot : public RobotCommonInterface, public ScoutInterface {
   // get robot state
   ScoutCoreState GetRobotState() override;
   ScoutActuatorState GetActuatorState() override;
-  ScoutCommonSensorState GetCommonSensorState() override;
+  ScoutSensorState GetSensorState() override;
 
  protected:
   RobotCommonInterface* robot_;

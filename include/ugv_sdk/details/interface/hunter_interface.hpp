@@ -17,7 +17,7 @@
 
 namespace westonrobot {
 struct HunterCoreState {
-  AgxMsgTimeStamp time_stamp;
+  SdkTimePoint time_stamp;
 
   SystemStateMessage system_state;
   MotionStateMessage motion_state;
@@ -25,7 +25,7 @@ struct HunterCoreState {
 };
 
 struct HunterActuatorState {
-  AgxMsgTimeStamp time_stamp;
+  SdkTimePoint time_stamp;
 
   // actuator state
   ActuatorHSStateMessage actuator_hs_state[3];

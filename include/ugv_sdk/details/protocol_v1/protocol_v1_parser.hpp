@@ -10,14 +10,14 @@
 #ifndef SCOUT_PROTOCOL_V1_PARSER_HPP
 #define SCOUT_PROTOCOL_V1_PARSER_HPP
 
-#include "ugv_sdk/details/interface/parser_interface.hpp"
+#include "ugv_sdk/details/parser_base.hpp"
 
 #include "ugv_sdk/details/protocol_v1/agilex_msg_parser_v1.h"
 #include "ugv_sdk/details/protocol_v1/robot_limits.hpp"
 
 namespace westonrobot {
 template <typename RobotLimitsType>
-class ProtocolV1Parser : public ParserInterface<ProtocolVersion::AGX_V1> {
+class ProtocolV1Parser : public ParserBase<ProtocolVersion::AGX_V1> {
  public:
   bool DecodeMessage(const struct can_frame *rx_frame,
                      AgxMessage *msg) override {

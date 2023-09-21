@@ -13,7 +13,7 @@
 #include <atomic>
 
 #include "ugv_sdk/details/async_port/async_can.hpp"
-#include "ugv_sdk/details/interface/parser_interface.hpp"
+#include "ugv_sdk/details/parser_base.hpp"
 
 namespace westonrobot {
 class ProtocolDetector {

@@ -17,7 +17,7 @@
 
 namespace westonrobot {
 struct BunkerCoreState {
-  AgxMsgTimeStamp time_stamp;
+  SdkTimePoint time_stamp;
 
   SystemStateMessage system_state;
   MotionStateMessage motion_state;
@@ -25,7 +25,7 @@ struct BunkerCoreState {
 };
 
 struct BunkerActuatorState {
-  AgxMsgTimeStamp time_stamp;
+  SdkTimePoint time_stamp;
 
   // actuator state
   ActuatorHSStateMessage actuator_hs_state[2];
