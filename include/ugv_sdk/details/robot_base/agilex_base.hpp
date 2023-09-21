@@ -20,7 +20,7 @@
 
 #include "ugv_sdk/details/async_port/async_can.hpp"
 #include "ugv_sdk/details/interface/robot_common_interface.hpp"
-#include "ugv_sdk/details/interface/parser_interface.hpp"
+#include "ugv_sdk/details/parser_base.hpp"
 
 namespace westonrobot {
 struct CoreStateMsgGroup {
@@ -55,12 +55,12 @@ class AgilexBase : public RobotCommonInterface {
  public:
   AgilexBase() {
     static_assert(
-        std::is_base_of<ParserInterface<ProtocolVersion::AGX_V1>,
+        std::is_base_of<ParserBase<ProtocolVersion::AGX_V1>,
                         ParserType>::value ||
-            std::is_base_of<ParserInterface<ProtocolVersion::AGX_V2>,
+            std::is_base_of<ParserBase<ProtocolVersion::AGX_V2>,
                             ParserType>::value,
         "Incompatible parser for the AgilexBase class, expecting one derived "
-        "from ParserInterface!");
+        "from ParserBase!");
   };
   virtual ~AgilexBase() { DisconnectPort(); }
 

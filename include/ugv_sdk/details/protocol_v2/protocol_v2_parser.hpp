@@ -10,10 +10,10 @@
 #ifndef PROTOCOL_V2_PARSER_HPP
 #define PROTOCOL_V2_PARSER_HPP
 
-#include "ugv_sdk/details/interface/parser_interface.hpp"
+#include "ugv_sdk/details/parser_base.hpp"
 
 namespace westonrobot {
-class ProtocolV2Parser : public ParserInterface<ProtocolVersion::AGX_V2> {
+class ProtocolV2Parser : public ParserBase<ProtocolVersion::AGX_V2> {
  public:
   bool DecodeMessage(const struct can_frame *rx_frame,
                      AgxMessage *msg) override;

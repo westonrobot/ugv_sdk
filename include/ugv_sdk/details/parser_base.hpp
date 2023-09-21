@@ -29,9 +29,9 @@ struct can_frame {
 enum class ProtocolVersion { UNKONWN, AGX_V1, AGX_V2 };
 
 template <ProtocolVersion VersionNumber = ProtocolVersion::AGX_V2>
-class ParserInterface {
+class ParserBase {
  public:
-  virtual ~ParserInterface() = default;
+  virtual ~ParserBase() = default;
 
   // CAN support
   virtual bool DecodeMessage(const struct can_frame *rx_frame,
@@ -43,16 +43,11 @@ class ParserInterface {
 
   // UART support
   virtual bool DecodeMessage(uint8_t *data, uint8_t dlc, AgxMessage *msg) {
-    // throw exception
     return false;
-  };
-  virtual void EncodeMessage(const AgxMessage *msg, uint8_t *buf, uint8_t *len){
-      // throw exception
-  };
-  virtual uint8_t CalculateChecksum(uint8_t *buf, uint8_t len) {
-    // throw exception
-    return 0;
-  };
+  }
+  virtual void EncodeMessage(const AgxMessage *msg, uint8_t *buf,
+                             uint8_t *len) {}
+  virtual uint8_t CalculateChecksum(uint8_t *buf, uint8_t len) { return 0; }
 
   ProtocolVersion GetParserProtocolVersion() { return VersionNumber; }
 };
