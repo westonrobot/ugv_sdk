@@ -73,11 +73,6 @@ ScoutActuatorState ScoutRobot::GetActuatorState() {
   return scout->GetActuatorState();
 }
 
-ScoutSensorState ScoutRobot::GetSensorState() {
-  auto scout = dynamic_cast<ScoutInterface*>(robot_);
-  return scout->GetSensorState();
-}
-
 ///////////////////////////////////////////////////////////////////////////
 
 ScoutMiniOmniRobot::ScoutMiniOmniRobot(ProtocolVersion protocol)

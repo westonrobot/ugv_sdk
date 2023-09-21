@@ -27,6 +27,7 @@ struct RangerCoreState {
 
   RcStateMessage rc_state;
   OdometryMessage odometry;
+  BmsBasicMessage bms_basic_state;
 };
 
 struct RangerActuatorState {
@@ -37,12 +38,6 @@ struct RangerActuatorState {
 
   ActuatorHSStateMessage actuator_hs_state[8];
   ActuatorLSStateMessage actuator_ls_state[8];
-};
-
-struct RangerSensorState {
-  SdkTimePoint time_stamp;
-
-  BmsBasicMessage bms_basic_state;
 };
 
 /////////////////////////////////////////////////////////////////////////
@@ -68,7 +63,6 @@ struct RangerInterface {
   // get robot state
   virtual RangerCoreState GetRobotState() = 0;
   virtual RangerActuatorState GetActuatorState() = 0;
-  virtual RangerSensorState GetSensorState() = 0;
 };
 }  // namespace westonrobot
 
