@@ -44,7 +44,7 @@ struct ActuatorStateMsgGroup {
   MotorSpeedMessage motor_speeds;  // ranger only
 };
 
-struct CommonSensorStateMsgGroup {
+struct SensorStateMsgGroup {
   SdkTimePoint time_stamp;
 
   BmsBasicMessage bms_basic_state;
@@ -183,7 +183,7 @@ class AgilexBase : public RobotCommonInterface {
     return actuator_state_msgs_;
   }
 
-  CommonSensorStateMsgGroup GetSensorStateMsgGroup() {
+  SensorStateMsgGroup GetSensorStateMsgGroup() {
     std::lock_guard<std::mutex> guard(common_sensor_state_mtx_);
     return common_sensor_state_msgs_;
   }
@@ -205,7 +205,7 @@ class AgilexBase : public RobotCommonInterface {
 
   /* feedback group 3: common sensor */
   std::mutex common_sensor_state_mtx_;
-  CommonSensorStateMsgGroup common_sensor_state_msgs_;
+  SensorStateMsgGroup common_sensor_state_msgs_;
 
   std::mutex version_str_buf_mtx_;
   std::string version_string_buffer_;
