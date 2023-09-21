@@ -23,6 +23,33 @@
 #include "ugv_sdk/details/interface/parser_interface.hpp"
 
 namespace westonrobot {
+struct CoreStateMsgGroup {
+  SdkTimePoint time_stamp;
+
+  SystemStateMessage system_state;
+  MotionStateMessage motion_state;
+  LightStateMessage light_state;
+  MotionModeStateMessage motion_mode_state;
+  RcStateMessage rc_state;
+};
+
+struct ActuatorStateMsgGroup {
+  SdkTimePoint time_stamp;
+
+  ActuatorHSStateMessage actuator_hs_state[AGX_MAX_ACTUATOR_NUM];  // v2 only
+  ActuatorLSStateMessage actuator_ls_state[AGX_MAX_ACTUATOR_NUM];  // v2 only
+  ActuatorStateMessageV1 actuator_state[AGX_MAX_ACTUATOR_NUM];     // v1 only
+
+  MotorAngleMessage motor_angles;  // ranger only
+  MotorSpeedMessage motor_speeds;  // ranger only
+};
+
+struct CommonSensorStateMsgGroup {
+  SdkTimePoint time_stamp;
+
+  BmsBasicMessage bms_basic_state;
+};
+
 template <typename ParserType>
 class AgilexBase : public RobotCommonInterface {
  public:
@@ -146,17 +173,17 @@ class AgilexBase : public RobotCommonInterface {
     return parser_.GetParserProtocolVersion();
   }
 
-  CoreStateMsgGroup GetRobotCoreStateMsgGroup() override {
+  CoreStateMsgGroup GetRobotCoreStateMsgGroup() {
     std::lock_guard<std::mutex> guard(core_state_mtx_);
     return core_state_msgs_;
   }
 
-  ActuatorStateMsgGroup GetActuatorStateMsgGroup() override {
+  ActuatorStateMsgGroup GetActuatorStateMsgGroup() {
     std::lock_guard<std::mutex> guard(actuator_state_mtx_);
     return actuator_state_msgs_;
   }
 
-  CommonSensorStateMsgGroup GetCommonSensorStateMsgGroup() override {
+  CommonSensorStateMsgGroup GetSensorStateMsgGroup() {
     std::lock_guard<std::mutex> guard(common_sensor_state_mtx_);
     return common_sensor_state_msgs_;
   }
@@ -262,32 +289,32 @@ class AgilexBase : public RobotCommonInterface {
     switch (status_msg.type) {
       case AgxMsgSystemState: {
         //   std::cout << "system status feedback received" << std::endl;
-        core_state_msgs_.time_stamp = AgxMsgRefClock::now();
+        core_state_msgs_.time_stamp = SdkClock::now();
         core_state_msgs_.system_state = status_msg.body.system_state_msg;
         break;
       }
       case AgxMsgMotionState: {
         // std::cout << "motion control feedback received" << std::endl;
-        core_state_msgs_.time_stamp = AgxMsgRefClock::now();
+        core_state_msgs_.time_stamp = SdkClock::now();
         core_state_msgs_.motion_state = status_msg.body.motion_state_msg;
         break;
       }
       case AgxMsgLightState: {
         // std::cout << "light control feedback received" << std::endl;
-        core_state_msgs_.time_stamp = AgxMsgRefClock::now();
+        core_state_msgs_.time_stamp = SdkClock::now();
         core_state_msgs_.light_state = status_msg.body.light_state_msg;
         break;
       }
       case AgxMsgMotionModeState: {
         // std::cout << "motion mode feedback received" << std::endl;
-        core_state_msgs_.time_stamp = AgxMsgRefClock::now();
+        core_state_msgs_.time_stamp = SdkClock::now();
         core_state_msgs_.motion_mode_state =
             status_msg.body.motion_mode_state_msg;
         break;
       }
       case AgxMsgRcState: {
         // std::cout << "rc feedback received" << std::endl;
-        core_state_msgs_.time_stamp = AgxMsgRefClock::now();
+        core_state_msgs_.time_stamp = SdkClock::now();
         core_state_msgs_.rc_state = status_msg.body.rc_state_msg;
         break;
       }
@@ -298,7 +325,7 @@ class AgilexBase : public RobotCommonInterface {
 
   void UpdateActuatorState(const AgxMessage &status_msg) {
     std::lock_guard<std::mutex> guard(actuator_state_mtx_);
-    actuator_state_msgs_.time_stamp = AgxMsgRefClock::now();
+    actuator_state_msgs_.time_stamp = SdkClock::now();
     switch (status_msg.type) {
       case AgxMsgMotorAngle: {
         actuator_state_msgs_.motor_angles.angle_5 =
@@ -355,7 +382,7 @@ class AgilexBase : public RobotCommonInterface {
     switch (status_msg.type) {
       case AgxMsgBmsBasic: {
         //      std::cout << "system status feedback received" << std::endl;
-        common_sensor_state_msgs_.time_stamp = AgxMsgRefClock::now();
+        common_sensor_state_msgs_.time_stamp = SdkClock::now();
         common_sensor_state_msgs_.bms_basic_state =
             status_msg.body.bms_basic_msg;
         break;

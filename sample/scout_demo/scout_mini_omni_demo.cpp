@@ -96,7 +96,7 @@ int main(int argc, char **argv) {
               << state.motion_state.lateral_velocity << std::endl;
     std::cout << "core state age (ms): "
               << std::chrono::duration_cast<std::chrono::milliseconds>(
-                     AgxMsgRefClock::now() - state.time_stamp)
+                     SdkClock::now() - state.time_stamp)
                      .count()
               << std::endl;
 
@@ -112,7 +112,7 @@ int main(int argc, char **argv) {
       }
       std::cout << "actuator state age (ms): "
                 << std::chrono::duration_cast<std::chrono::milliseconds>(
-                       AgxMsgRefClock::now() - actuator.time_stamp)
+                       SdkClock::now() - actuator.time_stamp)
                        .count()
                 << std::endl;
     } else {
@@ -126,7 +126,7 @@ int main(int argc, char **argv) {
       }
       std::cout << "actuator state age (ms): "
                 << std::chrono::duration_cast<std::chrono::milliseconds>(
-                       AgxMsgRefClock::now() - actuator.time_stamp)
+                       SdkClock::now() - actuator.time_stamp)
                        .count()
                 << std::endl;
     }

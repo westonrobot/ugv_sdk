@@ -68,8 +68,8 @@ RangerActuatorState RangerRobot::GetActuatorState() {
   return ranger->GetActuatorState();
 }
 
-RangerCommonSensorState RangerRobot::GetCommonSensorState() {
+RangerSensorState RangerRobot::GetSensorState() {
   auto ranger = dynamic_cast<RangerInterface*>(robot_);
-  return ranger->GetCommonSensorState();
+  return ranger->GetSensorState();
 }
 }  // namespace westonrobot

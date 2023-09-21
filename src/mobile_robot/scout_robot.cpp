@@ -41,10 +41,6 @@ std::string ScoutRobot::RequestVersion(int timeout_sec) {
   return robot_->RequestVersion(timeout_sec);
 }
 
-void ScoutRobot::Connect(std::string uart_name, uint32_t baudrate) {
-  //   robot_->Connect(uart_name, baudrate);
-}
-
 void ScoutRobot::ResetRobotState() { robot_->ResetRobotState(); }
 
 ProtocolVersion ScoutRobot::GetParserProtocolVersion() {
@@ -56,14 +52,15 @@ void ScoutRobot::SetMotionCommand(double linear_vel, double angular_vel) {
   scout->SetMotionCommand(linear_vel, angular_vel);
 }
 
-// std::string ScoutRobot::
-
-void ScoutRobot::DisableLightControl() { robot_->DisableLightControl(); }
-
 void ScoutRobot::SetLightCommand(AgxLightMode f_mode, uint8_t f_value,
                                  AgxLightMode r_mode, uint8_t r_value) {
   auto scout = dynamic_cast<ScoutInterface*>(robot_);
   scout->SetLightCommand(f_mode, f_value, r_mode, r_value);
+}
+
+void ScoutRobot::DisableLightControl() {
+  auto scout = dynamic_cast<ScoutInterface*>(robot_);
+  scout->DisableLightControl();
 }
 
 ScoutCoreState ScoutRobot::GetRobotState() {
@@ -76,9 +73,9 @@ ScoutActuatorState ScoutRobot::GetActuatorState() {
   return scout->GetActuatorState();
 }
 
-ScoutCommonSensorState ScoutRobot::GetCommonSensorState() {
+ScoutSensorState ScoutRobot::GetSensorState() {
   auto scout = dynamic_cast<ScoutInterface*>(robot_);
-  return scout->GetCommonSensorState();
+  return scout->GetSensorState();
 }
 
 ///////////////////////////////////////////////////////////////////////////

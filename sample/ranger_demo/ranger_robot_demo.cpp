@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
     }
 
     auto state = ranger->GetRobotState();
-    auto sensor = ranger->GetCommonSensorState();
+    auto sensor = ranger->GetSensorState();
     auto motion = ranger->GetActuatorState();
 
     std::cout << "-------------------------------" << std::endl;
