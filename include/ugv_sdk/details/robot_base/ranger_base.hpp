@@ -110,6 +110,15 @@ class RangerMiniV1Base : public RangerBaseV2 {
   ~RangerMiniV1Base() = default;
 
   // robot control
+  void SetMotionMode(uint8_t mode) override {
+    if (mode == RangerInterface::MotionMode::kPark) {
+      return;
+    } else if (mode == RangerInterface::MotionMode::kSideSlip) {
+      mode = 3;
+    }
+    AgilexBase::SetMotionMode(mode);
+  }
+
   void SetMotionCommand(double linear_vel, double steer_angle,
                         double angular_vel) override {
     auto state = GetRobotState();
