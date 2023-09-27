@@ -47,7 +47,8 @@ struct RangerInterface {
     kDualAckerman = 0,
     kParallel = 1,
     kSpinning = 2,
-    kSideSlip = 3
+    kPark = 3,
+    kSideSlip = 4
   };
 
   virtual ~RangerInterface() = default;
