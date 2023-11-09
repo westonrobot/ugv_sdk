@@ -35,10 +35,10 @@ typedef enum {
 } AgxVehicleState;
 
 typedef enum {
-  //   CONTROL_MODE_STANDBY = 0x00,
-  CONTROL_MODE_RC = 0x00,
+  CONTROL_MODE_STANDBY = 0x00,
   CONTROL_MODE_CAN = 0x01,
-  CONTROL_MODE_UART = 0x02
+  CONTROL_MODE_UART = 0x02,
+  CONTROL_MODE_RC = 0x03
 } AgxControlMode;
 
 typedef enum {
