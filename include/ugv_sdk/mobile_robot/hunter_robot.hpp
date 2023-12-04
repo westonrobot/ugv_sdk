@@ -39,6 +39,7 @@ class HunterRobot : public RobotCommonInterface, public HunterInterface {
   // get robot state
   HunterCoreState GetRobotState() override;
   HunterActuatorState GetActuatorState() override;
+  HunterCommonSensorState GetCommonSensorState() override;
 
  private:
   RobotCommonInterface* robot_;
