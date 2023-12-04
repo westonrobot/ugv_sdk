@@ -63,4 +63,8 @@ HunterActuatorState HunterRobot::GetActuatorState() {
   auto hunter = dynamic_cast<HunterInterface*>(robot_);
   return hunter->GetActuatorState();
 }
+HunterCommonSensorState HunterRobot::GetCommonSensorState() {
+  auto hunter = dynamic_cast<HunterInterface*>(robot_);
+  return hunter->GetCommonSensorState();
+}
 }  // namespace westonrobot

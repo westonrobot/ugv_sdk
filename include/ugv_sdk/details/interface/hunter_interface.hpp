@@ -34,6 +34,11 @@ struct HunterActuatorState {
   ActuatorStateMessageV1 actuator_state[3];
 };
 
+struct HunterCommonSensorState {
+  AgxMsgTimeStamp time_stamp;
+
+  BmsBasicMessage bms_basic_state;
+};
 struct HunterInterface {
   virtual ~HunterInterface() = default;
 
@@ -45,6 +50,7 @@ struct HunterInterface {
   // get robot state
   virtual HunterCoreState GetRobotState() = 0;
   virtual HunterActuatorState GetActuatorState() = 0;
+  virtual HunterCommonSensorState GetCommonSensorState() = 0;
 };
 }  // namespace westonrobot
 
