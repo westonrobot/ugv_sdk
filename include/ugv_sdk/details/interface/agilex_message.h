@@ -229,13 +229,19 @@ typedef struct {
 #define BMS_PROT4_DISCHARGING_MOS_FAILURE_SET_MASK ((uint8_t)0x08)
 #define BMS_PROT4_WEAK_SIGNAL_SWITCH_OPEN_SET_MASK ((uint8_t)0x10)
 
+// typedef struct {
+//   uint8_t protection_code1;
+//   uint8_t protection_code2;
+//   uint8_t protection_code3;
+//   uint8_t protection_code4;
+//   uint8_t battery_max_teperature;
+//   uint8_t battery_min_teperature;
+// } BmsExtendedMessage;
 typedef struct {
-  uint8_t protection_code1;
-  uint8_t protection_code2;
-  uint8_t protection_code3;
-  uint8_t protection_code4;
-  uint8_t battery_max_teperature;
-  uint8_t battery_min_teperature;
+  uint8_t alarm_status_1;
+  uint8_t alarm_status_2;
+  uint8_t warn_status_1;
+  uint8_t warn_status_2;
 } BmsExtendedMessage;
 
 /************  Query/config messages ****************/

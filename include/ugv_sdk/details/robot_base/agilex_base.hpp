@@ -48,6 +48,7 @@ struct ActuatorStateMsgGroup {
 
 struct SensorStateMsgGroup {
   SdkTimePoint time_stamp;
+  BmsExtendedMessage bms_extend_state;
 };
 
 template <typename ParserType>
@@ -386,6 +387,17 @@ class AgilexBase : public RobotCommonInterface {
     //    std::cout << common_sensor_state_msgs_.bms_basic_state.battery_soc<<
     //    std::endl;
     switch (status_msg.type) {
+      case AgxMsgBmsBasic: {
+        //      std::cout << "system status feedback received" << std::endl;
+        common_sensor_state_msgs_.time_stamp = AgxMsgRefClock::now();
+        common_sensor_state_msgs_.bms_basic_state =
+            status_msg.body.bms_basic_msg;
+        break;
+      }
+      case AgxMsgBmsExtended: {
+        common_sensor_state_msgs_.bms_extend_state = 
+          status_msg.body.bms_extended_msg;
+      }
       default:
         break;
     }
