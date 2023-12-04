@@ -38,6 +38,7 @@ struct HunterCommonSensorState {
   AgxMsgTimeStamp time_stamp;
 
   BmsBasicMessage bms_basic_state;
+  BmsExtendedMessage bms_extend_state;
 };
 struct HunterInterface {
   virtual ~HunterInterface() = default;

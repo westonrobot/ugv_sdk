@@ -48,6 +48,7 @@ struct CommonSensorStateMsgGroup {
   AgxMsgTimeStamp time_stamp;
 
   BmsBasicMessage bms_basic_state;
+  BmsExtendedMessage bms_extend_state;
 };
 
 class RobotCommonInterface {

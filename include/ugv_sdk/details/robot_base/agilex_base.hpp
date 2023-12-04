@@ -360,6 +360,10 @@ class AgilexBase : public RobotCommonInterface {
             status_msg.body.bms_basic_msg;
         break;
       }
+      case AgxMsgBmsExtended: {
+        common_sensor_state_msgs_.bms_extend_state = 
+          status_msg.body.bms_extended_msg;
+      }
       default:
         break;
     }

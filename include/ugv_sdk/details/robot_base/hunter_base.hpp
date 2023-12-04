@@ -81,6 +81,14 @@ class HunterBase : public AgilexBase<ParserType>, public HunterInterface {
         common_sensor.bms_basic_state.battery_soh;
     hunter_bms.bms_basic_state.temperature =
         common_sensor.bms_basic_state.temperature;
+    hunter_bms.bms_extend_state.alarm_status_1 =
+        common_sensor.bms_extend_state.alarm_status_1;
+    hunter_bms.bms_extend_state.alarm_status_2 =
+        common_sensor.bms_extend_state.alarm_status_2;
+    hunter_bms.bms_extend_state.warn_status_1 =
+        common_sensor.bms_extend_state.warn_status_1;
+    hunter_bms.bms_extend_state.warn_status_2 =
+        common_sensor.bms_extend_state.warn_status_2;
 
     return hunter_bms;
   }
