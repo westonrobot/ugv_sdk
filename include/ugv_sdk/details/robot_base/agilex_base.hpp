@@ -31,8 +31,6 @@ struct CoreStateMsgGroup {
   LightStateMessage light_state;
   MotionModeStateMessage motion_mode_state;
   RcStateMessage rc_state;
-
-  BmsBasicMessage bms_basic_state;
 };
 
 struct ActuatorStateMsgGroup {
@@ -48,6 +46,7 @@ struct ActuatorStateMsgGroup {
 
 struct SensorStateMsgGroup {
   SdkTimePoint time_stamp;
+  BmsBasicMessage bms_basic_state;
   BmsExtendedMessage bms_extend_state;
 };
 
@@ -319,12 +318,12 @@ class AgilexBase : public RobotCommonInterface {
         core_state_msgs_.rc_state = status_msg.body.rc_state_msg;
         break;
       }
-      case AgxMsgBmsBasic: {
-        //      std::cout << "system status feedback received" << std::endl;
-        core_state_msgs_.time_stamp = SdkClock::now();
-        core_state_msgs_.bms_basic_state = status_msg.body.bms_basic_msg;
-        break;
-      }
+      // case AgxMsgBmsBasic: {
+      //   //      std::cout << "system status feedback received" << std::endl;
+      //   core_state_msgs_.time_stamp = SdkClock::now();
+      //   core_state_msgs_.bms_basic_state = status_msg.body.bms_basic_msg;
+      //   break;
+      // }
       default:
         break;
     }
@@ -389,7 +388,7 @@ class AgilexBase : public RobotCommonInterface {
     switch (status_msg.type) {
       case AgxMsgBmsBasic: {
         //      std::cout << "system status feedback received" << std::endl;
-        common_sensor_state_msgs_.time_stamp = AgxMsgRefClock::now();
+        common_sensor_state_msgs_.time_stamp = SdkClock::now();
         common_sensor_state_msgs_.bms_basic_state =
             status_msg.body.bms_basic_msg;
         break;

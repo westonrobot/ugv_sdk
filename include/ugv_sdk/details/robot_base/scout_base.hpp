@@ -56,7 +56,7 @@ class ScoutBase : public AgilexBase<ParserType>, public ScoutInterface {
     scout_state.motion_state = state.motion_state;
     scout_state.light_state = state.light_state;
     scout_state.rc_state = state.rc_state;
-    scout_state.bms_basic_state = state.bms_basic_state;
+    // scout_state.bms_basic_state = state.bms_basic_state;
     return scout_state;
   }
 

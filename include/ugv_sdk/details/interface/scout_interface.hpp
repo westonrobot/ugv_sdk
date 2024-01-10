@@ -23,7 +23,6 @@ struct ScoutCoreState {
   MotionStateMessage motion_state;
   LightStateMessage light_state;
   RcStateMessage rc_state;
-  BmsBasicMessage bms_basic_state;
 };
 
 struct ScoutActuatorState {
@@ -35,6 +34,12 @@ struct ScoutActuatorState {
   ActuatorLSStateMessage actuator_ls_state[4];
   // - for v1 robots only
   ActuatorStateMessageV1 actuator_state[4];
+};
+
+struct ScoutSensorState {
+  SdkTimePoint time_stamp;
+
+  BmsBasicMessage bms_basic_state;
 };
 
 struct ScoutInterface {
