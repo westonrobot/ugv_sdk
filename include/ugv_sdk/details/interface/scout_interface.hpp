@@ -36,7 +36,7 @@ struct ScoutActuatorState {
   ActuatorStateMessageV1 actuator_state[4];
 };
 
-struct ScoutSensorState {
+struct ScoutCommonSensorState {
   SdkTimePoint time_stamp;
 
   BmsBasicMessage bms_basic_state;

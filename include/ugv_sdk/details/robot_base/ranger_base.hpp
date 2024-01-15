@@ -100,11 +100,11 @@ class RangerBaseV2 : public AgilexBase<ProtocolV2Parser>,
     return ranger_actuator;
   }
 
-  RangerSensorState GetSensorState() override {
+  RangerCommonSensorState GetCommonSensorState() override {
     auto common_sensor =
-        AgilexBase<ProtocolV2Parser>::GetSensorStateMsgGroup();
+        AgilexBase<ProtocolV2Parser>::GetCommonSensorStateMsgGroup();
 
-    RangerSensorState ranger_bms;
+    RangerCommonSensorState ranger_bms;
 
     ranger_bms.time_stamp = common_sensor.time_stamp;
 

@@ -61,11 +61,11 @@ class HunterBase : public AgilexBase<ParserType>, public HunterInterface {
     return hunter_actuator;
   }
 
-  HunterSensorState GetSensorState() override {
+  HunterCommonSensorState GetCommonSensorState() override {
     auto common_sensor =
-        AgilexBase<ParserType>::GetSensorStateMsgGroup();
+        AgilexBase<ParserType>::GetCommonSensorStateMsgGroup();
 
-    HunterSensorState hunter_bms;
+    HunterCommonSensorState hunter_bms;
 
     hunter_bms.time_stamp = common_sensor.time_stamp;
 
