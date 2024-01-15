@@ -63,18 +63,6 @@ class RangerBaseV2 : public AgilexBase<ProtocolV2Parser>,
     ranger_state.rc_state = state.rc_state;
     ranger_state.motion_mode_state = state.motion_mode_state;
 
-    ranger_state.bms_basic_state.current = state.bms_basic_state.current;
-    // Note: BMS CAN message definition is not consistent across AgileX robots.
-    // Robots with steering mechanism should additionally divide the voltage by
-    // 10.
-    ranger_state.bms_basic_state.voltage = state.bms_basic_state.voltage * 0.1f;
-    ranger_state.bms_basic_state.battery_soc =
-        state.bms_basic_state.battery_soc;
-    ranger_state.bms_basic_state.battery_soh =
-        state.bms_basic_state.battery_soh;
-    ranger_state.bms_basic_state.temperature =
-        state.bms_basic_state.temperature;
-
     return ranger_state;
   }
 
@@ -98,6 +86,30 @@ class RangerBaseV2 : public AgilexBase<ProtocolV2Parser>,
       ranger_actuator.actuator_ls_state[i] = actuator.actuator_ls_state[i];
     }
     return ranger_actuator;
+  }
+
+  RangerCommonSensorState GetCommonSensorState() override {
+    auto common_sensor =
+        AgilexBase<ProtocolV2Parser>::GetCommonSensorStateMsgGroup();
+
+    RangerCommonSensorState ranger_bms;
+
+    ranger_bms.time_stamp = common_sensor.time_stamp;
+
+    ranger_bms.bms_basic_state.current = common_sensor.bms_basic_state.current;
+    // Note: BMS CAN message definition is not consistent across AgileX robots.
+    // Robots with steering mechanism should additionally divide the voltage by
+    // 10.
+    ranger_bms.bms_basic_state.voltage =
+        common_sensor.bms_basic_state.voltage * 0.1f;
+    ranger_bms.bms_basic_state.battery_soc =
+        common_sensor.bms_basic_state.battery_soc;
+    ranger_bms.bms_basic_state.battery_soh =
+        common_sensor.bms_basic_state.battery_soh;
+    ranger_bms.bms_basic_state.temperature =
+        common_sensor.bms_basic_state.temperature;
+
+    return ranger_bms;
   }
 };
 
