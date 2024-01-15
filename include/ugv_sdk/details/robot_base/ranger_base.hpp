@@ -63,18 +63,6 @@ class RangerBaseV2 : public AgilexBase<ProtocolV2Parser>,
     ranger_state.rc_state = state.rc_state;
     ranger_state.motion_mode_state = state.motion_mode_state;
 
-    // ranger_state.bms_basic_state.current = state.bms_basic_state.current;
-    // Note: BMS CAN message definition is not consistent across AgileX robots.
-    // Robots with steering mechanism should additionally divide the voltage by
-    // 10.
-    // ranger_state.bms_basic_state.voltage = state.bms_basic_state.voltage * 0.1f;
-    // ranger_state.bms_basic_state.battery_soc =
-    //     state.bms_basic_state.battery_soc;
-    // ranger_state.bms_basic_state.battery_soh =
-    //     state.bms_basic_state.battery_soh;
-    // ranger_state.bms_basic_state.temperature =
-    //     state.bms_basic_state.temperature;
-
     return ranger_state;
   }
 

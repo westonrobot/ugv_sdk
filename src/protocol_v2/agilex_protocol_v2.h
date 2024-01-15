@@ -315,15 +315,6 @@ typedef struct {
   struct16_t temperature;
 } BmsBasicFrame;
 
-// typedef struct {
-//   uint8_t protection_code1;
-//   uint8_t protection_code2;
-//   uint8_t protection_code3;
-//   uint8_t protection_code4;
-//   uint8_t battery_max_teperature;
-//   uint8_t battery_min_teperature;
-//   struct16_t count;
-// } BmsExtendedFrame;
 typedef struct {
   uint8_t alarm_status_1;
   uint8_t alarm_status_2;
