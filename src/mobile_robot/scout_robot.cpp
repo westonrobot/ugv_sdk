@@ -72,6 +72,10 @@ ScoutActuatorState ScoutRobot::GetActuatorState() {
   auto scout = dynamic_cast<ScoutInterface*>(robot_);
   return scout->GetActuatorState();
 }
+ScoutCommonSensorState ScoutRobot::GetCommonSensorState() {
+  auto scout = dynamic_cast<ScoutInterface*>(robot_);
+  return scout->GetCommonSensorState();
+}
 
 ///////////////////////////////////////////////////////////////////////////
 

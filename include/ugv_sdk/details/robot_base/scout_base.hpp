@@ -71,6 +71,18 @@ class ScoutBase : public AgilexBase<ParserType>, public ScoutInterface {
     }
     return scout_actuator;
   }
+
+  ScoutCommonSensorState GetCommonSensorState() override {
+    auto common_sensor =
+        AgilexBase<ParserType>::GetCommonSensorStateMsgGroup();
+
+    ScoutCommonSensorState scout_bms;
+
+    scout_bms.time_stamp = common_sensor.time_stamp;
+    scout_bms.bms_basic_state = common_sensor.bms_basic_state;
+
+    return scout_bms;
+  }
 };
 
 template <typename ParserType>
