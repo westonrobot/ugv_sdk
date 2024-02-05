@@ -39,6 +39,7 @@ class ScoutRobot : public RobotCommonInterface, public ScoutInterface {
   // get robot state
   ScoutCoreState GetRobotState() override;
   ScoutActuatorState GetActuatorState() override;
+  ScoutCommonSensorState GetCommonSensorState() override;
 
  protected:
   RobotCommonInterface* robot_;

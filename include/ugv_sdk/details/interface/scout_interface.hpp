@@ -53,6 +53,7 @@ struct ScoutInterface {
   // get robot state
   virtual ScoutCoreState GetRobotState() = 0;
   virtual ScoutActuatorState GetActuatorState() = 0;
+  virtual ScoutCommonSensorState GetCommonSensorState() = 0;
 };
 
 struct ScoutOmniInterface {
