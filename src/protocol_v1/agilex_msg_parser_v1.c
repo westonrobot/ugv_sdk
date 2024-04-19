@@ -78,9 +78,8 @@ bool DecodeCanFrameV1(const struct can_frame *rx_frame, AgxMessage *msg) {
       msg->type = AgxMsgActuatorStateV1;
       msg->body.v1_actuator_state_msg.motor_id =
           rx_frame->can_id - CAN_MSG_ACTUATOR1_STATE_ID;
-      msg->body.v1_actuator_state_msg.current =
-          ((((uint16_t)rx_frame->data[0]) << 8) | (uint16_t)rx_frame->data[1]) /
-          10.0f;
+      msg->body.v1_actuator_state_msg.current = (int16_t)((
+          ((uint16_t)rx_frame->data[0]) << 8) | (uint16_t)rx_frame->data[1]) * 0.1;
       msg->body.v1_actuator_state_msg.rpm = (int16_t)((
           (((uint16_t)rx_frame->data[2]) << 8) | (uint16_t)rx_frame->data[3]));
       msg->body.v1_actuator_state_msg.driver_temp = rx_frame->data[4];

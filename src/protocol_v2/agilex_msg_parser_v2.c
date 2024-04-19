@@ -158,9 +158,8 @@ bool DecodeCanFrameV2(const struct can_frame *rx_frame, AgxMessage *msg) {
           (int16_t)((uint16_t)(frame->rpm.low_byte) |
                     (uint16_t)(frame->rpm.high_byte) << 8);
       msg->body.actuator_hs_state_msg.current =
-          ((uint16_t)(frame->current.low_byte) |
-           (uint16_t)(frame->current.high_byte) << 8) *
-          0.1;
+          (int16_t)((uint16_t)(frame->current.low_byte) |
+                    (uint16_t)(frame->current.high_byte) << 8) * 0.1;
       msg->body.actuator_hs_state_msg.pulse_count =
           (int32_t)((uint32_t)(frame->pulse_count.lsb) |
                     (uint32_t)(frame->pulse_count.low_byte) << 8 |
