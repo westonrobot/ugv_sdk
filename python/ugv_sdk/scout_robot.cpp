@@ -9,6 +9,7 @@
 
 #include <pybind11/pybind11.h>
 
+#include "agilex_message.hpp"
 #include "ugv_sdk/mobile_robot/scout_robot.hpp"
 
 namespace py = pybind11;
@@ -19,11 +20,36 @@ using namespace westonrobot;
 PYBIND11_MODULE(scout_robot, m) {
     m.doc() = "Python bindings for handling a Scout robot";
 
+    BindSystemStateMessage(m);
+    BindMotionStateMessage(m);
+    BindLightStateMessage(m);
+    BindRcStateMessage(m);
+
     py::enum_<ProtocolVersion>(m, "ProtocolVersion")
         .value("AGX_V1", ProtocolVersion::AGX_V1)
         .value("AGX_V2", ProtocolVersion::AGX_V2)
         .export_values();
 
+    py::class_<ScoutCoreState>(m, "ScoutCoreState")
+        .def(py::init<>())
+        .def_property("time_stamp",
+        [](const ScoutCoreState &s) {
+                        // Convert time_point to duration since epoch in milliseconds
+                        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+                                s.time_stamp.time_since_epoch());
+                        return duration.count();
+                        },
+                        [](ScoutCoreState &s, long long ms) {
+                        // Convert milliseconds back to time_point
+                        s.time_stamp = std::chrono::steady_clock::time_point(
+                                std::chrono::milliseconds(ms));
+                        })
+        .def_readwrite("system_state", &ScoutCoreState::system_state)
+        .def_readwrite("motion_state", &ScoutCoreState::motion_state)
+        .def_readwrite("light_state", &ScoutCoreState::light_state)
+        .def_readwrite("rc_state", &ScoutCoreState::rc_state);
+
+    // ScoutRobot class
     py::class_<ScoutRobot>(m, "ScoutRobot")
         .def(py::init<ProtocolVersion, bool>(),
             py::arg("protocol") = ProtocolVersion::AGX_V2,
@@ -39,6 +65,8 @@ PYBIND11_MODULE(scout_robot, m) {
             "Request the robot version")
         .def("SetMotionCommand", &ScoutRobot::SetMotionCommand,
             py::arg("linear_vel"), py::arg("angular_vel"),
-            "Set the motion command for the robot");
+            "Set the motion command for the robot")
+        // get robot state
+        .def("GetRobotState", &ScoutRobot::GetRobotState, "Get the robot state");
 }
 // clang-format on

@@ -8,6 +8,10 @@ cmake-build-release/
 
 .editorconfig
 
+# Python
+dist
+*.egg-info
+
 # Temp files
 *~
 */~

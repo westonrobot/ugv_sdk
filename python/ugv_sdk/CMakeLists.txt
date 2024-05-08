@@ -1,2 +1,2 @@
-pybind11_add_module(scout_robot scout_robot.cpp)
+pybind11_add_module(scout_robot scout_robot.cpp agilex_message.cpp)
 target_link_libraries(scout_robot PRIVATE ugv_sdk)
