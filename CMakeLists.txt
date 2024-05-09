@@ -11,8 +11,6 @@ endif()
 option(BUILD_TESTING "Build tests" OFF)
 option(STATIC_CHECK "Run static check" OFF)
 option(PYTHON_BINDING "Build python binding" OFF)
-# set(CMAKE_BUILD_TYPE Release)
-# set(CMAKE_BUILD_TYPE Debug)
 
 ## Check if pkg is built with ROS catkin
 if(CATKIN_DEVEL_PREFIX)

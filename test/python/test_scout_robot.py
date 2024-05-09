@@ -4,23 +4,26 @@ import scout_robot
 
 def test_scout_robot():
     # Create an instance of ScoutRobot
-    robot = scout_robot.ScoutRobot(scout_robot.ProtocolVersion.AGX_V1, True)
+    robot = scout_robot.ScoutRobot(scout_robot.ProtocolVersion.AGX_V2, True)
 
     # Connect to the robot
     try:
-        robot.Connect("can0")
+        robot.connect("can0")
         print("Connection to the robot established.")
     except Exception as e:
         print(f"Failed to connect to the robot: {e}")
         return
 
     # Enable commanded mode
-    robot.EnableCommandedMode()
+    robot.enable_commanded_mode()
 
     # Set motion command
     while True:
-        robot.SetMotionCommand(1.0, 0.0)
-        state = robot.GetRobotState()
+        # robot control
+        robot.set_motion_command(1.0, 0.0)
+
+        # robot state monitoring
+        state = robot.get_robot_state()
         print("time: ", state.time_stamp)
         print("battery voltage: ", state.system_state.battery_voltage)
         print(
@@ -42,6 +45,7 @@ def test_scout_robot():
             state.rc_state.stick_left_h,
             state.rc_state.var_a
         ))
+
         time.sleep(20 / 1000)
 
 

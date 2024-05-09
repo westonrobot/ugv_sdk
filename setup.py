@@ -30,15 +30,9 @@ class CMakeBuild(build_ext):
         cfg = 'Debug' if self.debug else 'Release'
         build_args = ['--config', cfg]
 
-        if platform.system() == "Windows":
-            cmake_args += ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(cfg.upper(), extdir)]
-            if sys.maxsize > 2**32:
-                cmake_args += ['-A', 'x64']
-            build_args += ['--', '/m']
-        else:
-            cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
-            cmake_args += ['-DPYTHON_BINDING=ON']
-            build_args += ['--', '-j2']
+        cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
+        cmake_args += ['-DPYTHON_BINDING=ON']
+        build_args += ['--', '-j2']
 
         env = os.environ.copy()
         env['CXXFLAGS'] = '{} -DVERSION_INFO=\\"{}\\"'.format(env.get('CXXFLAGS', ''),
@@ -50,7 +44,7 @@ class CMakeBuild(build_ext):
 
 setup(
     name='ugv_sdk_py',
-    version='0.8.0',
+    version='0.1.1',
     author='Ruixiang Du',
     author_email='ruixiang.du@westonrobot.com',
     description='Python bindings for the ugv_sdk library using pybind11',

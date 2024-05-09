@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>ugv_sdk</name>
-  <version>0.1.6</version>
+  <version>0.8.0</version>
   <description>Weston Robot Platform SDK</description>
 
   <author email="ruixiang.du@westonrobot.com">Ruixiang Du</author>
