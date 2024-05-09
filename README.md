@@ -8,8 +8,8 @@
 This software package provides a C++ interface to communicate with the mobile platforms, for sending commands to the
 robot and receiving the latest robot state. The repository is a joint effort by the development teams at Weston Robot (Singapore) and AgileX Robotics (China).
 
-- Copyright (c) 2020-2023 [Weston Robot](https://www.westonrobot.com/)
-- Copyright (c) 2020-2023 [AgileX Robotics](http://www.agilex.ai/?lang=zh-cn)
+- Copyright (c) 2020-2024 [Weston Robot](https://www.westonrobot.com/)
+- Copyright (c) 2020-2024 [AgileX Robotics](http://www.agilex.ai/?lang=zh-cn)
 
 Please create an issue on Github at https://github.com/westonrobot/ugv_sdk/issues if you encounter any problems when
 using the packages.
@@ -60,6 +60,42 @@ $ cd <your-catkin-ws>/src
 $ git clone https://github.com/westonrobot/ugv_sdk.git
 $ cd ..
 $ catkin_make
+```
+
+### Build the package as a CMake project
+
+```
+$ git clone https://github.com/westonrobot/ugv_sdk.git
+$ cd ugv_sdk
+$ mkdir build && cd build
+$ cmake .. && make
+```
+
+If you need Python binding, you can build the package with the following command
+
+```
+$ cmake -DENABLE_PYTHON_BINDING=ON .. && make
+```
+
+### Build the package as a Python package
+
+For development and testing, you can use inplace build
+
+```bash
+$ python setup.py build_ext --inplace
+```
+
+It will generate library files in build/temp.linux-x86_64-3.10/lib (the name could be different based on your system). 
+You can add the path to the PYTHONPATH environment variable to use the library.
+
+```bash
+$ export PYTHONPATH=$PYTHONPATH:<path-to-the-repo>/build/temp.linux-x86_64-3.10/lib
+```
+
+You can also install the package to your Python environment using
+
+```bash
+$ python setup.py install
 ```
 
 ## Setup CAN-To-USB Adapter

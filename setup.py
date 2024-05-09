@@ -44,11 +44,19 @@ class CMakeBuild(build_ext):
 
 setup(
     name='ugv_sdk_py',
-    version='0.1.1',
+    version='0.2.0',
     author='Ruixiang Du',
     author_email='ruixiang.du@westonrobot.com',
     description='Python bindings for the ugv_sdk library using pybind11',
-    long_description='',
+    long_description='ugv_sdk C++ library: https://github.com/westonrobot/ugv_sdk, by Weston Robot & AgileX Robotics',
+    classifiers=[
+        'Operating System :: POSIX :: Linux',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.10',
+    ],
+    platforms=['Linux'],
+    python_requires='>=3.8',
     ext_modules=[CMakeExtension('ugv_sdk_bindings')],
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
