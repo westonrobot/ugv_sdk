@@ -74,7 +74,12 @@ $ cmake .. && make
 If you need Python binding, you can build the package with the following command
 
 ```
-$ cmake -DENABLE_PYTHON_BINDING=ON .. && make
+$ git clone --recursive https://github.com/westonrobot/ugv_sdk.git
+$ cd ugv_sdk
+# if you've checked out ugv_sdk without --recursive, you can run  the following command to fetch the submodule
+$ git submodule update --init --recursive
+$ mkdir build && cd build
+$ cmake -DPYTHON_BINDING=ON .. && make
 ```
 
 ### Build the package as a Python package
