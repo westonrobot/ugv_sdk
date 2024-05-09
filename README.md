@@ -73,6 +73,10 @@ $ cmake .. && make
 
 If you need Python binding, you can build the package with the following command
 
+```bash
+$ sudo apt-get install python3-dev
+```
+
 ```
 $ git clone --recursive https://github.com/westonrobot/ugv_sdk.git
 $ cd ugv_sdk
