@@ -95,7 +95,7 @@ $ python setup.py build_ext --inplace
 ```
 
 It will generate library files in build/temp.linux-x86_64-3.10/lib (the name could be different based on your system). 
-You can add the path to the PYTHONPATH environment variable to use the library.
+You can add the path to the PYTHONPATH environment variable to use the library. Please note that setting the PYTHONPATH directly in the shell will only affect the current session.
 
 ```bash
 $ export PYTHONPATH=$PYTHONPATH:<path-to-the-repo>/build/temp.linux-x86_64-3.10/lib
