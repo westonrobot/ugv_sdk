@@ -4,7 +4,8 @@ import scout_robot
 
 def test_scout_robot():
     # Create an instance of ScoutRobot
-    robot = scout_robot.ScoutRobot(scout_robot.ProtocolVersion.AGX_V2, True)
+    is_scout_mini = True
+    robot = scout_robot.ScoutRobot(scout_robot.ProtocolVersion.AGX_V2, is_scout_mini)
 
     # Connect to the robot
     try:
@@ -81,18 +82,19 @@ def test_scout_robot():
             )
 
         # common sensor state
-        common_sensor = robot.get_common_sensor_state()
-        print(
-            "bms: voltage {0}, current {1}, temperature {2}, soc {3}, soh {4}".format(
-                common_sensor.bms_basic_state.voltage,
-                common_sensor.bms_basic_state.current,
-                common_sensor.bms_basic_state.temperature,
-                common_sensor.bms_basic_state.battery_soc,
-                common_sensor.bms_basic_state.battery_soh,
+        if not is_scout_mini: 
+            common_sensor = robot.get_common_sensor_state()
+            print(
+                "bms: voltage {0}, current {1}, temperature {2}, soc {3}, soh {4}".format(
+                    common_sensor.bms_basic_state.voltage,
+                    common_sensor.bms_basic_state.current,
+                    common_sensor.bms_basic_state.temperature,
+                    common_sensor.bms_basic_state.battery_soc,
+                    common_sensor.bms_basic_state.battery_soh,
+                )
             )
-        )
 
-        time.sleep(20 / 1000)
+        time.sleep(10 / 100)
 
 
 if __name__ == "__main__":

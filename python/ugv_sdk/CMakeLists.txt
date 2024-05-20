@@ -1,2 +1,6 @@
 pybind11_add_module(scout_robot scout_robot.cpp agilex_message.cpp)
+pybind11_add_module(ranger_robot ranger_robot.cpp agilex_message.cpp)
+pybind11_add_module(hunter_robot hunter_robot.cpp agilex_message.cpp)
 target_link_libraries(scout_robot PRIVATE ugv_sdk)
+target_link_libraries(ranger_robot PRIVATE ugv_sdk)
+target_link_libraries(hunter_robot PRIVATE ugv_sdk)
