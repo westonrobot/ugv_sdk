@@ -53,7 +53,7 @@ src/lcmtypes/python
 *.pch
 
 # Compiled Dynamic libraries
-#*.so
+*.so
 #*.dylib
 #*.dll
 

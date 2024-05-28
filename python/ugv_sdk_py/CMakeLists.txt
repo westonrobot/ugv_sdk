@@ -10,3 +10,8 @@ target_include_directories(ugv_sdk_py PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
   PRIVATE src)
+set(PYBIND_OUTPUT_LIBDIR ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR} CACHE PATH "Output directory for pybind libraries")
+message(STATUS " - To install pybind components to ${PYBIND_OUTPUT_LIBDIR}")
+set_target_properties(ugv_sdk_py PROPERTIES
+  LIBRARY_OUTPUT_DIRECTORY ${PYBIND_OUTPUT_LIBDIR}
+)

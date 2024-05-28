@@ -4,11 +4,14 @@ import subprocess
 import os
 import sys
 import platform
+from pathlib import Path
+
 
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=''):
         Extension.__init__(self, name, sources=[])
         self.sourcedir = os.path.abspath(sourcedir)
+
 
 class CMakeBuild(build_ext):
     def run(self):
@@ -20,27 +23,43 @@ class CMakeBuild(build_ext):
 
         for ext in self.extensions:
             self.build_extension(ext)
+        super().run()
 
     def build_extension(self, ext):
-        extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
+        ext_fullpath = Path.cwd() / self.get_ext_fullpath(ext.name)
+        extdir = ext_fullpath.parent.resolve()
 
-        cmake_args = ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
-                      '-DPYTHON_EXECUTABLE=' + sys.executable]
+        debug = int(os.environ.get("DEBUG", 0)
+                    ) if self.debug is None else self.debug
+        cfg = 'Debug' if debug else 'Release'
 
-        cfg = 'Debug' if self.debug else 'Release'
+        cmake_args = [
+            f"-DPYBIND_OUTPUT_LIBDIR={extdir}{os.sep}{ext.name}{os.sep}",
+            f"-DPYTHON_EXECUTABLE={sys.executable}",
+            f"-DCMAKE_BUILD_TYPE={cfg}",
+            f"-DPYTHON_BINDING=ON"
+        ]
         build_args = ['--config', cfg]
-
-        cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
-        cmake_args += ['-DPYTHON_BINDING=ON']
         build_args += ['--', '-j2']
 
         env = os.environ.copy()
         env['CXXFLAGS'] = '{} -DVERSION_INFO=\\"{}\\"'.format(env.get('CXXFLAGS', ''),
                                                               self.distribution.get_version())
-        if not os.path.exists(self.build_temp):
-            os.makedirs(self.build_temp)
-        subprocess.check_call(['cmake', ext.sourcedir] + cmake_args, cwd=self.build_temp, env=env)
-        subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=self.build_temp)
+
+        build_temp = Path(self.build_temp) / ext.name
+        if not build_temp.exists():
+            build_temp.mkdir(parents=True)
+        lib_path = Path(f"{extdir}{os.sep}{ext.name}{os.sep}")
+        if not lib_path.exists():
+            lib_path.mkdir(parents=True)
+
+        subprocess.run(
+            ["cmake", ext.sourcedir, *cmake_args], cwd=build_temp, env=env, check=True
+        )
+        subprocess.run(
+            ["cmake", "--build", ".", *build_args], cwd=build_temp, env=env, check=True
+        )
+
 
 setup(
     name='ugv_sdk_py',
@@ -57,7 +76,8 @@ setup(
     ],
     platforms=['Linux'],
     python_requires='>=3.8',
-    ext_modules=[CMakeExtension('ugv_sdk_bindings')],
+    ext_modules=[CMakeExtension('ugv_sdk_py')],
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
+    install_requires=['pybind11'],
 )
