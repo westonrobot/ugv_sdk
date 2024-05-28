@@ -1,5 +1,6 @@
 import time
-import ranger_robot
+import ugv_sdk_py
+from ugv_sdk_py import ranger_robot
 
 
 def test_ranger_robot():

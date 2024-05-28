@@ -6,29 +6,19 @@
  *
  * Copyright (c) 2024 Weston Robot Pte. Ltd.
  */
-#include <pybind11/pybind11.h>
+#include "ugv_sdk_py/hunter_robot.hpp"
 
-#include "agilex_message.hpp"
 #include "ugv_sdk/mobile_robot/hunter_robot.hpp"
 
 namespace py = pybind11;
 
-using namespace westonrobot;
-
+namespace westonrobot {
 // clang-format off
-PYBIND11_MODULE(hunter_robot, m) {
-    m.doc() = "Python bindings for handling a Hunter robot";
+void BindHunterRobot(pybind11::module &m) {
+    py::module_ m_hunter_robot = m.def_submodule("hunter_robot");
+    m_hunter_robot.doc() = "Python bindings for handling a Hunter robot";
 
-    BindProtocolVersion(m);
-    BindSystemStateMessage(m);
-    BindMotionStateMessage(m);
-    BindLightStateMessage(m);
-    BindRcStateMessage(m);
-    BindActuatorHSStateMessage(m);
-    BindActuatorLSStateMessage(m);
-    BindBmsBasicMessage(m);
-
-    py::class_<HunterCoreState>(m, "HunterCoreState")
+    py::class_<HunterCoreState>(m_hunter_robot, "HunterCoreState")
         .def(py::init<>())
         .def_property("time_stamp",
         [](const HunterCoreState &s) {
@@ -46,7 +36,7 @@ PYBIND11_MODULE(hunter_robot, m) {
         .def_readwrite("motion_state", &HunterCoreState::motion_state)
         .def_readwrite("rc_state", &HunterCoreState::rc_state);
 
-    py::class_<HunterActuatorState>(m, "HunterActuatorState")
+    py::class_<HunterActuatorState>(m_hunter_robot, "HunterActuatorState")
         .def(py::init<>())
         .def_property("time_stamp",
             [](const HunterActuatorState &s) {
@@ -97,7 +87,7 @@ PYBIND11_MODULE(hunter_robot, m) {
                     }
             });
 
-    py::class_<HunterCommonSensorState>(m, "HunterCommonSensorState")
+    py::class_<HunterCommonSensorState>(m_hunter_robot, "HunterCommonSensorState")
         .def(py::init<>())
         .def_property("time_stamp",
             [](const HunterCommonSensorState &s) {
@@ -115,7 +105,7 @@ PYBIND11_MODULE(hunter_robot, m) {
         .def_readwrite("bms_extend_state", &HunterCommonSensorState::bms_extend_state);
 
     // HunterRobot class
-    py::class_<HunterRobot>(m, "HunterRobot")
+    py::class_<HunterRobot>(m_hunter_robot, "HunterRobot")
         .def(py::init<ProtocolVersion>(),
             py::arg("protocol") = ProtocolVersion::AGX_V2,
             "Constructor for HunterRobot with optional protocol version")
@@ -147,3 +137,4 @@ PYBIND11_MODULE(hunter_robot, m) {
             "Get the common sensor state");
 }
 // clang-format on
+}  // namespace westonrobot

@@ -1,10 +1,11 @@
 import time
-import hunter_robot
+import ugv_sdk_py
+from ugv_sdk_py import hunter_robot
 
 
 def test_hunter_robot():
     # Create an instance of HunterRobot
-    robot = hunter_robot.HunterRobot(hunter_robot.ProtocolVersion.AGX_V2)
+    robot = hunter_robot.HunterRobot(ugv_sdk_py.ProtocolVersion.AGX_V2)
 
     # Connect to the robot
     try:

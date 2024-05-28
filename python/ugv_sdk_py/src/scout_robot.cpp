@@ -1,4 +1,4 @@
-/* 
+/*
  * scout_robot.cpp
  *
  * Created on 5/8/24 2:57 PM
@@ -6,30 +6,20 @@
  *
  * Copyright (c) 2024 Weston Robot Pte. Ltd.
  */
+#include "ugv_sdk_py/scout_robot.hpp"
 
-#include <pybind11/pybind11.h>
-
-#include "agilex_message.hpp"
 #include "ugv_sdk/mobile_robot/scout_robot.hpp"
 
 namespace py = pybind11;
 
-using namespace westonrobot;
+namespace westonrobot {
 
 // clang-format off
-PYBIND11_MODULE(scout_robot, m) {
-    m.doc() = "Python bindings for handling a Scout robot";
+void BindScoutRobot(pybind11::module &m) {
+    py::module_ m_scout_robot = m.def_submodule("scout_robot");
+    m_scout_robot.doc() = "Python bindings for handling a Scout robot";
 
-    BindProtocolVersion(m);
-    BindSystemStateMessage(m);
-    BindMotionStateMessage(m);
-    BindLightStateMessage(m);
-    BindRcStateMessage(m);
-    BindActuatorHSStateMessage(m);
-    BindActuatorLSStateMessage(m);
-    BindBmsBasicMessage(m);
-
-    py::class_<ScoutCoreState>(m, "ScoutCoreState")
+    py::class_<ScoutCoreState>(m_scout_robot, "ScoutCoreState")
         .def(py::init<>())
         .def_property("time_stamp",
         [](const ScoutCoreState &s) {
@@ -48,7 +38,7 @@ PYBIND11_MODULE(scout_robot, m) {
         .def_readwrite("light_state", &ScoutCoreState::light_state)
         .def_readwrite("rc_state", &ScoutCoreState::rc_state);
 
-    py::class_<ScoutActuatorState>(m, "ScoutActuatorState")
+    py::class_<ScoutActuatorState>(m_scout_robot, "ScoutActuatorState")
         .def(py::init<>())
         .def_property("time_stamp",
         [](const ScoutActuatorState &s) {
@@ -99,7 +89,7 @@ PYBIND11_MODULE(scout_robot, m) {
             }
         });
 
-    py::class_<ScoutCommonSensorState>(m, "ScoutCommonSensorState")
+    py::class_<ScoutCommonSensorState>(m_scout_robot, "ScoutCommonSensorState")
         .def(py::init<>())
         .def_property("time_stamp",
         [](const ScoutCommonSensorState &s) {
@@ -116,7 +106,7 @@ PYBIND11_MODULE(scout_robot, m) {
         .def_readwrite("bms_basic_state", &ScoutCommonSensorState::bms_basic_state);
 
     // ScoutRobot class
-    py::class_<ScoutRobot>(m, "ScoutRobot")
+    py::class_<ScoutRobot>(m_scout_robot, "ScoutRobot")
         .def(py::init<ProtocolVersion, bool>(),
             py::arg("protocol") = ProtocolVersion::AGX_V2,
             py::arg("is_mini_model") = false,
@@ -148,3 +138,4 @@ PYBIND11_MODULE(scout_robot, m) {
         .def("get_common_sensor_state", &ScoutRobot::GetCommonSensorState, "Get the common sensor state");
 }
 // clang-format on
+}  // namespace westonrobot

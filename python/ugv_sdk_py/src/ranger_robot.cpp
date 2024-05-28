@@ -6,29 +6,20 @@
  *
  * Copyright (c) 2024 Weston Robot Pte. Ltd.
  */
-#include <pybind11/pybind11.h>
+#include "ugv_sdk_py/ranger_robot.hpp"
 
-#include "agilex_message.hpp"
 #include "ugv_sdk/mobile_robot/ranger_robot.hpp"
 
 namespace py = pybind11;
 
-using namespace westonrobot;
+namespace westonrobot {
 
 // clang-format off
-PYBIND11_MODULE(ranger_robot, m) {
-    m.doc() = "Python bindings for handling a Ranger robot";
+void BindRangerRobot(pybind11::module &m) {
+    py::module_ m_ranger_robot = m.def_submodule("ranger_robot");
+    m_ranger_robot.doc() = "Python bindings for handling a Ranger robot";
 
-    BindProtocolVersion(m);
-    BindSystemStateMessage(m);
-    BindMotionStateMessage(m);
-    BindLightStateMessage(m);
-    BindRcStateMessage(m);
-    BindActuatorHSStateMessage(m);
-    BindActuatorLSStateMessage(m);
-    BindBmsBasicMessage(m);
-
-    py::class_<RangerCoreState>(m, "RangerCoreState")
+    py::class_<RangerCoreState>(m_ranger_robot, "RangerCoreState")
         .def(py::init<>())
         .def_property("time_stamp",
             [](const RangerCoreState &s) {
@@ -49,7 +40,7 @@ PYBIND11_MODULE(ranger_robot, m) {
         .def_readwrite("rc_state", &RangerCoreState::rc_state)
         .def_readwrite("odometry", &RangerCoreState::odometry);
 
-    py::class_<RangerActuatorState>(m, "RangerActuatorState")
+    py::class_<RangerActuatorState>(m_ranger_robot, "RangerActuatorState")
         .def(py::init<>())
         .def_property("time_stamp",
             [](const RangerActuatorState &s) {
@@ -90,7 +81,7 @@ PYBIND11_MODULE(ranger_robot, m) {
                 }
             });
 
-    py::class_<RangerCommonSensorState>(m, "RangerCommonSensorState")
+    py::class_<RangerCommonSensorState>(m_ranger_robot, "RangerCommonSensorState")
         .def(py::init<>())
         .def_property("time_stamp",
             [](const RangerCommonSensorState &s) {
@@ -107,7 +98,7 @@ PYBIND11_MODULE(ranger_robot, m) {
         .def_readwrite("bms_basic_state", &RangerCommonSensorState::bms_basic_state);
 
     // RangerRobot class
-    py::class_<RangerRobot>(m, "RangerRobot")
+    py::class_<RangerRobot>(m_ranger_robot, "RangerRobot")
         .def(py::init<bool>(),
             py::arg("is_mini_v1") = false,
             "Constructor for RangerRobot with model version")
@@ -149,3 +140,4 @@ PYBIND11_MODULE(ranger_robot, m) {
             "Get the common sensor state");
 }
 // clang-format on
+}  // namespace westonrobot

@@ -9,7 +9,7 @@
 
 #include <pybind11/pybind11.h>
 
-#include "agilex_message.hpp"
+#include "ugv_sdk_py/agilex_message.hpp"
 #include "ugv_sdk/details/interface/agilex_message.h"
 #include "ugv_sdk/details/parser_base.hpp"
 
