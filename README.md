@@ -94,17 +94,20 @@ For development and testing, you can use inplace build
 $ python setup.py build_ext --inplace
 ```
 
-It will generate library files in build/temp.linux-x86_64-3.10/lib (the name could be different based on your system). 
-You can add the path to the PYTHONPATH environment variable to use the library. Please note that setting the PYTHONPATH directly in the shell will only affect the current session.
+It will generate library files in build/temp.linux-x86_64-3.10/lib (the name could be different based on your system) and in the directory where you run the command.
+
+You can then use the library in a python script from the same directory directly. If you want to use the library in other directories, you can add the path to the PYTHONPATH environment variable.
+
+Please note that setting the PYTHONPATH directly in the shell will only affect the current session.
 
 ```bash
-$ export PYTHONPATH=$PYTHONPATH:<path-to-the-repo>/build/temp.linux-x86_64-3.10/lib
+$ export PYTHONPATH=$PYTHONPATH:<path-to-the-repo>/build/lib.linux-x86_64-3.10
 ```
 
 You can also install the package to your Python environment using
 
 ```bash
-$ python setup.py install
+$ python3 -m pip install .
 ```
 
 ## Setup CAN-To-USB Adapter

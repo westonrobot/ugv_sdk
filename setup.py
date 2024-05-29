@@ -34,7 +34,7 @@ class CMakeBuild(build_ext):
         cfg = 'Debug' if debug else 'Release'
 
         cmake_args = [
-            f"-DPYBIND_OUTPUT_LIBDIR={extdir}{os.sep}{ext.name}{os.sep}",
+            f"-DPYBIND_OUTPUT_LIBDIR={extdir}{os.sep}",
             f"-DPYTHON_EXECUTABLE={sys.executable}",
             f"-DCMAKE_BUILD_TYPE={cfg}",
             f"-DPYTHON_BINDING=ON"
@@ -49,7 +49,7 @@ class CMakeBuild(build_ext):
         build_temp = Path(self.build_temp) / ext.name
         if not build_temp.exists():
             build_temp.mkdir(parents=True)
-        lib_path = Path(f"{extdir}{os.sep}{ext.name}{os.sep}")
+        lib_path = Path(f"{extdir}{os.sep}")
         if not lib_path.exists():
             lib_path.mkdir(parents=True)
 
