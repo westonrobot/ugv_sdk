@@ -1,0 +1,22 @@
+name: Pybind
+
+on:
+  push:
+  pull_request:
+    branches: 
+      - main
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ ubuntu-22.04, ubuntu-20.04 ]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Install dependencies
+      run: sudo apt-get install -y build-essential cmake libasio-dev python3-dev
+    - name: Build python package
+      run: python setup.py build_ext --inplace

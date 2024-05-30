@@ -23,7 +23,7 @@ class RangerRobot : public RobotCommonInterface, public RangerInterface {
   bool Connect(std::string can_name) override;
 
   void EnableCommandedMode() override;
-  std::string RequestVersion(int timeout_sec) override;
+  std::string RequestVersion(int timeout_sec = 3) override;
 
   // functions to be implemented by each robot class
   void ResetRobotState() override;

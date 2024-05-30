@@ -8,6 +8,10 @@ cmake-build-release/
 
 .editorconfig
 
+# Python
+dist
+*.egg-info
+
 # Temp files
 *~
 */~
@@ -49,7 +53,7 @@ src/lcmtypes/python
 *.pch
 
 # Compiled Dynamic libraries
-#*.so
+*.so
 #*.dylib
 #*.dll
 

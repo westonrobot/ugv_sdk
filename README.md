@@ -8,8 +8,8 @@
 This software package provides a C++ interface to communicate with the mobile platforms, for sending commands to the
 robot and receiving the latest robot state. The repository is a joint effort by the development teams at Weston Robot (Singapore) and AgileX Robotics (China).
 
-- Copyright (c) 2020-2023 [Weston Robot](https://www.westonrobot.com/)
-- Copyright (c) 2020-2023 [AgileX Robotics](http://www.agilex.ai/?lang=zh-cn)
+- Copyright (c) 2020-2024 [Weston Robot](https://www.westonrobot.com/)
+- Copyright (c) 2020-2024 [AgileX Robotics](http://www.agilex.ai/?lang=zh-cn)
 
 Please create an issue on Github at https://github.com/westonrobot/ugv_sdk/issues if you encounter any problems when
 using the packages.
@@ -60,6 +60,54 @@ $ cd <your-catkin-ws>/src
 $ git clone https://github.com/westonrobot/ugv_sdk.git
 $ cd ..
 $ catkin_make
+```
+
+### Build the package as a CMake project
+
+```
+$ git clone https://github.com/westonrobot/ugv_sdk.git
+$ cd ugv_sdk
+$ mkdir build && cd build
+$ cmake .. && make
+```
+
+If you need Python binding, you can build the package with the following command
+
+```bash
+$ sudo apt-get install python3-dev
+```
+
+```
+$ git clone --recursive https://github.com/westonrobot/ugv_sdk.git
+$ cd ugv_sdk
+# if you've checked out ugv_sdk without --recursive, you can run  the following command to fetch the submodule
+$ git submodule update --init --recursive
+$ mkdir build && cd build
+$ cmake -DPYTHON_BINDING=ON .. && make
+```
+
+### Build the package as a Python package
+
+For development and testing, you can use inplace build
+
+```bash
+$ python setup.py build_ext --inplace
+```
+
+It will generate library files in build/temp.linux-x86_64-3.10/lib (the name could be different based on your system) and in the directory where you run the command.
+
+You can then use the library in a python script from the same directory directly. If you want to use the library in other directories, you can add the path to the PYTHONPATH environment variable.
+
+Please note that setting the PYTHONPATH directly in the shell will only affect the current session.
+
+```bash
+$ export PYTHONPATH=$PYTHONPATH:<path-to-the-repo>/build/lib.linux-x86_64-3.10
+```
+
+You can also install the package to your Python environment using
+
+```bash
+$ python3 -m pip install .
 ```
 
 ## Setup CAN-To-USB Adapter
