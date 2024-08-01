@@ -19,7 +19,7 @@ jobs:
       image: ros:melodic-robot
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Install dependencies
       run: sudo apt-get update && sudo apt-get install -y git libasio-dev
     - name: Create catkin workspace
@@ -36,7 +36,7 @@ jobs:
       image: ros:noetic-robot
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install -y git libasio-dev
       - name: Create catkin workspace
@@ -53,7 +53,7 @@ jobs:
       image: ros:foxy
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install -y git libasio-dev
       - name: Create colcon workspace
@@ -70,7 +70,7 @@ jobs:
       image: ros:humble
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install -y git libasio-dev
       - name: Create colcon workspace
