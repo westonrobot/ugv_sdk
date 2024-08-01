@@ -42,6 +42,12 @@ bool DecodeCanFrameV2(const struct can_frame *rx_frame, AgxMessage *msg) {
           1000.0;
       break;
     }
+    case CAN_MSG_SET_MOTION_MODE_ID: {
+      msg->type = AgxMsgSetMotionModeCommand;
+      SetMotionModeFrame *frame = (SetMotionModeFrame *)(rx_frame->data);
+      msg->body.motion_mode_msg.motion_mode = frame->motion_mode;
+      break;
+    }
     case CAN_MSG_LIGHT_COMMAND_ID: {
       msg->type = AgxMsgLightCommand;
       // parse frame buffer to message
