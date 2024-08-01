@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5.1)
-project(ugv_sdk VERSION 0.8.0)
+project(ugv_sdk VERSION 0.8.1)
 
 find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
