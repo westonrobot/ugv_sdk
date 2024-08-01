@@ -159,7 +159,8 @@ bool DecodeCanFrameV2(const struct can_frame *rx_frame, AgxMessage *msg) {
                     (uint16_t)(frame->rpm.high_byte) << 8);
       msg->body.actuator_hs_state_msg.current =
           (int16_t)((uint16_t)(frame->current.low_byte) |
-                    (uint16_t)(frame->current.high_byte) << 8) * 0.1;
+                    (uint16_t)(frame->current.high_byte) << 8) *
+          0.1;
       msg->body.actuator_hs_state_msg.pulse_count =
           (int32_t)((uint32_t)(frame->pulse_count.lsb) |
                     (uint32_t)(frame->pulse_count.low_byte) << 8 |
@@ -504,7 +505,36 @@ bool EncodeCanFrameV2(const AgxMessage *msg, struct can_frame *tx_frame) {
       tx_frame->can_id = CAN_MSG_RC_STATE_ID;
       tx_frame->can_dlc = 8;
       RcStateFrame frame;
-      // TODO
+      frame.sws = 0;
+      // switch a
+      if (msg->body.rc_state_msg.swa == RC_SWITCH_UP)
+        frame.sws |= RC_SWA_UP_MASK;
+      else if (msg->body.rc_state_msg.swa == RC_SWITCH_DOWN)
+        frame.sws |= RC_SWA_DOWN_MASK;
+      // switch b
+      if (msg->body.rc_state_msg.swb == RC_SWITCH_UP)
+        frame.sws |= RC_SWB_UP_MASK;
+      else if (msg->body.rc_state_msg.swb == RC_SWITCH_MIDDLE)
+        frame.sws |= RC_SWB_MIDDLE_MASK;
+      else if (msg->body.rc_state_msg.swb == RC_SWITCH_DOWN)
+        frame.sws |= RC_SWB_DOWN_MASK;
+      // switch c
+      if (msg->body.rc_state_msg.swc == RC_SWITCH_UP)
+        frame.sws |= RC_SWC_UP_MASK;
+      else if (msg->body.rc_state_msg.swc == RC_SWITCH_MIDDLE)
+        frame.sws |= RC_SWC_MIDDLE_MASK;
+      else if (msg->body.rc_state_msg.swc == RC_SWITCH_DOWN)
+        frame.sws |= RC_SWC_DOWN_MASK;
+      // switch d
+      if (msg->body.rc_state_msg.swd == RC_SWITCH_UP)
+        frame.sws |= RC_SWD_UP_MASK;
+      else if (msg->body.rc_state_msg.swd == RC_SWITCH_DOWN)
+        frame.sws |= RC_SWD_DOWN_MASK;
+      frame.stick_right_v = msg->body.rc_state_msg.stick_right_v;
+      frame.stick_right_h = msg->body.rc_state_msg.stick_right_h;
+      frame.stick_left_v = msg->body.rc_state_msg.stick_left_v;
+      frame.stick_left_h = msg->body.rc_state_msg.stick_left_h;
+      frame.var_a = msg->body.rc_state_msg.var_a;
       memcpy(tx_frame->data, (uint8_t *)(&frame), tx_frame->can_dlc);
       break;
     }
@@ -513,7 +543,17 @@ bool EncodeCanFrameV2(const AgxMessage *msg, struct can_frame *tx_frame) {
                          CAN_MSG_ACTUATOR1_HS_STATE_ID;
       tx_frame->can_dlc = 8;
       ActuatorHSStateFrame frame;
-      // TODO
+      int16_t rpm = msg->body.actuator_hs_state_msg.rpm;
+      int16_t current = msg->body.actuator_hs_state_msg.current * 10;
+      int32_t pulse_count = msg->body.actuator_hs_state_msg.pulse_count;
+      frame.rpm.high_byte = (uint8_t)(rpm >> 8);
+      frame.rpm.low_byte = (uint8_t)(rpm & 0x00ff);
+      frame.current.high_byte = (uint8_t)(current >> 8);
+      frame.current.low_byte = (uint8_t)(current & 0x00ff);
+      frame.pulse_count.lsb = (uint8_t)(pulse_count & 0x000000ff);
+      frame.pulse_count.low_byte = (uint8_t)((pulse_count >> 8) & 0x000000ff);
+      frame.pulse_count.high_byte = (uint8_t)((pulse_count >> 16) & 0x000000ff);
+      frame.pulse_count.msb = (uint8_t)((pulse_count >> 24) & 0x000000ff);
       memcpy(tx_frame->data, (uint8_t *)(&frame), tx_frame->can_dlc);
       break;
     }
@@ -522,7 +562,16 @@ bool EncodeCanFrameV2(const AgxMessage *msg, struct can_frame *tx_frame) {
                          CAN_MSG_ACTUATOR1_LS_STATE_ID;
       tx_frame->can_dlc = 8;
       ActuatorLSStateFrame frame;
-      // TODO
+      int16_t driver_voltage =
+          (int16_t)(msg->body.actuator_ls_state_msg.driver_voltage * 10);
+      int16_t driver_temp =
+          (int16_t)(msg->body.actuator_ls_state_msg.driver_temp);
+      frame.driver_voltage.high_byte = (uint8_t)(driver_voltage >> 8);
+      frame.driver_voltage.low_byte = (uint8_t)(driver_voltage & 0x00ff);
+      frame.driver_temp.high_byte = (uint8_t)(driver_temp >> 8);
+      frame.driver_temp.low_byte = (uint8_t)(driver_temp & 0x00ff);
+      frame.motor_temp = msg->body.actuator_ls_state_msg.motor_temp;
+      frame.driver_state = msg->body.actuator_ls_state_msg.driver_state;
       memcpy(tx_frame->data, (uint8_t *)(&frame), tx_frame->can_dlc);
       break;
     }
@@ -588,7 +637,17 @@ bool EncodeCanFrameV2(const AgxMessage *msg, struct can_frame *tx_frame) {
       tx_frame->can_id = CAN_MSG_BMS_BASIC_ID;
       tx_frame->can_dlc = 8;
       BmsBasicFrame frame;
-      // TODO
+      frame.battery_soc = msg->body.bms_basic_msg.battery_soc;
+      frame.battery_soh = msg->body.bms_basic_msg.battery_soh;
+      int16_t voltage = (int16_t)(msg->body.bms_basic_msg.voltage * 10);
+      int16_t current = (int16_t)(msg->body.bms_basic_msg.current * 10);
+      int16_t temperature = (int16_t)(msg->body.bms_basic_msg.temperature * 10);
+      frame.voltage.high_byte = (uint8_t)(voltage >> 8);
+      frame.voltage.low_byte = (uint8_t)(voltage & 0x00ff);
+      frame.current.high_byte = (uint8_t)(current >> 8);
+      frame.current.low_byte = (uint8_t)(current & 0x00ff);
+      frame.temperature.high_byte = (uint8_t)(temperature >> 8);
+      frame.temperature.low_byte = (uint8_t)(temperature & 0x00ff);
       memcpy(tx_frame->data, (uint8_t *)(&frame), tx_frame->can_dlc);
       break;
     }
