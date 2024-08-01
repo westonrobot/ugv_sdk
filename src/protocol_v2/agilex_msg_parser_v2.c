@@ -541,8 +541,6 @@ bool EncodeCanFrameV2(const AgxMessage *msg, struct can_frame *tx_frame) {
                          CAN_MSG_ACTUATOR1_HS_STATE_ID;
       tx_frame->can_dlc = 8;
       ActuatorHSStateFrame frame;
-      rx_frame.can_id = msg->body.actuator_hs_state_msg.motor_id +
-                         CAN_MSG_ACTUATOR1_HS_STATE_ID;
       int16_t rpm =
           (int16_t)(msg->body.actuator_hs_state_msg.rpm);
       int16_t current =
@@ -565,8 +563,6 @@ bool EncodeCanFrameV2(const AgxMessage *msg, struct can_frame *tx_frame) {
                          CAN_MSG_ACTUATOR1_LS_STATE_ID;
       tx_frame->can_dlc = 8;
       ActuatorLSStateFrame frame;
-      rx_frame.can_id = msg->body.actuator_ls_state_msg.motor_id +
-                         CAN_MSG_ACTUATOR1_LS_STATE_ID;
       int16_t driver_voltage = 
           (int16_t)(msg->body.actuator_ls_state_msg.driver_voltage * 10);
       int16_t driver_temp =
