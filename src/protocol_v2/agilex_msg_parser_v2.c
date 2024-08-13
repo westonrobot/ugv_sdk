@@ -499,6 +499,15 @@ bool EncodeCanFrameV2(const AgxMessage *msg, struct can_frame *tx_frame) {
       memcpy(tx_frame->data, (uint8_t *)(&frame), tx_frame->can_dlc);
       break;
     }
+    case AgxMsgMotionModeState: {
+      tx_frame->can_id = CAN_MSG_CURRENT_CTRL_MODE;
+      tx_frame->can_dlc = 2;
+      MotionModeStateFrame frame;
+      frame.motion_mode = msg->body.motion_mode_state_msg.motion_mode;
+      frame.mode_changing = msg->body.motion_mode_state_msg.mode_changing;
+      memcpy(tx_frame->data, (uint8_t *)(&frame), tx_frame->can_dlc);
+      break;
+    }
     case AgxMsgLightState: {
       tx_frame->can_id = CAN_MSG_LIGHT_STATE_ID;
       tx_frame->can_dlc = 8;
