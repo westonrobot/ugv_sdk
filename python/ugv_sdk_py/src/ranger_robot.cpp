@@ -13,7 +13,6 @@
 namespace py = pybind11;
 
 namespace westonrobot {
-
 // clang-format off
 void BindRangerRobot(pybind11::module &m) {
     py::module_ m_ranger_robot = m.def_submodule("ranger_robot");
@@ -99,8 +98,8 @@ void BindRangerRobot(pybind11::module &m) {
 
     // RangerRobot class
     py::class_<RangerRobot>(m_ranger_robot, "RangerRobot")
-        .def(py::init<bool>(),
-            py::arg("is_mini_v1") = false,
+        .def(py::init<RangerRobot::Variant>(),
+            py::arg("variant"),
             "Constructor for RangerRobot with model version")
         .def("connect", &RangerRobot::Connect,
             py::arg("can_name"),
@@ -138,6 +137,13 @@ void BindRangerRobot(pybind11::module &m) {
             "Get the actuator state")
         .def("get_common_sensor_state", &RangerRobot::GetCommonSensorState,
             "Get the common sensor state");
+
+    py::enum_<RangerRobot::Variant>(m_ranger_robot, "Variant")
+    .value("kRangerMiniV1", RangerRobot::Variant::kRangerMiniV1)
+    .value("kRangerMiniV2", RangerRobot::Variant::kRangerMiniV2)
+    .value("kRangerMiniV3", RangerRobot::Variant::kRangerMiniV3)
+    .value("kRanger", RangerRobot::Variant::kRanger)
+    .export_values();
 }
 // clang-format on
 }  // namespace westonrobot

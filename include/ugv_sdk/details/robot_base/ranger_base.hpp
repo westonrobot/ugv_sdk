@@ -21,11 +21,10 @@
 #include "ugv_sdk/details/protocol_v2/protocol_v2_parser.hpp"
 
 namespace westonrobot {
-class RangerBaseV2 : public AgilexBase<ProtocolV2Parser>,
-                     public RangerInterface {
+class RangerBase : public AgilexBase<ProtocolV2Parser>, public RangerInterface {
  public:
-  RangerBaseV2() : AgilexBase<ProtocolV2Parser>(){};
-  virtual ~RangerBaseV2() = default;
+  RangerBase() : AgilexBase<ProtocolV2Parser>() {};
+  virtual ~RangerBase() = default;
 
   // set up connection
   bool Connect(std::string can_name) override {
@@ -97,9 +96,32 @@ class RangerBaseV2 : public AgilexBase<ProtocolV2Parser>,
     ranger_bms.time_stamp = common_sensor.time_stamp;
 
     ranger_bms.bms_basic_state.current = common_sensor.bms_basic_state.current;
+    ranger_bms.bms_basic_state.voltage =
+        common_sensor.bms_basic_state.voltage;
+    ranger_bms.bms_basic_state.battery_soc =
+        common_sensor.bms_basic_state.battery_soc;
+    ranger_bms.bms_basic_state.battery_soh =
+        common_sensor.bms_basic_state.battery_soh;
+    ranger_bms.bms_basic_state.temperature =
+        common_sensor.bms_basic_state.temperature;
+
+    return ranger_bms;
+  }
+};
+
+using RangerMiniV3Base = RangerBase;
+class RangerMiniV2Base : public RangerBase {
+  RangerCommonSensorState GetCommonSensorState() override {
+    auto common_sensor =
+        AgilexBase<ProtocolV2Parser>::GetCommonSensorStateMsgGroup();
+
+    RangerCommonSensorState ranger_bms;
+
+    ranger_bms.time_stamp = common_sensor.time_stamp;
+
+    ranger_bms.bms_basic_state.current = common_sensor.bms_basic_state.current;
     // Note: BMS CAN message definition is not consistent across AgileX robots.
-    // Robots with steering mechanism should additionally divide the voltage by
-    // 10.
+    // RM2 BMS voltage data follows unit: 0.01V
     ranger_bms.bms_basic_state.voltage =
         common_sensor.bms_basic_state.voltage * 0.1f;
     ranger_bms.bms_basic_state.battery_soc =
@@ -116,9 +138,9 @@ class RangerBaseV2 : public AgilexBase<ProtocolV2Parser>,
 // Note: Ranger Mini V1 uses a modified AgileX V2 protocol
 // Here we provide a work-around fix as no new firmware will be provided from
 // AgileX to properly fix the issue.
-class RangerMiniV1Base : public RangerBaseV2 {
+class RangerMiniV1Base : public RangerBase {
  public:
-  RangerMiniV1Base() : RangerBaseV2(){};
+  RangerMiniV1Base() : RangerBase() {};
   ~RangerMiniV1Base() = default;
 
   // robot control
