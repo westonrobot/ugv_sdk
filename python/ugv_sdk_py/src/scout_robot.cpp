@@ -136,6 +136,15 @@ void BindScoutRobot(pybind11::module &m) {
         .def("get_robot_state", &ScoutRobot::GetRobotState, "Get the robot state")
         .def("get_actuator_state", &ScoutRobot::GetActuatorState, "Get the actuator state")
         .def("get_common_sensor_state", &ScoutRobot::GetCommonSensorState, "Get the common sensor state");
+
+    // ScoutMiniOmniRobot class
+    py::class_<ScoutMiniOmniRobot, ScoutRobot>(m_scout_robot, "ScoutMiniOmniRobot")
+        .def(py::init<ProtocolVersion>(),
+            py::arg("protocol") = ProtocolVersion::AGX_V2,
+            "Constructor for ScoutMiniOmniRobot with optional protocol")
+        .def("set_omni_motion_command", &ScoutOmniInterface::SetMotionCommand,
+        py::arg("linear_vel"), py::arg("angular_vel"), py::arg("lateral_velocity"),
+        "Set the motion command for the robot");
 }
 // clang-format on
 }  // namespace westonrobot
