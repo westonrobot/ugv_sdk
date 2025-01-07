@@ -11,11 +11,15 @@
 #include "ugv_sdk/details/robot_base/bunker_base.hpp"
 
 namespace westonrobot {
-BunkerRobot::BunkerRobot(ProtocolVersion protocol) {
-  if (protocol == ProtocolVersion::AGX_V1) {
+BunkerRobot::BunkerRobot(Variant variant) {
+  if (variant == Variant::kBunkerV1) {
     robot_ = new BunkerBaseV1();
-  } else if (protocol == ProtocolVersion::AGX_V2) {
+  } else if (variant == Variant::kBunkerV2) {
     robot_ = new BunkerBaseV2();
+  } else if (variant == Variant::kBunkerPro) {
+    robot_ = new BunkerPro();
+  } else if (variant == Variant::kBunkerMini) {
+    robot_ = new BunkerMini();
   }
 }
 
@@ -53,4 +57,10 @@ BunkerActuatorState BunkerRobot::GetActuatorState() {
   auto bunker = dynamic_cast<BunkerInterface*>(robot_);
   return bunker->GetActuatorState();
 }
+
+BunkerCommonSensorState BunkerRobot::GetCommonSensorState() {
+  auto bunker = dynamic_cast<BunkerInterface*>(robot_);
+  return bunker->GetCommonSensorState();
+}
+
 }  // namespace westonrobot
