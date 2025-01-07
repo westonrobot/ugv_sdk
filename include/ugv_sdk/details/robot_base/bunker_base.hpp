@@ -22,7 +22,7 @@ namespace westonrobot {
 template <typename ParserType>
 class BunkerBase : public AgilexBase<ParserType>, public BunkerInterface {
  public:
-  BunkerBase() : AgilexBase<ParserType>(){};
+  BunkerBase() : AgilexBase<ParserType>() {};
   ~BunkerBase() = default;
 
   // set up connection
@@ -60,6 +60,10 @@ class BunkerBase : public AgilexBase<ParserType>, public BunkerInterface {
     }
     return bunker_actuator;
   }
+
+  BunkerCommonSensorState GetCommonSensorState() override {
+    return BunkerCommonSensorState();
+  }
 };
 }  // namespace westonrobot
 
@@ -69,6 +73,18 @@ class BunkerBase : public AgilexBase<ParserType>, public BunkerInterface {
 namespace westonrobot {
 using BunkerBaseV1 = BunkerBase<BunkerProtocolV1Parser>;
 using BunkerBaseV2 = BunkerBase<ProtocolV2Parser>;
+using BunkerPro = BunkerBase<ProtocolV2Parser>;
+
+class BunkerMini : public BunkerBase<ProtocolV2Parser> {
+  BunkerCommonSensorState GetCommonSensorState() override {
+    auto sensor = AgilexBase<ProtocolV2Parser>::GetCommonSensorStateMsgGroup();
+
+    BunkerCommonSensorState bunker_sensor;
+    bunker_sensor.time_stamp = sensor.time_stamp;
+    bunker_sensor.bms_basic_state = sensor.bms_basic_state;
+    return bunker_sensor;
+  }
+};
 }  // namespace westonrobot
 
 #endif /* BUNKER_BASE_HPP */

@@ -35,10 +35,10 @@ int main(int argc, char **argv) {
   std::unique_ptr<BunkerRobot> bunker;
   if (protocol_version == "v1") {
     bunker =
-        std::unique_ptr<BunkerRobot>(new BunkerRobot(ProtocolVersion::AGX_V1));
+        std::unique_ptr<BunkerRobot>(new BunkerRobot(BunkerRobot::Variant::kBunkerV1));
   } else if (protocol_version == "v2") {
     bunker =
-        std::unique_ptr<BunkerRobot>(new BunkerRobot(ProtocolVersion::AGX_V2));
+        std::unique_ptr<BunkerRobot>(new BunkerRobot(BunkerRobot::Variant::kBunkerV2));
   } else {
     std::cout << "Error: invalid protocol version string" << std::endl;
     return -1;
