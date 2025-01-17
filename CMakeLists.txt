@@ -83,7 +83,7 @@ endif()
 
 ## Build libraries
 find_package(Threads REQUIRED)
-
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 # add sdk main library
 add_library(${PROJECT_NAME}
     ########################
